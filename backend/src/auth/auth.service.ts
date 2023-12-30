@@ -12,34 +12,40 @@ const scrypt=promisify(_scrypt);
 export class AuthService {
     constructor(private usersService:UsersService,
        private jwtService:JwtService){}
-        async signIn(email:string,password:string){
-            const [user] = await this.usersService.find(email);
-            if(!user){
-                throw new NotFoundException("User not found");
-            }
-            const [salt,storedHash]=user.password.split('.');
-            const hash=(await scrypt(password,salt,32)) as Buffer
-            if(storedHash!==hash.toString('hex')){
-                return new BadRequestException('Wrong password!')
-            }
-            const payload_access = {userId:user?.id} as JWTpayload;
-            const payload_refresh={userId:user?.id} as JWTpayloadRt;
-            const access_token=await this.jwtService.signAsync(payload_access);
-            const refresh_token=await this.jwtService.signAsync(payload_refresh);
-            const refresh_hash = await argon.hash(refresh_token);
-        await this.usersService.update(user?.id,{RefreshToken:refresh_hash})
-            return {
-            access_token,
-            refresh_token
-          } as Tokens;
-            
-        
-        }
+async signIn(email: string, password: string) {
+    const [user] = await this.usersService.find(email);
+
+    if (!user) {
+        throw new NotFoundException("Email does not exist!");
+    }
+
+    const [salt, storedHash] = user.password.split('.');
+    const hash = (await scrypt(password, salt, 32)) as Buffer;
+
+    if (storedHash !== hash.toString('hex')) {
+        throw new BadRequestException('Wrong password!');
+    }
+
+    const payloadAccess = { userId: user?.id } as JWTpayload;
+    const payloadRefresh = { userId: user?.id } as JWTpayloadRt;
+
+    const accessToken = await this.jwtService.signAsync(payloadAccess);
+    const refreshToken = await this.jwtService.signAsync(payloadRefresh);
+    const refreshHash = await argon.hash(refreshToken);
+
+    await this.usersService.update(user?.id, { RefreshToken: refreshHash });
+
+    return {
+        access_token: accessToken,
+        refresh_token: refreshToken
+    } as Tokens;
+}
+
         async signUp(email:string,password:string){
             try{
                 const users=await this.usersService.find(email);
                 if(users.length){
-                throw new BadRequestException("Email is used before")
+                throw new BadRequestException("Email is already used")
                 }
                 // Generate Salt
                 const salt=randomBytes(8).toString('hex');

@@ -44,11 +44,11 @@ const email = decoded.email;
     e.preventDefault();
 
     const validationErrors = {};
-if (data.firstName.length >= 0 && data.firstName.length <6 ) {
-  validationErrors.firstName = "firstName must be 6 characters or more.";
+if (data.firstName.length <2 ) {
+  validationErrors.firstName = "firstName must be 2 characters or more.";
 }
-if (data.lastName.length >= 0 && data.lastName.length <6 ) {
-  validationErrors.lastName = "lastName must be 6 characters or more..";
+if (data.lastName.length <3 ) {
+  validationErrors.lastName = "lastName must be 3 characters or more..";
 }
     if (Object.keys(validationErrors).length > 0) {
       setError(validationErrors);

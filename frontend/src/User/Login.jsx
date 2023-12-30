@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import {jwtDecode} from 'jwt-decode'
 import logo from "../assets/LinkedIn-logo.png";
 import { GoogleLogin,GoogleOAuthProvider } from '@react-oauth/google';
-
+import axios from 'axios';
 const Login = () => {
   const navigate = useNavigate();
 
@@ -40,7 +40,23 @@ if (password.length > 0 && password.length <6 ) {
       setErrors(validationErrors);
       return;
     }
-    navigate('/Register'); // nese gjithcka eshte ne rregull na dergon tek Register ne kete pjese vetem per testim 
+    const loginInfo = {
+      email:email,
+      password:password
+     };
+     try {
+      await axios.post("/auth/login", loginInfo);
+      navigate('/Register');
+    } catch (err) {
+      if (err.response && err.response.data && err.response.data.message) {
+        // eshfaqim errorin per pjesen e password nese ka 
+        setErrors({ password: err.response.data.message });
+      } else {
+        // Nese nuk ka ndonje error specifik 
+        setErrors({ password: "Login failed. Please try again." });
+      }
+    }
+    // nese gjithcka eshte ne rregull na dergon tek Register ne kete pjese vetem per testim 
     //pasi te shtojm pjesen e home dhe feed e dergojm userin aty
   
   }
