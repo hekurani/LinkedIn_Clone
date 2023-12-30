@@ -5,10 +5,11 @@ import { SignUpDto } from './dto/signUp.dto';
 import { AuthentGuard } from './guards/auth.guard';
 import { Public } from './decorators/Public-Api.decorator';
 import { RtGuard } from './guards/rt.guard';
+import { MailService } from '../mailer-forgot-password/mail.service';
 import { AuthGuard } from '@nestjs/passport';
 @Controller('auth')
 export class AuthController {
-    constructor(private authService:AuthService){}
+    constructor(private authService:AuthService,private readonly mailService: MailService){}
     @Post('/signUp')
     @Public()
    async signUp(@Body() signUpDto:SignUpDto){
@@ -24,6 +25,19 @@ export class AuthController {
    @Get('/profile')
    getProfile(@Request() req) {
      return req.user;
+   }
+   @Post('/send_recovery_email')
+   @Public()
+   async sendRecoveryEmail(@Body() body: { email: string, OTP: string }) {
+    console.log("email requested")
+    console.log(body)
+     const { email, OTP } = body;
+     try {
+       const result = await this.mailService.sendMail(email, OTP);
+       return { message: result };
+     } catch (error) {
+       return { error: error.message };
+     }
    }
    @Post('/refreshtoken')
    @UseGuards(RtGuard)

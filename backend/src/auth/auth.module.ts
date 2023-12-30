@@ -6,7 +6,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt/dist';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthentGuard } from './guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
-
+import { MailService } from '../mailer-forgot-password/mail.service';
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ import { APP_GUARD } from '@nestjs/core';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, {
+  providers: [AuthService,MailService, {
     provide: APP_GUARD,
     useClass: AuthentGuard
   }],

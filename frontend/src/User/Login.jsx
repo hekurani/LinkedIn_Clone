@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {useNavigate} from "react-router-dom";
+import {useNavigate,Link} from "react-router-dom";
 import {jwtDecode} from 'jwt-decode'
 import logo from "../assets/LinkedIn-logo.png";
 import { GoogleLogin,GoogleOAuthProvider } from '@react-oauth/google';
@@ -87,7 +87,7 @@ if (password.length > 0 && password.length <6 ) {
                onChange={(e) => setPassword(e.target.value)}
              />
              <span className='text-red-500 text-xs italic'>{errors.password}</span>
-           <p style={{ color: '#0a66c2' }} className='mt-2 font-semibold'>Forgot Password?</p>
+           <p style={{ color: '#0a66c2' }} className='mt-2 font-semibold'><Link to={'/reset-password-request-email'}>Forgot Password?</Link></p>
            <button style={{ backgroundColor: '#0a66c2' }} className='w-80 h-12 font-semibold text-white rounded-full mt-3'>Sign In</button> 
             <p className='text-center pt-2'>or</p>
             <p className='text-xs mx-auto mt-5 mb-5 text-center'>By clicking Agree & Join, you agree to the LinkedIn <span style={{ color: 'purple' }}>User Agreement</span>, <span style={{ color: '#0a66c2' }}>Privacy Policy</span>, and <span style={{ color: '#0a66c2' }}>Cookie Policy</span>. </p>
