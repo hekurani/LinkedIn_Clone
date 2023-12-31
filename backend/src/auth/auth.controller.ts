@@ -12,8 +12,7 @@ export class AuthController {
     constructor(private authService:AuthService,private readonly mailService: MailService){}
     @Post('/signUp')
     @Public()
-   async signUp(@Body() signUpDto:SignUpDto){
-      console.log("hyri")
+   async signUp(@Body() signUpDto:SignInDto){
         return await this.authService.signUp(signUpDto.email,signUpDto.password);
     }
    @Post('/login')

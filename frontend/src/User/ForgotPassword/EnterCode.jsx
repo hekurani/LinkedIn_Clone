@@ -20,7 +20,7 @@ const EnterCodeForgotPassword = () => {
     if (email) {
       const OTP = generateOTP();
       axios
-        .post("/send_recovery_email", { recipient_email: email, OTP: OTP })
+        .post("/auth/send_recovery_email", { email: email, OTP: OTP })
         .then((response) => {
           setErrors("We have resent you the code!");
           setOTP(OTP);
@@ -41,7 +41,7 @@ const EnterCodeForgotPassword = () => {
     console.log(typeof(code))
     console.log(typeof(otp))
     if (code === otp.toString()){ //test nese jane te njejta dmth lejohet qasja tutje
-      navigate("/resetPassword")
+      navigate("/success-reset-change-password")
       
     } else { // nese nuk eshte ne rregull
       setErrors("Invalid code. Please try again.");
@@ -75,14 +75,14 @@ const EnterCodeForgotPassword = () => {
 
           <form className='bg-white w-96 h-200 rounded-lg p-5 pl-7' style={{boxShadow: '0 7px 30px -12px rgb(0 0 0 / 0.25)'}}   onSubmit={handleSubmit}> {/* forma */}
           <span style={{fontSize:'1.6rem'}} className='font-semibold mb-1'>Enter the 6-digit code</span> <br></br>
-          <p className='mt-2 text-sm'>Check <span className='font-semibold'>staffheredonaz@gmail.com</span> for a verification code. <span className='font-semibold' style={{color:'#0a66c2'}}> <Link to={'/Login'}>Change</Link></span></p>
+          <p className='mt-2 text-sm'>Check <span className='font-semibold'>{email}</span> for a verification code. <span className='font-semibold' style={{color:'#0a66c2'}}> <Link to={'/Login'}>Change</Link></span></p>
            <input style={{ border: '1px solid black' }} className=' p-2  mt-8 w-80 rounded h-12 mb-1' placeholder='6 digit code' type="text"
             name="email"              
               value={code}
             onChange={(e) => setCode(e.target.value)}
           />
              <span className='text-red-500 text-xs italic'>{errors}</span> <br></br>
-             <span onClick={resendCode} className='font-semibold text-sm' style={{color:'#0a66c2'}}>Resend Code</span>
+             <span  onClick={resendCode} className='font-semibold text-sm' style={{color:'#0a66c2',cursor:'pointer'}}>Resend Code</span>
 
   <button style={{ backgroundColor: '#0a66c2' }} className='w-80 mt-8 h-12 font-semibold text-white rounded-full mt-3'>Submit</button> 
 <p className='mt-5 text-sm text-left mb-1' style={{color:'grey'}}>If you don't see a code in your inbox, check your spam folder. If it's not there, the email address may not be confirmed, or it may not match an existing LinkedIn account.</p>

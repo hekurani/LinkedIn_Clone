@@ -28,7 +28,7 @@ function App() {
     <Route path="/Login" element={<Login />} />
     <Route path="/reset-password-request-email" element={<EmailInput />} />
     <Route path="/verification-code-forgotpass" element={<EnterCodeForgotPassword />} />
-    <Route path="/success-reset-password" element={<ResetPassword />} />
+    <Route path="/success-reset-change-password" element={<ResetPassword />} />
 
     </Routes>
     </EmailProvider>

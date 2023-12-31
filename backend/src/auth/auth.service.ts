@@ -12,34 +12,32 @@ const scrypt=promisify(_scrypt);
 export class AuthService {
     constructor(private usersService:UsersService,
        private jwtService:JwtService){}
-async signIn(email: string, password: string) {
-    const [user] = await this.usersService.find(email);
+    async signIn(email: string, password: string) {
+        const [user] = await this.usersService.find(email);
 
-    if (!user) {
-        throw new NotFoundException("Email does not exist!");
+        if (!user) {
+            throw new NotFoundException("Email does not exist!");
+        }
+
+        const isPasswordValid = await argon.verify(user.password, password);
+
+        if (!isPasswordValid) {
+            throw new BadRequestException('Wrong password!');
+        }
+
+        const payloadAccess = { userId: user?.id } as JWTpayload;
+        const payloadRefresh = { userId: user?.id } as JWTpayloadRt;
+
+        const accessToken = await this.jwtService.signAsync(payloadAccess);
+        const refreshToken = await this.jwtService.signAsync(payloadRefresh);
+
+        await this.usersService.update(user?.id, { RefreshToken: refreshToken });
+
+        return {
+            access_token: accessToken,
+            refresh_token: refreshToken,
+        } as Tokens;
     }
-
-    const [salt, storedHash] = user.password.split('.');
-    const hash = (await scrypt(password, salt, 32)) as Buffer;
-
-    if (storedHash !== hash.toString('hex')) {
-        throw new BadRequestException('Wrong password!');
-    }
-
-    const payloadAccess = { userId: user?.id } as JWTpayload;
-    const payloadRefresh = { userId: user?.id } as JWTpayloadRt;
-
-    const accessToken = await this.jwtService.signAsync(payloadAccess);
-    const refreshToken = await this.jwtService.signAsync(payloadRefresh);
-    const refreshHash = await argon.hash(refreshToken);
-
-    await this.usersService.update(user?.id, { RefreshToken: refreshHash });
-
-    return {
-        access_token: accessToken,
-        refresh_token: refreshToken
-    } as Tokens;
-}
 
         async signUp(email:string,password:string){
             try{
