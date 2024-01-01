@@ -4,10 +4,10 @@ const EmailContext = createContext();
 
 export const EmailProvider = ({ children }) => {
   const [email, setEmail] = useState(""); //emaili i shtypen nga user per forgot password
-  const [otp, setOTP] = useState(""); //code per verifikim
+
 
   return (
-    <EmailContext.Provider value={{ email, setEmail,otp,setOTP }}>
+    <EmailContext.Provider value={{ email, setEmail }}>
       {children}
     </EmailContext.Provider>
   );

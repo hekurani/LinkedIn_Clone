@@ -25,14 +25,28 @@ export class AuthController {
    getProfile(@Request() req) {
      return req.user;
    }
+   @Post('/verify_OTP')
+   @Public()
+    verifyOTP(@Body() body: {code:string}){
+    try{
+      const { code } = body;
+      console.log(code)
+      const result =  this.mailService.verifyOTP(code);
+      console.log(result)
+      return result;
+    }
+    catch(error){
+      return {error:error.message};
+    }
+   }
    @Post('/send_recovery_email')
    @Public()
-   async sendRecoveryEmail(@Body() body: { email: string, OTP: string }) {
+   async sendRecoveryEmail(@Body() body: { email: string}) {
     console.log("email requested")
     console.log(body)
-     const { email, OTP } = body;
+     const { email } = body;
      try {
-       const result = await this.mailService.sendMail(email, OTP);
+       const result = await this.mailService.sendMail(email);
        return { message: result };
      } catch (error) {
        return { error: error.message };

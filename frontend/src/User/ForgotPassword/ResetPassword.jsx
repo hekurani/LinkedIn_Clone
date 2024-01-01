@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate} from "react-router-dom";
+import { useNavigate,Link} from "react-router-dom";
 import logo from "../../assets/LinkedIn-logo.png";
 import axios from 'axios';
 
@@ -71,8 +71,8 @@ const EnterCodeForgotPassword = () => {
      
         <div  className="image ml-24 flex " >
           <img className='logo' width={120} height={120} src={logo} alt={'clone'} />
-          <button  className='font-semibold' style={{marginLeft:'830px',marginBottom:'15px',color:'grey'}}>Sign in</button>
-          <button className='mb-7 pb-1 pl-4 pr-4 mt-3 ml-4 rounded-full  pt-1 pb-0 font-semibold' style={{color:'#0a66c2',border:'1px solid #0a66c2' ,borderTop:'1.8px solid #0a66c2',borderLeft:'1.8px solid #0a66c2',borderRight:'1.8px solid #0a66c2'}}> <span className='text-center'>Join now</span></button>
+          <button  className='font-semibold' style={{marginLeft:'830px',marginBottom:'15px',color:'grey'}}> <Link to={'/Login'}>Sign in</Link> </button>
+          <button className='mb-7 pb-1 pl-4 pr-4 mt-3 ml-4 rounded-full  pt-1 pb-0 font-semibold' style={{color:'#0a66c2',border:'1px solid #0a66c2' ,borderTop:'1.8px solid #0a66c2',borderLeft:'1.8px solid #0a66c2',borderRight:'1.8px solid #0a66c2'}}> <span className='text-center'><Link to={'/Register'}>Join now</Link> </span></button>
         </div>
        
 
