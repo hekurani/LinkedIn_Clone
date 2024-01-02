@@ -18,7 +18,7 @@ import { FormProvider } from './User/context/FormContext';
 function App() {
   return (
     <BrowserRouter>
-{/* <HeaderComponent/> */}
+     <HeaderComponent/>
 <EmailProvider>
 
 

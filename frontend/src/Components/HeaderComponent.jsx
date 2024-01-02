@@ -9,7 +9,7 @@ const HeaderComponent = () => {
     <div className='header h-16' style={{border:'1px solid blue'}}>
         <div className='logoAndSearch flex pt-3 pl-20'>
         <img   className='pt-1 pb-2' src={logo} width={30} height={20} alt={'nul'} />
-        <input type="text"  style={{backgroundColor: '#e6f7ff'}}className=' bg-current ml-2 mt-1 border pl-2 w-52 h-8' placeholder="Search"/>
+        <input type="text"  style={{backgroundColor: '#e6f7ff'}}className=' bg-current ml-2 mt-1 border pl-2 w-52 h-8 rounded-sm' placeholder="Search"/>
         <div className='ml-28' style={{borderRight:'1px solid black'}}>
         <Link style={{ display: 'inline-block', textAlign: 'center', marginRight: '30px' }}>
             <FontAwesomeIcon className='ml-3 block' icon={faHouse} />

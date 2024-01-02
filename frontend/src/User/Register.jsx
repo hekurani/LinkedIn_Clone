@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import useFormContext from "./context/FormContext"
 import logo from "../assets/LinkedIn-logo.png";
 import FormInputs from './RegistrationComponents/FormInputs';
@@ -90,7 +90,7 @@ return (
             <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}> <GoogleLogin
   onSuccess={responseGoogle}
 ><button type="submit" style={{ backgroundColor: 'transparent',color:'black',border:'1px solid black' }} className='w-80 h-12 font-semibold text-white rounded-full mt-3 mb-3'>Sign In with Google</button></GoogleLogin></GoogleOAuthProvider>
-            <p className='mt-5 text-center'>Already on LinkedIn? <span style={{ color: '#0a66c2' }}>Sign in</span></p>
+            <p className='mt-5 text-center'>Already on LinkedIn? <span className='font-semibold' style={{ color: '#0a66c2' }}> <Link to={'/Login'}>Sign in</Link></span></p>
           </form>
         </div>
       </div>

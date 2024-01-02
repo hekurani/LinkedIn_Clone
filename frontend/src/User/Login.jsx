@@ -46,7 +46,7 @@ if (password.length > 0 && password.length <6 ) {
      };
      try {
       await axios.post("/auth/login", loginInfo);
-      navigate('/Register');
+      navigate('/');
     } catch (err) {
       if (err.response && err.response.data && err.response.data.message) {
         // eshfaqim errorin per pjesen e password nese ka 
@@ -76,13 +76,13 @@ if (password.length > 0 && password.length <6 ) {
           <form className='bg-white w-96 h-200 rounded-lg p-5 pl-7' style={{boxShadow: '0 7px 30px -12px rgb(0 0 0 / 0.25)'}}   onSubmit={signIn}> {/* forma */}
           <span style={{fontSize:'2.2rem'}}className='font-semibold'>Sign in</span> <br></br>
           <p className='text-sm pt-2 pb-3'>Stay updated on your professional world</p>
-           <input style={{ border: '1px solid black' }} className=' p-2  mt-2 w-80 rounded h-10' placeholder='Email or Phone' type="email"
+           <input style={{ border: '1px solid black' }} className=' p-2 pl-3  mt-2 w-80 rounded h-12' placeholder='Email or Phone' type="email"
             name="email"              
               value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
              <span className='text-red-500 text-xs italic'>{errors.email}</span> <br></br>
-           <input style={{ border: '1px solid black' }} className=' p-2 mt-6 w-80 h-10 rounded' placeholder="Password"type="password" name="password"
+           <input style={{ border: '1px solid black' }} className=' p-2  pl-3 mt-6 w-80 h-12 rounded' placeholder="Password"type="password" name="password"
                value={password}
                onChange={(e) => setPassword(e.target.value)}
              />
@@ -95,7 +95,7 @@ if (password.length > 0 && password.length <6 ) {
   onSuccess={responseGoogle}
 ><button type="submit" style={{ backgroundColor: 'transparent',color:'black',border:'1px solid black' }} className='w-80 h-12 font-semibold text-white rounded-full mt-3 mb-3'>Sign In with Google</button></GoogleLogin></GoogleOAuthProvider>          </form>
           <p className='text-center mt-5'>
-          New to LinkedIn? <span style={{color:'#0a66c2'}} className='font-semibold'>Join now</span>
+          New to LinkedIn? <span style={{color:'#0a66c2'}} className='font-semibold'><Link to={'/Register'}>Join now</Link></span>
           </p>
           
         </div>
