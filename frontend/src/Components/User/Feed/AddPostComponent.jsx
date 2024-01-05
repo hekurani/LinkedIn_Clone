@@ -1,6 +1,6 @@
 import React from 'react';
-import profile from "../../assets/profile.png";
-import background from "../../assets/background.jpg";
+import profile from "../../../assets/profile.png";
+import background from "../../../assets/background.jpg";
 import { faCalendarDays,faNewspaper} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

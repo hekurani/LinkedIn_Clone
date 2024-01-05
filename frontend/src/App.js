@@ -12,6 +12,7 @@ import { EmailProvider } from './User/ForgotPassword/EmailContext';
 //components
 import HeaderComponent from './Components/HeaderComponent';
 import Feed from './User/Feed';
+import Profile from "./User/Profile";
 
 import { FormProvider } from './User/context/FormContext';
 
@@ -25,6 +26,7 @@ function App() {
     <Routes>
     <Route path="/Register" element={<FormProvider><Register /></FormProvider>} />
     <Route path="/" element={<Feed />} />
+    <Route path="/profile" element={<Profile />} />
     <Route path="/Login" element={<Login />} />
     <Route path="/reset-password-request-email" element={<EmailInput />} />
     <Route path="/verification-code-forgotpass" element={<EnterCodeForgotPassword />} />

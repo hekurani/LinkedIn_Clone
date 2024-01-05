@@ -1,5 +1,6 @@
 import React from 'react';
-import profile from "../../assets/profile.png";
+import profile from "../../../assets/profile.png";
+import { Link } from 'react-router-dom';
 
 const UserFeedComponent = () => {
   return (
@@ -10,7 +11,7 @@ const UserFeedComponent = () => {
                
             </div>
             <div>
-                <p className='text-center mt-7 font-semibold'>Welcome, Ferat!</p>
+               <Link to={'/profile'}><p className='text-center mt-7 font-semibold'>Welcome, Ferat!</p></Link> 
                 <p className='text-sm text-center ' style={{color:'#0a66c2'}}>Add Photo</p>
             </div>
         </div>

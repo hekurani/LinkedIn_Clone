@@ -1,13 +1,13 @@
 import React from 'react'
-import profile from "../../assets/profile.png";
-import post from "../../assets/LinkedIn-logo.png";
+import profile from "../../../assets/profile.png";
+import post from "../../../assets/LinkedIn-logo.png";
 
 const PostComponent = () => {
     const LoveImageUrl = "https://static.licdn.com/aero-v1/sc/h/cpho5fghnpme8epox8rdcds22"
     const  LikeImageUrl ="https://static.licdn.com/aero-v1/sc/h/8ekq8gho1ruaf8i7f86vd1ftt"
   return (
-    <div  className=' ml-16 mt-8 rounded-md'style={{border:'1px solid blue'}}>
-        <div className='header m-3 flex' style={{border:'1px solid blue'}}>
+    <div  className=' ml-16 mt-8 rounded-md'style={{border:'1px solid black'}}>
+        <div className='header m-3 flex' >
             <img src={profile}  className='w-12 h-12 mt-1' alt={'userprofile'} />
             <div className=' profileinfo text-left ml-2'>
             <p>Ferat Gashi</p>
@@ -27,10 +27,10 @@ const PostComponent = () => {
             <p>Description</p>      
         </div>
 
-        <div className='media'  style={{width:'555px',height:'444px',border:'3px solid blue'}}>
+        <div className='media'  style={{width:'555px',height:'444px',border:'1px solid black'}}>
             <img src={post} alt={'media'} />
         </div>
-        <div className='socials-feedback h-7 flex' style={{border:'1px solid blue'}}>
+        <div className='socials-feedback h-7 flex ' style={{borderBottom:'1px solid black'}}>
     <img className="reactions-icon social-detail-social-counts__count-icon socia...tions-icon-type-EMPATHY data-test-reactions-icon-theme-light m-1 absolute" src={LikeImageUrl} alt="like" />
     <img className="reactions-icon social-detail-social-counts__count-icon socia...tions-icon-type-EMPATHY data-test-reactions-icon-theme-light m-1  absolute" src={LoveImageUrl} style={{marginLeft:'15px'}}alt="love" />
     <p className='ml-10 mt-0.5 text-sm' style={{color:'gray'}}>26</p>
