@@ -35,6 +35,11 @@ export class User {
     @OneToMany(() => Posts, post => post.user)
     posts: Posts[];
 
+    @Column({nullable:true})
+    imageProfile:string;
+
+    @Column({nullable:true})
+    gender:String;
 @BeforeRemove()
 beforeRemove(){
     console.log(`The removed user id is ${this.id}`);

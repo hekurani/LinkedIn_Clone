@@ -12,38 +12,39 @@ const scrypt=promisify(_scrypt);
 export class AuthService {
     constructor(private usersService:UsersService,
        private jwtService:JwtService){}
-    async signIn(email: string, password: string) {
-        const [user] = await this.usersService.find(email);
-
-        if (!user) {
-            throw new NotFoundException("Email does not exist!");
+        async signIn(email:string,password:string){
+            const [user] = await this.usersService.find(email);
+            if(!user){
+                throw new NotFoundException("User not found");
+            }
+            const [salt,storedHash]=user.password.split('.');
+            const hash=(await scrypt(password,salt,32)) as Buffer
+            if(storedHash!==hash.toString('hex')){
+                return new BadRequestException('Wrong password!')
+            }
+            const payload_access = {userId:user?.id} as JWTpayload;
+            const payload_refresh={userId:user?.id} as JWTpayloadRt;
+            const access_token=await this.jwtService.signAsync(payload_access);
+            const refresh_token=await this.jwtService.signAsync(payload_refresh);
+            const refresh_hash = await argon.hash(refresh_token);
+        await this.usersService.update(user?.id,{RefreshToken:refresh_hash})
+            return {
+            access_token,
+            refresh_token
+          } as Tokens;
+            
+        
         }
-
-        const isPasswordValid = await argon.verify(user.password, password);
-
-        if (!isPasswordValid) {
-            throw new BadRequestException('Wrong password!');
-        }
-
-        const payloadAccess = { userId: user?.id } as JWTpayload;
-        const payloadRefresh = { userId: user?.id } as JWTpayloadRt;
-
-        const accessToken = await this.jwtService.signAsync(payloadAccess);
-        const refreshToken = await this.jwtService.signAsync(payloadRefresh);
-
-        await this.usersService.update(user?.id, { RefreshToken: refreshToken });
-
-        return {
-            access_token: accessToken,
-            refresh_token: refreshToken,
-        } as Tokens;
-    }
-
-        async signUp(email:string,password:string){
+        async signUp(email:string,password:string,image:string){
             try{
                 const users=await this.usersService.find(email);
                 if(users.length){
-                throw new BadRequestException("Email is already used")
+                throw new BadRequestException("Email is used before")
+                }
+                const isPasswordValid = await argon.verify(users[0].password, password);
+
+                if (!isPasswordValid) {
+                    throw new BadRequestException('Wrong password!');
                 }
                 // Generate Salt
                 const salt=randomBytes(8).toString('hex');
@@ -52,8 +53,7 @@ export class AuthService {
                 // join the salt at the encoded password as the strings
                 const result=salt+'.'+hash.toString('hex')
                 //Create the user
-                const user=await this.usersService.create(email,result);
-                console.log(user);
+                const user=await this.usersService.create(email,result,image);
                 const payload_access = {userId:user?.id} as JWTpayload;
                 const payload_refresh={userId:user?.id} as JWTpayloadRt;
                 const access_token=await this.jwtService.signAsync(payload_access);

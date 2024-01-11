@@ -4,14 +4,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserRole } from './user.entity';
 import { Posts } from '../posts/post.entity';
 import { FindManyOptions } from 'typeorm';
-import * as argon from 'argon2';
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>,@InjectRepository(Posts) private postRepository: Repository<Posts>) {}
 
-  async create(email: string, password: string) {
+  async create(email: string, password: string,imageProfile:string) {
     console.log("here");
-    const user = this.repo.create({ email, password });
+    const user = this.repo.create({ email, password,imageProfile });
     return this.repo.save(user);
   }
 
@@ -68,12 +67,6 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-
-    if (attrs.password) {
-      const hashedPassword = await argon.hash(attrs.password); // Hash the password
-      attrs.password = hashedPassword;
-    }
-
     Object.assign(user, attrs);
     return this.repo.save(user);
   }
