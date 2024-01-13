@@ -11,6 +11,12 @@ import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
 import { SkillsModule } from './skills/skills.module';
 import {Skill} from "./skills/skills.entity";
+import { ChatRoomModule } from './chatroom/chatroom.module';
+import { MessageModule } from './message/message.module';
+import { ChatRoom } from './chatroom/chat.entity';
+import { Message } from './message/message.entity';
+import { GatewayModule } from './gateway/gateway.module';
+
 const cookieSession=require('cookie-session')
 @Module({
   imports: [
@@ -28,7 +34,7 @@ TypeOrmModule.forRootAsync({
       username:'postgres',
       port:+config.get<string>('PORT'),
       password:'1234',
-      entities:[User,Posts,Skill],
+      entities:[User,Posts,Skill,ChatRoom,Message],
       synchronize:true
     }
   }
@@ -41,9 +47,9 @@ TypeOrmModule.forRootAsync({
 
   // })
   
-  ,UsersModule, AuthModule, PostsModule, SkillsModule],
+  ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule,GatewayModule],
   controllers: [AppController],
-  providers: [AppService,
+  providers: [AppService,GatewayModule,
   {
     provide:APP_PIPE,
     useValue:new ValidationPipe({

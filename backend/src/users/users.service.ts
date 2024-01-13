@@ -48,7 +48,8 @@ export class UsersService {
 
     if (!user.skills.includes(skillId)) { //nese nuk e ka ja shtojm
       user.skills.push(skillId); //e bejm push
-      await this.repo.save(user); //save
+     const loco =  await this.repo.save(user); //save
+
     }
 
     return user; //return user ose mundemi te kthejm edhe diqka tjeter

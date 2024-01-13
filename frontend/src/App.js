@@ -16,6 +16,9 @@ import Profile from "./User/Profile";
 
 import { FormProvider } from './User/context/FormContext';
 
+//chat
+import ChatComponent from './Components/User/Chat/ChatComponent';
+
 function App() {
   return (
     <BrowserRouter>
@@ -31,6 +34,10 @@ function App() {
     <Route path="/reset-password-request-email" element={<EmailInput />} />
     <Route path="/verification-code-forgotpass" element={<EnterCodeForgotPassword />} />
     <Route path="/success-reset-change-password" element={<ResetPassword />} />
+
+
+    <Route path="/chat" element={<ChatComponent />} />
+    
 
     </Routes>
     </EmailProvider>
