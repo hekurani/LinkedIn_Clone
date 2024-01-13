@@ -3,7 +3,11 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserRole } from './user.entity';
 import { Posts } from '../posts/post.entity';
+import {randomBytes,scrypt as _scrypt} from 'crypto'
+
 import { FindManyOptions } from 'typeorm';
+import { promisify } from 'util';
+const scrypt=promisify(_scrypt);
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>,@InjectRepository(Posts) private postRepository: Repository<Posts>) {}
@@ -68,8 +72,14 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    Object.assign(user, attrs);
-    return this.repo.save(user);
+    //passwordi qe na ka ardh nese na ka ardh e hashum
+    if (attrs.password) {
+      const salt = randomBytes(8).toString('hex');
+      const hash = (await scrypt(attrs.password, salt, 32)) as Buffer;
+      attrs.password = salt + '.' + hash.toString('hex');
+    }
+    Object.assign(user, attrs);//ja  bashkangjesim att e reja userit 
+    return this.repo.save(user);//save user
   }
   async getUserPosts(user_id: number): Promise<Posts[]> {
     const user = await this.repo.findOne({ where: { id: user_id } });

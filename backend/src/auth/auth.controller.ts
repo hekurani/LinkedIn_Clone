@@ -80,8 +80,6 @@ return await this.authService.refreshToken(req?.user?.userId,req?.user?.rt);
    @Post('/send_recovery_email')
    @Public()
    async sendRecoveryEmail(@Body() body: { email: string}) {
-    console.log("email requested")
-    console.log(body)
      const { email } = body;
      try {
        const result = await this.mailService.sendMail(email);

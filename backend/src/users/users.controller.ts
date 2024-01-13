@@ -13,6 +13,7 @@ import { AuthentGuard } from '../auth/guards/auth.guard';
 import {UseGuards} from '@nestjs/common';
 import { Posts } from '../posts/post.entity';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Public } from 'src/auth/decorators/Public-Api.decorator';
 
 @Controller('/users')
 @Serialize(UserDto)
@@ -74,6 +75,7 @@ findAllUsers(@Query('email') email:string){
 remove(@Param('id') id:string){
     return this.usersService.remove(parseInt(id));
 }
+@Public()
 @Patch('/users/:id')
 async updateUser(@Param('id') id:string,@Body() body: UpdateUserDto){
 return this.usersService.update(parseInt(id),body);

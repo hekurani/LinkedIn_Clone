@@ -25,11 +25,12 @@ const cookieSession=require('cookie-session')
       isGlobal:true,
       envFilePath:`.env.${process.env.NODE_ENV}`
     }),
-TypeOrmModule.forRootAsync({
+TypeOrmModule.forRoot(dataSourceOptions)/* ({
   inject:[ConfigService],
   useFactory:(config:ConfigService)=>{
     return {
       type:'postgres',
+      
       database:config.get<string>('DB_NAME'),
       host:config.get<string>('HOST'),
       username:'postgres',
@@ -39,8 +40,7 @@ TypeOrmModule.forRootAsync({
       synchronize:true
     }
   }
-})
-TypeOrmModule.forRoot(dataSourceOptions)
+}) */
   //   TypeOrmModule.forRoot({
   //   type:'sqlite',
   //   database:'db.sqlite',
