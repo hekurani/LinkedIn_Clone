@@ -6,7 +6,9 @@ import { JwtModule, JwtService } from '@nestjs/jwt/dist';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthentGuard } from './guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
-import { MailService } from '../mailer-forgot-password/mail.service';
+import { MulterModule } from '@nestjs/platform-express';
+import { MailService } from 'src/mailer-forgot-password/mail.service';
+
 
 @Module({
   imports: [
@@ -20,7 +22,9 @@ import { MailService } from '../mailer-forgot-password/mail.service';
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: '600s' },
       }),
-    }),
+    }),MulterModule.register({
+      dest: './images',
+    })
   ],
   controllers: [AuthController],
   providers: [AuthService,MailService, {

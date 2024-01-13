@@ -10,6 +10,7 @@ import { Posts } from './posts/post.entity';
 import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
 import { SkillsModule } from './skills/skills.module';
+import {dataSourceOptions} from './db/config/dataSource'
 import {Skill} from "./skills/skills.entity";
 import { ChatRoomModule } from './chatroom/chatroom.module';
 import { MessageModule } from './message/message.module';
@@ -39,12 +40,29 @@ TypeOrmModule.forRootAsync({
     }
   }
 })
+TypeOrmModule.forRoot(dataSourceOptions)
   //   TypeOrmModule.forRoot({
   //   type:'sqlite',
   //   database:'db.sqlite',
   //   entities:[User,Report],
   //   synchronize:true,
-
+//{
+//   inject:[ConfigService],
+//   useFactory:(config:ConfigService)=>{
+//     return {
+//       type:'postgres',
+//       database:config.get<string>('DB_NAME'),
+//       host:config.get<string>('HOST'),
+//       username:'postgres',
+//       port:+config.get<string>('PORT'),
+//       password:'1234',
+//       entities:[User,Posts,Skill],
+//       synchronize:true,
+//       seeds: ["src/db/seeding/seeds/**/*{.ts,.js}"],
+//       factories: ["src/db/seeding/factories/**/*{.ts,.js}"]
+//     }
+//   }
+// }
   // })
   
   ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule,GatewayModule],

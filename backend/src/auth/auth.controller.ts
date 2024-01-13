@@ -1,20 +1,53 @@
-import { Body, Controller, Get, Post, UseGuards,Request,Req, Injectable } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards,Request,Req, Injectable, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, HttpStatus, ParseFilePipeBuilder } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { AuthentGuard } from './guards/auth.guard';
 import { Public } from './decorators/Public-Api.decorator';
 import { RtGuard } from './guards/rt.guard';
-import { MailService } from '../mailer-forgot-password/mail.service';
 import { AuthGuard } from '@nestjs/passport';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { MailService } from '../mailer-forgot-password/mail.service';
+import { extname } from 'path';
+import { diskStorage } from 'multer';
+const imageFileFilter = (req, file, callback) => {
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    return callback(new Error('Only image files are allowed!'), false);
+  }
+  callback(null, true);
+};
+const storage = diskStorage({
+  destination: './src/auth/images',
+  filename: (req, file, cb) => {
+    const name = file.originalname.split('.')[0];
+    const extension = extname(file.originalname);
+    const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
+    cb(null, `${name}-${randomName}${extension}`);
+  },
+});
 @Controller('auth')
 export class AuthController {
     constructor(private authService:AuthService,private readonly mailService: MailService){}
+    @Post('/google/signUp')
+    @Public()
+    async googleSignUp(@Body() signUpDto:{token:string}){
+this.authService.googleSignUp(signUpDto?.token);
+    }
+    
+    
     @Post('/signUp')
     @Public()
-   async signUp(@Body() signUpDto:SignInDto){
-        return await this.authService.signUp(signUpDto.email,signUpDto.password);
+    @UseInterceptors(FileInterceptor('image', { storage,fileFilter:imageFileFilter }))
+   async signUp(@Body() signUpDto:SignUpDto,@UploadedFile( 
+  ) file:Express.Multer.File){
+    try{
+      console.log(signUpDto.password)
+        return await this.authService.signUp(signUpDto.email,signUpDto.password,file?.filename);
     }
+    catch(err){
+      console.log(err);
+    }
+      }
    @Post('/login')
    @Public()
     logIn(@Body() signInDto:SignInDto){
@@ -24,6 +57,11 @@ export class AuthController {
    @Get('/profile')
    getProfile(@Request() req) {
      return req.user;
+   }
+   @Post('/refreshtoken')
+   @UseGuards(RtGuard)
+  async  refreshToken(@Request() req){
+return await this.authService.refreshToken(req?.user?.userId,req?.user?.rt);
    }
    @Post('/verify_OTP')
    @Public()
@@ -52,14 +90,11 @@ export class AuthController {
        return { error: error.message };
      }
    }
-   @Post('/refreshtoken')
-   @UseGuards(RtGuard)
-  async  refreshToken(@Request() req){
-return await this.authService.refreshToken(req?.user?.userId,req?.user?.rt);
-   }
    @Get('/logout')
    @Public()
    async logOut(@Request() req){
     return this.authService.logout(req?.user?.userId);
    }
 }
+
+

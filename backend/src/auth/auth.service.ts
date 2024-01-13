@@ -7,44 +7,59 @@ import { Tokens } from './types/tokens.type';
 import { JWTpayload } from './types/JWTpayload.type';
 import { JWTpayloadRt } from './types/JWTpayloadRt.type';
 import * as argon from 'argon2';
+import { OAuth2Client } from 'google-auth-library';
+
+const client = new OAuth2Client(
+ process.env.GOOGLE_CLIENT_ID,
+ process.env.GOOGLE_CLIENT_SECRET,
+);
 const scrypt=promisify(_scrypt);
 @Injectable()
 export class AuthService {
     constructor(private usersService:UsersService,
        private jwtService:JwtService){}
-    async signIn(email: string, password: string) {
-        const [user] = await this.usersService.find(email);
-
-        if (!user) {
-            throw new NotFoundException("Email does not exist!");
+        async signIn(email:string,password:string){
+            const [user] = await this.usersService.find(email);
+            if(!user){
+                throw new NotFoundException("User not found");
+            }
+            const [salt,storedHash]=user.password.split('.');
+            const hash=(await scrypt(password,salt,32)) as Buffer
+            if(storedHash!==hash.toString('hex')){
+                return new BadRequestException('Wrong password!')
+            }
+            const payload_access = {userId:user?.id} as JWTpayload;
+            const payload_refresh={userId:user?.id} as JWTpayloadRt;
+            const access_token=await this.jwtService.signAsync(payload_access);
+            const refresh_token=await this.jwtService.signAsync(payload_refresh);
+            const refresh_hash = await argon.hash(refresh_token);
+        await this.usersService.update(user?.id,{RefreshToken:refresh_hash})
+            return {
+                status:'success',
+            access_token,
+            refresh_token
+          } as Tokens;
+            
+        
         }
-
-        const isPasswordValid = await argon.verify(user.password, password);
-
-        if (!isPasswordValid) {
-            throw new BadRequestException('Wrong password!');
+        async googleSignUp(token:string){
+           const ticket= client.verifyIdToken({
+               idToken: token,
+               audience: process.env.GOOGLE_CLIENT_ID,
+           });
+           const user = (await ticket).getPayload();
+           console.log("user: "+user);
+           const users=await this.usersService.find(user?.email);
+           console.log(user);
         }
-
-        const payloadAccess = { userId: user?.id } as JWTpayload;
-        const payloadRefresh = { userId: user?.id } as JWTpayloadRt;
-
-        const accessToken = await this.jwtService.signAsync(payloadAccess);
-        const refreshToken = await this.jwtService.signAsync(payloadRefresh);
-
-        await this.usersService.update(user?.id, { RefreshToken: refreshToken });
-
-        return {
-            access_token: accessToken,
-            refresh_token: refreshToken,
-        } as Tokens;
-    }
-
-        async signUp(email:string,password:string){
+        async signUp(email:string,password:string,image:string){
             try{
+            
                 const users=await this.usersService.find(email);
                 if(users.length){
-                throw new BadRequestException("Email is already used")
+                throw new BadRequestException("Email is used before")
                 }
+                console.log()
                 // Generate Salt
                 const salt=randomBytes(8).toString('hex');
                 //hash the salt and the password together
@@ -52,8 +67,7 @@ export class AuthService {
                 // join the salt at the encoded password as the strings
                 const result=salt+'.'+hash.toString('hex')
                 //Create the user
-                const user=await this.usersService.create(email,result);
-                console.log(user);
+                const user=await this.usersService.create(email,result,image);
                 const payload_access = {userId:user?.id} as JWTpayload;
                 const payload_refresh={userId:user?.id} as JWTpayloadRt;
                 const access_token=await this.jwtService.signAsync(payload_access);

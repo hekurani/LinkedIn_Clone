@@ -7,12 +7,13 @@ export class Posts {
     id:number;
 
 
-    @Column()
+    @Column({nullable:true})
     description:string;
     
     @ManyToOne(() => User, user => user.posts)
   user: User;
-
+  @Column("simple-array")
+  postImages: string[]
 
 @BeforeRemove() //para se me fshi na tregon cili post id eshte duhke u fshi
 beforeRemove(){
