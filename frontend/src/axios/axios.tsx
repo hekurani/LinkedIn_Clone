@@ -1,9 +1,9 @@
 import Axios, { AxiosRequestConfig } from "axios";
-import setAxiosHeader from "../utilities/setAxiosHeader";
+import setAxiosHeader from "../utilities/setAxiosHeader.tsx";
 import { getRefreshToken } from "../utilities/getToken";
 
 const axiosInstance = Axios.create({
-  baseURL: "",
+  baseURL: "http://localhost:4000/",
 });
 
 axiosInstance.interceptors.request.use(
@@ -34,7 +34,7 @@ axiosInstance.interceptors.response.use(
           if (refreshToken) {
             await Axios({
               method: "POST",
-              url: `api/v1/auth/refreshtoken`,
+              url: `auth/refreshtoken`,
               headers: {
                 "Content-Type": "application/json",
               },
@@ -63,7 +63,7 @@ axiosInstance.interceptors.response.use(
             refreshAndRetryQueue.length = 0;
           } else {
             localStorage.clear();
-            window.location.href = "/";
+            window.location.href = "/logIn";
             return Promise.reject(error);
           }
         } catch (refreshError) {

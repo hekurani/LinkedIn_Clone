@@ -28,12 +28,20 @@ const storage = diskStorage({
 @Controller('auth')
 export class AuthController {
     constructor(private authService:AuthService,private readonly mailService: MailService){}
+    @Post('/google/signUp')
+    @Public()
+    async googleSignUp(@Body() signUpDto:{token:string}){
+this.authService.googleSignUp(signUpDto?.token);
+    }
+    
+    
     @Post('/signUp')
     @Public()
     @UseInterceptors(FileInterceptor('image', { storage,fileFilter:imageFileFilter }))
    async signUp(@Body() signUpDto:SignUpDto,@UploadedFile( 
   ) file:Express.Multer.File){
     try{
+      console.log(signUpDto.password)
         return await this.authService.signUp(signUpDto.email,signUpDto.password,file?.filename);
     }
     catch(err){

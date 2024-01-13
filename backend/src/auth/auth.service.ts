@@ -7,6 +7,12 @@ import { Tokens } from './types/tokens.type';
 import { JWTpayload } from './types/JWTpayload.type';
 import { JWTpayloadRt } from './types/JWTpayloadRt.type';
 import * as argon from 'argon2';
+import { OAuth2Client } from 'google-auth-library';
+
+const client = new OAuth2Client(
+ process.env.GOOGLE_CLIENT_ID,
+ process.env.GOOGLE_CLIENT_SECRET,
+);
 const scrypt=promisify(_scrypt);
 @Injectable()
 export class AuthService {
@@ -29,23 +35,31 @@ export class AuthService {
             const refresh_hash = await argon.hash(refresh_token);
         await this.usersService.update(user?.id,{RefreshToken:refresh_hash})
             return {
+                status:'success',
             access_token,
             refresh_token
           } as Tokens;
             
         
         }
+        async googleSignUp(token:string){
+           const ticket= client.verifyIdToken({
+               idToken: token,
+               audience: process.env.GOOGLE_CLIENT_ID,
+           });
+           const user = (await ticket).getPayload();
+           console.log("user: "+user);
+           const users=await this.usersService.find(user?.email);
+           console.log(user);
+        }
         async signUp(email:string,password:string,image:string){
             try{
+            
                 const users=await this.usersService.find(email);
                 if(users.length){
                 throw new BadRequestException("Email is used before")
                 }
-                const isPasswordValid = await argon.verify(users[0].password, password);
-
-                if (!isPasswordValid) {
-                    throw new BadRequestException('Wrong password!');
-                }
+                console.log()
                 // Generate Salt
                 const salt=randomBytes(8).toString('hex');
                 //hash the salt and the password together

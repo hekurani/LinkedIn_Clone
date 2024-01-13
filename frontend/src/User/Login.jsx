@@ -3,8 +3,9 @@ import {useNavigate,Link} from "react-router-dom";
 import {jwtDecode} from 'jwt-decode'
 import logo from "../assets/LinkedIn-logo.png";
 import { GoogleLogin,GoogleOAuthProvider } from '@react-oauth/google';
-import axios from 'axios';
+import axiosInstance  from '../axios/axios.tsx';
 const Login = () => {
+  console.log(process.env.REACT_APP_CLIENT_ID)
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -45,9 +46,12 @@ if (password.length > 0 && password.length <6 ) {
       password:password
      };
      try {
-      await axios.post("/auth/login", loginInfo);
+      const result=await axiosInstance.post("/auth/login", loginInfo);
+    if(result.data.status==='success'){
       navigate('/');
+    }
     } catch (err) {
+      console.log(err);
       if (err.response && err.response.data && err.response.data.message) {
         // eshfaqim errorin per pjesen e password nese ka 
         setErrors({ password: err.response.data.message });

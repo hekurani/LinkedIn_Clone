@@ -12,7 +12,7 @@ import {ConfigModule,ConfigService} from '@nestjs/config';
         username:'postgres',
         port:+configService.get('PORT'),
         password:'1234',
-        entities: ['dist/resources/**/*.entity.js'],
+        entities: [User,Posts,Skill],
         migrations: [__dirname + '/../migrations/*{.ts,.js}'],
         seeds: ['dist/db/seeds/**/*.js'],
         synchronize: false,
