@@ -34,7 +34,7 @@ export class ChatRoomService {
   }
 
 
-  async findAllMessages(chatId: number) {//metod qe gjen gjitha mesazhet ne baz te chatId
+  async findAllMessages(chatId: number) :Promise<Message[]>{//metod qe gjen gjitha mesazhet ne baz te chatId
     return this.messageRepository.find({ where: { chat: { id: chatId } } });
   }
 

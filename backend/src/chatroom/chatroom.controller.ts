@@ -5,7 +5,8 @@ import { Public } from 'src/auth/decorators/Public-Api.decorator';
 @Controller('chatroom')
 export class ChatroomController {
     constructor(private readonly chatService:ChatRoomService) {}
-    
+
+    @Public()//per testim duhet te largohet me pas ne implementim front-back
     @Get('/allMessages/:chatId')  //me get gjitha mesazhet qe i takojn nje chati
     findAllMessages(@Param('chatId') id:number){
         return this.chatService.findAllMessages(id);
