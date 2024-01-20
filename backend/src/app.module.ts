@@ -16,7 +16,7 @@ import { ChatRoomModule } from './chatroom/chatroom.module';
 import { MessageModule } from './message/message.module';
 import { ChatRoom } from './chatroom/chat.entity';
 import { Message } from './message/message.entity';
-import { GatewayModule } from './gateway/gateway.module';
+import { ChatGateway } from './chat.gateway';
 
 const cookieSession=require('cookie-session')
 @Module({
@@ -65,9 +65,9 @@ TypeOrmModule.forRoot(dataSourceOptions)/* ({
 // }
   // })
   
-  ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule,GatewayModule],
+  ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule],
   controllers: [AppController],
-  providers: [AppService,GatewayModule,
+  providers: [AppService,ChatGateway,
   {
     provide:APP_PIPE,
     useValue:new ValidationPipe({

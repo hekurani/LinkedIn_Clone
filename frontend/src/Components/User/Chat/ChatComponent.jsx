@@ -1,43 +1,45 @@
-// src/ChatComponent.js
 import React, { useState, useEffect } from 'react';
-
 import io from 'socket.io-client';
 
-const socket = io("http://localhost:4000", {
-    transports: ["websocket"],
-  withCredentials: true,
-});
+let socket;
 
+function ChatPage() {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
 
-const ChatComponent = () => {
-  const [messageInput, setMessageInput] = useState('');
+  useEffect(() => {
+    socket = io('http://localhost:8001'); // replace with your server address
+    socket.on('message', message => {
+      setMessages(messages => [...messages, message]);
+    });
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
-
-
-  const sendMessage = async (e) => {
-    e.preventDefault();
-
-      // Emit 'newMessage' event
-      
-      socket.emit('message', messageInput);
-
-      setMessageInput('');
-    
+  const handleMessageSubmit = () => {
+    if (input) {
+      socket.emit('message', input);
+      setInput('');
+    }
   };
 
   return (
     <div>
-      <form onSubmit={sendMessage}>
-        <input
-          type="text"
-          value={messageInput}
-          onChange={(e) => setMessageInput(e.target.value)}
-          placeholder="Type your message here"
-        />
-        <button type="submit">Send</button>
-      </form>
+      <ul>
+        {messages.map((message, index) => (
+          <li key={index}>{message}</li>
+        ))}
+      </ul>
+      <input
+        value={input}
+        onChange={e => setInput(e.target.value)}
+        type="text"
+        placeholder="Type a message"
+      />
+      <button onClick={handleMessageSubmit}>Send</button>
     </div>
   );
-};
+}
 
-export default ChatComponent;
+export default ChatPage;
