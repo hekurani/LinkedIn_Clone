@@ -2,6 +2,7 @@ import React from 'react'
 import UserFeedComponent from '../Components/User/Feed/UserFeedComponent';
 import AddPostComponent from '../Components/User/Feed/AddPostComponent';
 import PostComponent from '../Components/User/Feed/PostComponent';
+import ChatPage from '../Components/User/Chat/ChatComponent';
 import './Feed.css';
 const Feed = () => {
   return (
@@ -10,6 +11,7 @@ const Feed = () => {
         <div>
         <AddPostComponent/>
         <PostComponent/>
+        <ChatPage/>
         </div>
       
     </div>
