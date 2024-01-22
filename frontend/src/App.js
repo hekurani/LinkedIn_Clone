@@ -18,6 +18,7 @@ import { FormProvider } from './User/context/FormContext';
 
 //chat
 import ChatComponent from './Components/User/Chat/ChatComponent';
+import ChatListingComponent from './Components/User/Chat/ChatListingComponent';
 
 function App() {
   return (
@@ -37,6 +38,8 @@ function App() {
 
 
     <Route path="/chat" element={<ChatComponent />} />
+    <Route path="/chat-listing" element={<ChatListingComponent />} />
+    
     
 
     </Routes>

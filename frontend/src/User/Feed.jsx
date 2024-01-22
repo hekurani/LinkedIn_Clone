@@ -4,6 +4,7 @@ import AddPostComponent from '../Components/User/Feed/AddPostComponent';
 import PostComponent from '../Components/User/Feed/PostComponent';
 import ChatPage from '../Components/User/Chat/ChatComponent';
 import './Feed.css';
+import ChatListingComponent from '../Components/User/Chat/ChatListingComponent';
 const Feed = () => {
   return (
     <div className='feed-container'>
@@ -11,6 +12,7 @@ const Feed = () => {
         <div>
         <AddPostComponent/>
         <PostComponent/>
+        <ChatListingComponent/>
         <ChatPage/>
         </div>
       

@@ -75,7 +75,7 @@ function ChatPage() {
   };
 
   return (
-    <div className={`h-96 w-80  rounded-t-md fixed bottom-0 right-0 mr-32 ${isChatOpen ? '' : 'hidden'}`} style={{ borderTop: '1px solid grey', borderLeft: '1px solid grey', borderRight: '1px solid grey' }}>
+    <div className={`h-96 w-80  rounded-t-md fixed bottom-0 right-40 mr-40 ${isChatOpen ? '' : 'hidden'}`} style={{ borderTop: '1px solid grey', borderLeft: '1px solid grey',backgroundColor:'white', borderRight: '1px solid grey' }}>
       <div className='header flex justify-items-center items-center' style={{ borderBottom: '1px solid black' }}>
         <img src={profile} className='ml-2 h-8 w-8' alt='profili' />
         <div className='ml-4 mr-3'>
