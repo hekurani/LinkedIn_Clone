@@ -8,4 +8,8 @@ export class UpdateUserDto{
     @IsOptional()
     password:string;
 
+    @IsString()
+    @IsOptional()
+    imageProfile:string;
+
 }

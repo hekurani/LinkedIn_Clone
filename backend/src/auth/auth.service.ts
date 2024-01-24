@@ -33,7 +33,8 @@ export class AuthService {
             const access_token=await this.jwtService.signAsync(payload_access);
             const refresh_token=await this.jwtService.signAsync(payload_refresh);
             const refresh_hash = await argon.hash(refresh_token);
-        await this.usersService.update(user?.id,{RefreshToken:refresh_hash})
+            await this.usersService.update(user?.id, {}, refresh_hash);
+
             return {
                 status:'success',
             access_token,
@@ -73,7 +74,8 @@ export class AuthService {
                 const access_token=await this.jwtService.signAsync(payload_access);
                 const refresh_token=await this.jwtService.signAsync(payload_refresh);
                 const refresh_hash = await argon.hash(refresh_token);
-            await this.usersService.update(user?.id,{RefreshToken:refresh_hash})
+                await this.usersService.update(user?.id, {}, refresh_hash);
+
                 return {
                 access_token,
                 refresh_token
@@ -98,7 +100,8 @@ const rtMatches= await argon.verify(user.RefreshToken, rt);
          const access_token=await this.jwtService.signAsync(payload_access);
          const refresh_token=await this.jwtService.signAsync(payload_refresh);
          const refresh_hash = await argon.hash(refresh_token);
-     await this.usersService.update(user?.id,{RefreshToken:refresh_hash})
+         await this.usersService.update(user?.id, {}, refresh_hash);
+
 return {
     access_token,
     refresh_token
@@ -109,7 +112,7 @@ return {
             if(!user){
                 throw new NotFoundException("No user is found")
             }
-            await this.usersService.update(user?.id,{RefreshToken:null});
+            await this.usersService.update(user?.id, {},null);
             return;
         }
     
