@@ -17,6 +17,8 @@ import { MessageModule } from './message/message.module';
 import { ChatRoom } from './chatroom/chat.entity';
 import { Message } from './message/message.entity';
 import { ChatGateway } from './chat.gateway';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 const cookieSession=require('cookie-session')
 @Module({
@@ -24,6 +26,10 @@ const cookieSession=require('cookie-session')
     ConfigModule.forRoot({
       isGlobal:true,
       envFilePath:`.env.${process.env.NODE_ENV}`
+    }),
+    ServeStaticModule.forRoot({
+      serveRoot: '/images',
+      rootPath: join(__dirname, '..', '..', 'images'),
     }),
 TypeOrmModule.forRoot(dataSourceOptions)/* ({
   inject:[ConfigService],

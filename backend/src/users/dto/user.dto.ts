@@ -4,6 +4,8 @@ export class UserDto {
     @Expose()
     id: number;
     @Expose()
-    email:string
+    email:string;
+    @Expose()
+    imageProfile:string;
       
 }

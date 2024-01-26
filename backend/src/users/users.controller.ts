@@ -6,7 +6,7 @@ import {Serialize } from '../interceptors/serialize.interceptor';
 import { UserDto } from './dto/user.dto';
 import { User } from './user.entity';
 import { AuthService } from '../auth/auth.service';
-import { Session } from '@nestjs/common/decorators';
+import { Session, UploadedFile } from '@nestjs/common/decorators';
 import { CurrentUser } from './Decorators/current-user.decorator';
 import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 import { AuthentGuard } from '../auth/guards/auth.guard';
@@ -14,6 +14,25 @@ import {UseGuards} from '@nestjs/common';
 import { Posts } from '../posts/post.entity';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Public } from 'src/auth/decorators/Public-Api.decorator';
+import { extname } from 'path';
+import { diskStorage } from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express';
+
+const imageFileFilter = (req, file, callback) => {
+    if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+      return callback(new Error('Only image files are allowed!'), false);
+    }
+    callback(null, true);
+  };
+  const storage = diskStorage({
+    destination: './src/auth/images',
+    filename: (req, file, cb) => {
+      const name = file.originalname.split('.')[0];
+      const extension = extname(file.originalname);
+      const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
+      cb(null, `/${name}-${randomName}${extension}`);
+    },
+  });
 
 @Controller('/users')
 @Serialize(UserDto)
@@ -60,6 +79,7 @@ async getUserPosts(@Param('id') userId: string): Promise<Posts[]> {
   const posts = await this.usersService.getUserPosts(parseInt(userId));
   return posts;
 }
+@Public()
 @Get('/users/:id')
 findUser(@Param('id') id:string) {
     if(!id){
@@ -77,7 +97,10 @@ remove(@Param('id') id:string){
 }
 @Public()
 @Patch('/users/:id')
-async updateUser(@Param('id') id:string,@Body() body: UpdateUserDto){
-return this.usersService.update(parseInt(id),body);
+@UseInterceptors(FileInterceptor('image', { storage,fileFilter:imageFileFilter }))
+
+async updateUser(@Param('id') id:string,@Body() body: UpdateUserDto,@UploadedFile() file:Express.Multer.File){
+    console.log(file,"file erdhiiiiiiiiiPOOOO")
+return this.usersService.update(parseInt(id),body,file?.filename);
 }
 }

@@ -22,8 +22,13 @@ export class UsersService {
     if (!id) {
       return null;
     }
-    let user = await this.repo.find({ where: { id: id } });
-    return user[0] ?? null;
+  
+    const user = await this.repo.findOne({
+      where: { id },
+      select: ['id', 'email', 'imageProfile'],
+    });
+  
+    return user ?? null;
   }
 
   async remove(id: number) {
@@ -67,7 +72,7 @@ export class UsersService {
     return user.skills || null; // Return the user's skills ose null
   }
 
-  async update(id: number, attrs: Partial<User>) {
+  async update(id: number, attrs: Partial<User>, image: string, refreshToken?: string) {
     const user = await this.findOne(id);
     if (!user) {
       throw new NotFoundException('User not found');
@@ -78,9 +83,21 @@ export class UsersService {
       const hash = (await scrypt(attrs.password, salt, 32)) as Buffer;
       attrs.password = salt + '.' + hash.toString('hex');
     }
-    Object.assign(user, attrs);//ja  bashkangjesim att e reja userit 
-    return this.repo.save(user);//save user
+  
+    
+    if (image) {
+      user.imageProfile = image;
+    }
+  
+    // Handle RefreshToken 
+    if (refreshToken) {
+      user.RefreshToken = refreshToken;
+    }
+  
+    Object.assign(user, attrs);
+    return this.repo.save(user);
   }
+  
   async getUserPosts(user_id: number): Promise<Posts[]> {
     const user = await this.repo.findOne({ where: { id: user_id } });
     if (!user) {
