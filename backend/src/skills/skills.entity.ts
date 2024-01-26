@@ -5,9 +5,6 @@ export class Skill {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({unique:true})
     name: string;
-
-    @Column({ nullable: true }) //leveli munet me qen null
-    level: string;
 }

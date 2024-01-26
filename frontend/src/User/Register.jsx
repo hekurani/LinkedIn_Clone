@@ -6,13 +6,15 @@ import logo from "../assets/LinkedIn-logo.png";
 import FormInputs from './RegistrationComponents/FormInputs';
 import { GoogleLogin,GoogleOAuthProvider } from '@react-oauth/google';
 import {jwtDecode} from 'jwt-decode'
+import axiosInstance  from '../axios/axios.tsx';
 const Register = () => {
   const navigate = useNavigate();
 
-function responseGoogle(response){
-const decoded=jwtDecode(response.credential);
-console.log(decoded);
-const email = decoded.email;
+async function responseGoogle(response){
+const token=response.credential;
+const responseGoogle=await axiosInstance.post('/google/signUp',{token});
+console.log(responseGoogle);
+
 }
   const {setPage,data,canSubmit,error,setError}=useFormContext();
   const handleNext = (e) => {

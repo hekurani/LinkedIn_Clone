@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import {randomBytes,scrypt as _scrypt} from 'crypto'
@@ -43,15 +43,48 @@ export class AuthService {
         
         }
         async googleSignUp(token:string){
-           const ticket= client.verifyIdToken({
-               idToken: token,
-               audience: process.env.GOOGLE_CLIENT_ID,
-           });
-           const user = (await ticket).getPayload();
-           console.log("user: "+user);
-           const users=await this.usersService.find(user?.email);
-           console.log(user);
-        }
+            const ticket= client.verifyIdToken({
+                idToken: token,
+                audience: process.env.GOOGLE_CLIENT_ID,
+            });
+            const payLoad = (await ticket).getPayload();
+            const users=await this.usersService.find(payLoad?.email);
+            if(users.length){
+             throw new ForbiddenException("The email is used before");
+            }
+            const user=await this.usersService.create(payLoad?.email,null,null);
+            const payload_access = {userId:user?.id} as JWTpayload;
+            const payload_refresh={userId:user?.id} as JWTpayloadRt;
+            const access_token=await this.jwtService.signAsync(payload_access);
+            const refresh_token=await this.jwtService.signAsync(payload_refresh);
+            const refresh_hash = await argon.hash(refresh_token);
+            await this.usersService.update(user?.id,{RefreshToken:refresh_hash})
+            return {
+             status:'success',
+             access_token,
+             refresh_token
+           } as Tokens;
+         }
+         async googleLogIn(token:string){
+             const ticket= client.verifyIdToken({
+                 idToken: token,
+                 audience: process.env.GOOGLE_CLIENT_ID,
+             });
+             const payLoad = (await ticket).getPayload();
+             const [user]=await this.usersService.find(payLoad?.email);
+             const payload_access = {userId:user?.id} as JWTpayload;
+             const payload_refresh={userId:user?.id} as JWTpayloadRt;
+             const access_token=await this.jwtService.signAsync(payload_access);
+             const refresh_token=await this.jwtService.signAsync(payload_refresh);
+             const refresh_hash = await argon.hash(refresh_token);
+         await this.usersService.update(user?.id,{RefreshToken:refresh_hash})
+             return {
+                 status:'success',
+             access_token,
+             refresh_token
+           } as Tokens;
+             
+         }
         async signUp(email:string,password:string,image:string){
             try{
             

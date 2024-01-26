@@ -12,7 +12,7 @@ export class SkillsController {
     createPost(@Body() SkillsDTO:SkillsDTO){
         return this.skillsService.create(SkillsDTO.name,SkillsDTO.level);
     }
-    @Get('/allSkills')
+    @Get()
     findAllSkills(){
         return this.skillsService.findAll();
     }

@@ -33,6 +33,11 @@ export class AuthController {
     async googleSignUp(@Body() signUpDto:{token:string}){
 this.authService.googleSignUp(signUpDto?.token);
     }
+    @Post('/google/logIn')
+    @Public()
+    async googleLogIn(@Body() logInDto:{token:string}){
+this.authService.googleLogIn(logInDto?.token);
+    }
     
     
     @Post('/signUp')
