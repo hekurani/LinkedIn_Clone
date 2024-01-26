@@ -10,7 +10,7 @@ export class SkillsController {
     constructor(private skillsService:SkillsService){}
     @Post('/create')
     createPost(@Body() SkillsDTO:SkillsDTO){
-        return this.skillsService.create(SkillsDTO.name,SkillsDTO.level);
+        return this.skillsService.create(SkillsDTO.name);
     }
     @Get()
     findAllSkills(){

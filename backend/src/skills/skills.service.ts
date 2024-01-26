@@ -7,8 +7,8 @@ import { User } from '../users/user.entity';
 export class SkillsService {
   constructor(@InjectRepository(Skill) private repo: Repository<Skill>,@InjectRepository(User) private userRepository: Repository<User>) {}
 
-   create(name:string,level: string) {
-    const skill =  this.repo.create({ name,level });
+   create(name:string) {
+    const skill =  this.repo.create({ name });
     return this.repo.save(skill);
   }
 
