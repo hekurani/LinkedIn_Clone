@@ -2,13 +2,13 @@ import React from 'react'
 import profile from "../../../assets/profile.png";
 import post from "../../../assets/LinkedIn-logo.png";
 
-const PostComponent = () => {
+const PostComponent = ({user}) => {
     const LoveImageUrl = "https://static.licdn.com/aero-v1/sc/h/cpho5fghnpme8epox8rdcds22"
     const  LikeImageUrl ="https://static.licdn.com/aero-v1/sc/h/8ekq8gho1ruaf8i7f86vd1ftt"
   return (
     <div  className=' ml-16 mt-8 rounded-md'style={{border:'1px solid black'}}>
         <div className='header m-3 flex' >
-            <img src={profile}  className='w-12 h-12 mt-1' alt={'userprofile'} />
+            <img src={user.imageProfile} style={{borderRadius:'50%',objectFit:'cover'}} className='w-12 h-12 mt-1' alt={'userprofile'} />
             <div className=' profileinfo text-left ml-2'>
             <p>Ferat Gashi</p>
             <p className='position text-xs'>Software Developer</p>

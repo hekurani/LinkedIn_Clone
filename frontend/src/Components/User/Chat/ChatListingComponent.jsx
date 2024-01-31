@@ -1,13 +1,13 @@
 import React from 'react';
 import profile from "../../../assets/profile.png";
 
-const ChatListingComponent = () => {
+const ChatListingComponent = ({user}) => {
   const repeatCount = 12;
   
   return (
     <div className='w-72 fixed bottom-0 right-0 mr-5 rounded-t-md' style={{ border: '1px solid grey',backgroundColor:'white', height: '80vh' }}>
       <div className='header h-12  flex justify-items-center items-center ' style={{ borderBottom: '1px solid grey' }}>
-        <img className='ml-2 h-8 w-8 mr-2' src={profile} alt="profili" />
+        <img className='ml-2 h-8 w-8 mr-2' src={user.imageProfile} style={{borderRadius:'50%',objectFit:'cover'}} alt="profili" />
         <p className='font-semibold items-center mb-1'>Messaging</p>
       </div>
       <div className='h-14 flex justify-center items-center' style={{ position: 'relative' }}>

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faSave } from '@fortawesome/free-solid-svg-icons'; // Import the save icon
 import axios from 'axios';
 
-const CameraModal = ({ isOpen, onRequestClose, onImageCapture }) => {
+const CameraModal = ({ isOpen, onRequestClose }) => {
   const videoRef = useRef(null);
   const [capturedImage, setCapturedImage] = useState(null);
 
@@ -46,6 +46,7 @@ const CameraModal = ({ isOpen, onRequestClose, onImageCapture }) => {
 
       const dataURL = canvas.toDataURL('image/png');
       setCapturedImage(dataURL);
+      stopCamera();
     }
   };
 
@@ -57,16 +58,18 @@ const CameraModal = ({ isOpen, onRequestClose, onImageCapture }) => {
       //  FormData per me  append  image file
       const formData = new FormData();
       formData.append('image', blob, 'captured-image.png');
-
+      stopCamera();
       try {
         
-        await axios.patch('http://localhost:4000/users/users/2', formData);
-
-
-        onImageCapture(capturedImage);
-
-        stopCamera();
+        await axios.patch('http://localhost:4000/users/users/1', formData);
+        
         onRequestClose();
+        setTimeout(()=> {
+          window.location.reload();
+        },1000)
+
+     
+   
       } catch (error) {
         console.error('Error uploading image:', error);
       }

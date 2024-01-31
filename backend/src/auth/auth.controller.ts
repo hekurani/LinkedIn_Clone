@@ -17,7 +17,7 @@ const imageFileFilter = (req, file, callback) => {
   callback(null, true);
 };
 const storage = diskStorage({
-  destination: './src/auth/images',
+  destination: '../../images',
   filename: (req, file, cb) => {
     const name = file.originalname.split('.')[0];
     const extension = extname(file.originalname);

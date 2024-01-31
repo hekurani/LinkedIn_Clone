@@ -28,8 +28,8 @@ const cookieSession=require('cookie-session')
       envFilePath:`.env.${process.env.NODE_ENV}`
     }),
     ServeStaticModule.forRoot({
-      serveRoot: '/images',
-      rootPath: join(__dirname, '..', '..', 'images'),
+      serveRoot: '/Images',
+      rootPath: join(__dirname, '..', '..', 'Images'),
     }),
 TypeOrmModule.forRoot(dataSourceOptions)/* ({
   inject:[ConfigService],

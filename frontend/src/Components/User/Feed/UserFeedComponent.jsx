@@ -3,20 +3,11 @@ import { Link } from 'react-router-dom';
 import UploadImageModal from '../Profile/UploadImageModal';
 import axios from 'axios';
 
-const UserFeedComponent = () => {
+const UserFeedComponent = ({user}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
-  const [userData, setUserData] = useState(null);
 
-  useEffect(()=> {
-    const fetchData  = async() => {
-        const resposne = await axios.get("http://localhost:4000/users/users/2")
-          setUserData(resposne.data)
-      }
- 
 
-      fetchData();
-  },[])
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -26,10 +17,11 @@ const UserFeedComponent = () => {
         
       <div className='h-36' style={{ borderBottom: '1px solid grey' }}>
         <div className='Cover rounded-t-md h-14' style={{ backgroundColor: 'yellow', border: '1px solid grey' }}>
-        {userData && (
+        {user && (
   <img
     className='absolute ml-20 mt-4 w-16 h-16'
-    src={userData.imageProfile}
+    style={{borderRadius:'50%',objectFit:'cover',border:'2px solid white'}}
+    src={user.imageProfile}
     alt={'Profile'}
   />
 )}

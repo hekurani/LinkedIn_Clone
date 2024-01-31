@@ -26,8 +26,12 @@ const UploadImageModal = ({ isOpen, onRequestClose }) => {
       formData.append('image', file);
 
       // Upload  file ne  backend
-      await axios.patch('http://localhost:4000/users/users/2', formData);
+      await axios.patch('http://localhost:4000/users/users/1', formData);
 
+      onRequestClose();
+      setTimeout(()=> {
+        window.location.reload();
+      },1000)
 
       setCapturedImage(null); // fshijm  captured image
     } catch (error) {

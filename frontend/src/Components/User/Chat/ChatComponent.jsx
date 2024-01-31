@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 let socket;
 
-function ChatPage() {
+function ChatPage({user}) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isChatOpen, setIsChatOpen] = useState(true);//me handle chat open/close
@@ -77,7 +77,7 @@ function ChatPage() {
   return (
     <div className={`h-96 w-80  rounded-t-md fixed bottom-0 right-40 mr-40 ${isChatOpen ? '' : 'hidden'}`} style={{ borderTop: '1px solid grey', borderLeft: '1px solid grey',backgroundColor:'white', borderRight: '1px solid grey' }}>
       <div className='header flex justify-items-center items-center' style={{ borderBottom: '1px solid black' }}>
-        <img src={profile} className='ml-2 h-8 w-8' alt='profili' />
+        <img src={user.imageProfile} className='ml-2 h-8 w-8' alt='profili' style={{borderRadius:'50%',objectFit:'cover'}}/>
         <div className='ml-4 mr-3'>
           <p className='font-semibold'>Ferat Gashi</p>
           <p className='text-xs'>Available on mobile</p>

@@ -3,7 +3,7 @@ import cover from "../../../assets/cover.jpg";
 import profile from "../../../assets/profile.png";
 import { faPencil } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-const ProfileInfo = () => {
+const ProfileInfo = ({user}) => {
 
    
         const handleHover = (e) => {
@@ -18,7 +18,7 @@ const ProfileInfo = () => {
     <div className='main ml-20 mt-7 rounded-md' style={{border:'1px solid blue',width:'804px'}}>
             <div className='header  rounded-md' style={{width:'804px',height:'201px',position:'relative',border:'1px solid blue'}} >
                 <img src={cover} className="rounded-md" style={{position:'absolute'}} alt={'coveri'} />
-                <img src={profile} style={{width:'152px',height:'152px',position:'absolute',borderRadius:'50%',border:'4px solid white',padding: '0px', boxSizing: 'border-box'}}  className='mt-28 ml-6' alt={'profile'} />
+                <img src={user.imageProfile} style={{width:'152px',height:'152px',objectFit: 'cover',position:'absolute',borderRadius:'50%',border:'4px solid white',padding: '0px', boxSizing: 'border-box'}}  className='mt-28 ml-6' alt={'profile'} />
                 <div>
                 <FontAwesomeIcon className='m-5 p-2' onFocus={{color:'blue'}} style={{marginBottom:'40px',right:'0',position:'absolute',border:'1px solid white',backgroundColor:'white',color:'#0a66c2',borderRadius:'50%'}}icon={faPencil}  onMouseOver={handleHover}
             onMouseOut={handleHoverOut} />
