@@ -22,10 +22,13 @@ const [user,setUser] = useState([])
     <div className='feed-container'>
         <UserFeedComponent user={user}/> {/* user feed componenta ne pjesen majtas */}
         <div>
-        <AddPostComponent user={user}/>
-        <PostComponent user={user}/>
-        <ChatListingComponent user={user}/>
-        <ChatPage user={user}/>
+
+          <AddPostComponent user={user}/> {/* Pjesa qe e bene add nje post */}
+        <PostComponent user={user}/> {/* pjesa e posteve */}
+
+
+        <ChatListingComponent user={user}/> {/* lista me chatroom */}
+        <ChatPage user={user}/> {/* CHatRoom componenta */}
         </div>
       
     </div>

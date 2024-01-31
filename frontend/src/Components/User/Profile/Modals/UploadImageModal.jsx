@@ -72,7 +72,7 @@ const UploadImageModal = ({ isOpen, onRequestClose }) => {
           />
         )}
 
-        <div className="bg-white p-4 rounded shadow-lg" style={{ width: '700px', height: '100vh' }}>
+        <div className="bg-white p-4 rounded shadow-2xl" style={{ width: '700px', height: '90vh' }}>
           <div className='flex m-7'>
             <h2 className="text-xl font-semibold mb-4">Add Photo</h2>
             <FontAwesomeIcon className='ml-auto text-2xl' icon={faXmark} onClick={onRequestClose} />

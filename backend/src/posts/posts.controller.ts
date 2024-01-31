@@ -15,7 +15,7 @@ const imageFileFilter = (req, file, callback) => {
   callback(null, true);
 };
 const storage = diskStorage({
-  destination: './src/auth/images',
+  destination: '../',
   filename: (req, file, cb) => {
     const name = file.originalname.split('.')[0];
     const extension = extname(file.originalname);
@@ -37,9 +37,14 @@ export class PostsController {
     )
     createPost(@Body() postDTO:PostDTO,@UploadedFiles() files){
       const response = [];
-      files.forEach(file => {
-        response.push(file.filename);
-      });
+      console.log(postDTO)
+      console.log(files)
+      if(files) {
+        files.forEach(file => {
+          response.push(file.filename);
+        });
+      }
+
         return this.postService.create(postDTO.description,response);
        
     }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import UploadImageModal from '../Profile/UploadImageModal';
+import UploadImageModal from '../Profile/Modals/UploadImageModal';
 import axios from 'axios';
 
 const UserFeedComponent = ({user}) => {
