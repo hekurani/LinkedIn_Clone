@@ -72,7 +72,7 @@ export class UsersService {
     return user.skills || null; // Return the user's skills ose null
   }
 
-  async update(id: number, attrs: Partial<User>, image: string, refreshToken?: string) {
+  async update(id: number, attrs: Partial<User>, refreshToken?: string) {
     const user = await this.findOne(id);
     if (!user) {
       throw new NotFoundException('User not found');
@@ -84,10 +84,7 @@ export class UsersService {
       attrs.password = salt + '.' + hash.toString('hex');
     }
   
-    
-    if (image) {
-      user.imageProfile = image;
-    }
+ 
   
     // Handle RefreshToken 
     if (refreshToken) {

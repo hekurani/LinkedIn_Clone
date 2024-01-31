@@ -100,7 +100,7 @@ remove(@Param('id') id:string){
 @UseInterceptors(FileInterceptor('image', { storage,fileFilter:imageFileFilter }))
 
 async updateUser(@Param('id') id:string,@Body() body: UpdateUserDto,@UploadedFile() file:Express.Multer.File){
-    console.log(file,"file erdhiiiiiiiiiPOOOO")
-return this.usersService.update(parseInt(id),body,file?.filename);
+  body.imageProfile = file?.filename;
+return this.usersService.update(parseInt(id),body);
 }
 }
