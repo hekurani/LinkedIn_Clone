@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { faCalendarDays, faClock, faImage, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const AddPostModal = ({ user ,closeModal}) => {
   const [description, setDescription] = useState('');
   const [images, setImages] = useState([]);
 
-  const navigate = useNavigate();
+
 
   const handleImageChange = (file) => {
     setImages((prevImages) => [...prevImages, file]);

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
-import profile from '../../../assets/profile.png';
 import { faEllipsis, faImage, faLink, faVideo, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -110,7 +109,7 @@ function ChatPage({user}) {
       <div className=' h-13 mt-4 flex justify-center items-center' >
         <FontAwesomeIcon className='ml-3'icon={faImage} />
         <FontAwesomeIcon className='ml-3' icon={faLink} />
-        <svg id="gif-small" className='h-5 w-5 ml-3' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true" role="none" data-supported-dps="16x16" fill="currentColor">
+        <svg id="gif-small" className='h-5 w-5 ml-3' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"  role="none" data-supported-dps="16x16" fill="currentColor">
           <path d="M12 6v1h2v2h-2v3h-2V4h5v2h-3zm-5 6h2V4H7v8zM1 6v4c0 1.1.9 2 2 2 .39 0 .74-.01 1.63-.74L5 12h1V8H4v2H3V6h3V4H3c-1.1 0-2 .9-2 2z"></path>
         </svg>
 

@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import profile from "../../../assets/profile.png";
-import post from "../../../assets/LinkedIn-logo.png";
 import axios from 'axios';
 
 const PostComponent = ({ user }) => {
