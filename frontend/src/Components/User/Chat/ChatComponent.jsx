@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 let socket;
 
-function ChatPage({user}) {
+function ChatPage({user,onCloseChat }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isChatOpen, setIsChatOpen] = useState(true);//me handle chat open/close
@@ -57,7 +57,12 @@ function ChatPage({user}) {
   };
 
   const handleToggleChat = () => {
-    setIsChatOpen(!isChatOpen);//me close chatin me X
+    setIsChatOpen(!isChatOpen);
+    if (!isChatOpen) {
+      scrollToBottom();
+    } else {
+      onCloseChat(); // This will close the chat when clicking on the "X" button
+    }
   };
 
   const scrollToBottom = () => {

@@ -20,9 +20,12 @@ const Feed = () => {
     fetchData();
   }, []);
 
-
   const handleOpenChatPage = () => {
     setIsChatOpen(true);
+  };
+
+  const handleCloseChatPage = () => {
+    setIsChatOpen(false);
   };
 
   return (
@@ -32,7 +35,7 @@ const Feed = () => {
         <AddPostComponent user={user} />
         <PostComponent user={user} />
         <ChatListingComponent user={user} onChatRowClick={handleOpenChatPage} />
-        {isChatOpen && <ChatPage user={user} />}
+        {isChatOpen && <ChatPage user={user} onCloseChat={handleCloseChatPage} />}
       </div>
     </div>
   );

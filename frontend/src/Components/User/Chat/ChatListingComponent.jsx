@@ -8,7 +8,9 @@ const ChatListingComponent = ({ user,onChatRowClick  }) => {
   const toggleChatListing = () => {
     setIsCollapsed(!isCollapsed);
   };
-
+  const handleChatRowClick = () => {
+    onChatRowClick(); // This will trigger the function passed from the parent (Feed) to open the chat
+  };
   return (
     <div className={`w-72 fixed bottom-0 right-0 mr-5 ${isCollapsed ? 'h-12' : 'rounded-t-md'}`} style={{ border: '1px solid grey', backgroundColor: 'white', height: isCollapsed ? 'auto' : '80vh' }}>
       <div className='header h-12 flex justify-items-center items-center' style={{ borderBottom: '1px solid grey' }}>
@@ -33,7 +35,7 @@ const ChatListingComponent = ({ user,onChatRowClick  }) => {
 
           <div className='list h-96 overflow-y-auto'>
             {Array.from({ length: repeatCount }, (_, index) => (
-              <div key={index} className='p-2 oneProfile h-16 flex justify-items-center items-center' style={{ border: '1px solid grey', borderBottom: '0px', borderLeft: '0px' }} onClick={onChatRowClick}>
+              <div key={index} className='p-2 oneProfile h-16 flex justify-items-center items-center' style={{ border: '1px solid grey', borderBottom: '0px', borderLeft: '0px' }} onClick={handleChatRowClick}>
                 <img className='h-10 w-10' src={profile} alt="profili" />
                 <div>
                   <p className='name ml-1'>Hekuran Kokolli</p>
