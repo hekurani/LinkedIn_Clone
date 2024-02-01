@@ -25,7 +25,7 @@ const AddPostModal = ({ user ,closeModal}) => {
   
 
     try {
-      await axios.post('http://localhost:4000/posts/create', formData);
+      await axios.post(`http://localhost:4000/posts/create/${user.id}`, formData);
       window.location.reload();
     } catch (error) {
       console.error('Error posting:', error);

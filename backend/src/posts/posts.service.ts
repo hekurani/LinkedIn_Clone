@@ -7,9 +7,9 @@ import { User } from 'src/users/user.entity';
 export class PostsService {
   constructor(@InjectRepository(Posts) private repo: Repository<Posts>,@InjectRepository(User) private userRepository: Repository<User>) {}
 
-   create(description: string,response:string[]) {
+   create(id,description: string,response:string[]) {
     if(!description && response.length===0) throw new BadRequestException("You have to add description or images to post")
-    const post =  this.repo.create({ description,postImages:response });
+    const post =  this.repo.create({ description,postImages:response,user:id});
     return this.repo.save(post);
   }
 
@@ -40,9 +40,15 @@ export class PostsService {
     return user.posts;
   }
 
-  async findAll() {
-    return this.repo.find();
+  async findAll(): Promise<{ user: User; posts: Posts[] }[]> {
+    const postsWithUsers = await this.repo.find({ relations: ['user'] });
+  
+    return postsWithUsers.map((post) => ({
+      user: post.user,
+      posts: [post],
+    }));
   }
+  
 
 
   async update(id: number, attrs: Partial<Posts>) {

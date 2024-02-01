@@ -20,14 +20,14 @@ const storage = diskStorage({
     const name = file.originalname.split('.')[0];
     const extension = extname(file.originalname);
     const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
-    cb(null, `${name}-${randomName}${extension}`);
+    cb(null, `/Images/${name}-${randomName}${extension}`);
   },
 });
 @Controller('posts')
 export class PostsController {
     constructor(private postService:PostsService){}
     
-    @Post('/create')
+    @Post('/create/:id')
     @Public()
     @UseInterceptors(
       FilesInterceptor('image', 20, {
@@ -35,7 +35,7 @@ export class PostsController {
         fileFilter: imageFileFilter,
       }),
     )
-    createPost(@Body() postDTO:PostDTO,@UploadedFiles() files){
+    createPost(@Param('id') id: string,@Body() postDTO:PostDTO,@UploadedFiles() files){
       const response = [];
       console.log(postDTO)
       console.log(files)
@@ -45,7 +45,7 @@ export class PostsController {
         });
       }
 
-        return this.postService.create(postDTO.description,response);
+        return this.postService.create(id,postDTO.description,response);
        
     }
     @Get('/user/:userId')
@@ -60,6 +60,7 @@ export class PostsController {
         throw new NotFoundException('User not found');
       }
     }
+    @Public()
     @Get('/allPosts')
     findAllUsers(){
         return this.postService.findAll();
