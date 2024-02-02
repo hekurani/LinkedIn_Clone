@@ -38,20 +38,23 @@ const PostComponent = ({ user }) => {
           <div className='description m-4 text-sm max-h-96'>
             <p>{postItem.posts[0].description}</p>
           </div>
-          <div className='media flex flex-wrap' style={{ border: '1px solid black', maxWidth: '555px',height:'400px',maxHeight:'300px', overflow: 'hidden' }}>
-  {postItem.posts[0].postImages.map((image, imageIndex) => (
-    <img
-      key={imageIndex}
-      src={image}
-      alt={`media-${index}-${imageIndex}`}
-      style={{
-        width: postItem.posts[0].postImages.length === 1 ? '100%' : (postItem.posts[0].postImages.length === 3 && imageIndex === 2) ? '100%' : '50%',
-        height: postItem.posts[0].postImages.length === 3 && imageIndex === 2 ? '100%' : 'auto',
-        marginBottom: postItem.posts[0].postImages.length === 2 ? '5px' : '0',
-      }}
-    />
-  ))}
-</div>
+          
+          {postItem.posts[0].postImages.length > 0 && (
+              <div className='media flex flex-wrap' style={{ border: '1px solid black', maxWidth: '555px', height: '400px', maxHeight: '300px', overflow: 'hidden' }}>
+                {postItem.posts[0].postImages.map((image, imageIndex) => (
+                  <img
+                    key={imageIndex}
+                    src={image}
+                    alt={`media-${index}-${imageIndex}`}
+                    style={{
+                      width: postItem.posts[0].postImages.length === 1 ? '100%' : (postItem.posts[0].postImages.length === 3 && imageIndex === 2) ? '100%' : '50%',
+                      height: postItem.posts[0].postImages.length === 3 && imageIndex === 2 ? '100%' : 'auto',
+                      marginBottom: postItem.posts[0].postImages.length === 2 ? '5px' : '0',
+                    }}
+                  />
+                ))}
+              </div>
+            )}
 
 
 
