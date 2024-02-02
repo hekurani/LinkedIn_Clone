@@ -7,10 +7,13 @@ const AddPostModal = ({ user ,closeModal}) => {
   const [description, setDescription] = useState('');
   const [images, setImages] = useState([]);
 
+  const handleRemoveImage = (position) => {
+    setImages((prevImages) => prevImages.filter((_, index) => index !== position));
+  };
+  
 
-
-  const handleImageChange = (file) => {
-    setImages((prevImages) => [...prevImages, file]);
+  const handleImageChange = (files) => {
+    setImages((prevImages) => [...prevImages, ...Array.from(files)]);
   };
 
   const handlePost = async () => {
@@ -62,11 +65,29 @@ const AddPostModal = ({ user ,closeModal}) => {
             id="imageInput"
             accept="image/*"
             multiple
-            onChange={(e) => handleImageChange(e.target.files[0])}
+            onChange={(e) => handleImageChange(e.target.files)}
             style={{ display: 'none' }}
           />
           <button className=' ml-7 text-lg font-semibold'>  <FontAwesomeIcon icon={faCalendarDays} style={{ color: 'grey' }} width={20} height={10} /></button>
         </div>
+        
+ <div className="h-20"style={{maxHeight:'130px'}}>{/*imageBeforeUpload  */}
+  {images.map((val, input) => (
+    <React.Fragment key={input}>
+      <button className='rounded-full font-semibold text-white pl-4 pr-4 pb-1 mt-1  ml-3 mr-1' style={{ backgroundColor: '#0a66c2' }}>
+        {val.name}
+       
+
+        
+        <span onClick={() => handleRemoveImage(input)} style={{ paddingLeft:'1px',color: 'white',fontSize:'13px' }}> X</span>
+        
+      </button>
+    
+ 
+    </React.Fragment>
+  ))}
+</div>
+
         <div className='flex justify-center items-center' style={{ float: 'right' }}>{/* post button and schedule time */}
           <button className='text-2xl pt-1'><FontAwesomeIcon style={{ color: 'grey' }} icon={faClock}></FontAwesomeIcon></button>
           <button className='rounded-full font-semibold text-white pl-4 pr-4 mt-1 pt-1 pb-1 ml-3 mr-3' onClick={handlePost} style={{ backgroundColor: '#0a66c2', outline: 'none'/* , float: 'right' */}}>Post</button>
