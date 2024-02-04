@@ -3,13 +3,15 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Posts } from './post.entity';
 import { User } from 'src/users/user.entity';
+import { CreatePostDto } from './dtos/create-post-dto';
 @Injectable()
 export class PostsService {
   constructor(@InjectRepository(Posts) private repo: Repository<Posts>,@InjectRepository(User) private userRepository: Repository<User>) {}
 
-   create(id,description: string,response:string[]) {
+   create(id,payload: CreatePostDto,response:string[]) {
+     const {description} = payload;
     if(!description && response.length===0) throw new BadRequestException("You have to add description or images to post")
-    const post =  this.repo.create({ description,postImages:response,user:id});
+    const post =  this.repo.create({ description,postImages:response,user:id,});
     return this.repo.save(post);
   }
 

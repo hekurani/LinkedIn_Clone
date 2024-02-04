@@ -8,6 +8,7 @@ import { NotFoundException } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { CreatePostDto } from './dtos/create-post-dto';
 const imageFileFilter = (req, file, callback) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
     return callback(new Error('Only image files are allowed!'), false);
@@ -35,7 +36,7 @@ export class PostsController {
         fileFilter: imageFileFilter,
       }),
     )
-    createPost(@Param('id') id: string,@Body() postDTO:PostDTO,@UploadedFiles() files){
+    createPost(@Param('id') id: string,@Body() postDTO:CreatePostDto,@UploadedFiles() files){
       const response = [];
       console.log(postDTO)
       console.log(files)
@@ -45,7 +46,7 @@ export class PostsController {
         });
       }
 
-        return this.postService.create(id,postDTO.description,response);
+        return this.postService.create(id,postDTO,response);
        
     }
     @Get('/user/:userId')

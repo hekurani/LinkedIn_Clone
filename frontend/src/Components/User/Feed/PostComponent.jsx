@@ -8,12 +8,41 @@ const PostComponent = ({ user }) => {
     const getAllPosts = async () => {
       const response = await axios.get('http://localhost:4000/posts/allPosts');
       setAllPosts(response.data);
+      console.log(response.data)
     }
     getAllPosts();
   }, [])
 
   const LoveImageUrl = "https://static.licdn.com/aero-v1/sc/h/cpho5fghnpme8epox8rdcds22";
   const LikeImageUrl = "https://static.licdn.com/aero-v1/sc/h/8ekq8gho1ruaf8i7f86vd1ftt";
+
+  const getTimePassed = (publishDate) => {
+    const currentDate = new Date();
+    const postDate = new Date(publishDate);
+    const timeDifference = currentDate - postDate; 
+
+
+    const seconds = Math.floor(timeDifference / 1000);// turn milisekondat ne sekonda
+
+    if (seconds < 60) { //nese ne secods e kemi
+      return `${seconds} s`; // retunrn sekondat 
+    }
+
+    const minutes = Math.floor(seconds / 60);
+
+    if (minutes < 60) { //nese ne minuta
+      return `${minutes} min`; //return minutat
+    }
+
+    const hours = Math.floor(minutes / 60);
+
+    if (hours < 24) { // nese ne or 
+      return `${hours} h`; // return minutat
+    } 
+
+    const days = Math.floor(hours / 24); // dhe nese ne dite
+    return `${days} d`; //return ditet qe sa eshte publiku
+  };
 
   return (
     <>
@@ -27,7 +56,7 @@ const PostComponent = ({ user }) => {
             <div className='profileinfo text-left ml-2'>
               <p>Ferat Gashi</p>
               <p className='position text-xs'>Software Developer</p>
-              <p className='time text-xs'>7m •</p>
+              <p className='time text-xs'>{getTimePassed(postItem.posts[0].publishDate)} •</p>
             </div>
             <div className='ml-auto flex'>
               <p>•••</p>

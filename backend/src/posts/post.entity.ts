@@ -6,6 +6,11 @@ export class Posts {
     @PrimaryGeneratedColumn()
     id:number;
 
+    @Column({ default: () => 'CURRENT_TIMESTAMP' })
+   publishDate: Date;
+
+
+
 
     @Column({nullable:true})
     description:string;
