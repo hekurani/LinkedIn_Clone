@@ -61,7 +61,7 @@ this.authService.googleLogIn(logInDto?.token);
    @UseGuards(AuthentGuard)
    @Get('/profile')
    getProfile(@Request() req) {
-     return req.user;
+    return this.authService.findById(req.user.id);
    }
    @Post('/refreshtoken')
    @UseGuards(RtGuard)

@@ -43,6 +43,12 @@ export class AuthService {
             
         
         }
+        async findById(id){
+const user=await this.usersService.findOne(id);
+if(!user)
+throw new NotFoundException("User not found");
+return user;
+        }
         async googleSignUp(token:string){
             const ticket= client.verifyIdToken({
                 idToken: token,
