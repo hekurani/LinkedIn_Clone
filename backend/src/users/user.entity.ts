@@ -2,6 +2,7 @@ import { BeforeInsert,BeforeRemove,BeforeUpdate } from "typeorm";
 import { Entity,Column,PrimaryGeneratedColumn,OneToMany } from "typeorm";
 import { Exclude } from "class-transformer";
 import { Posts } from "../posts/post.entity";
+import { Comment } from "../comments/comment.entity";
 export enum UserRole {
     ADMIN = "admin",
     JOBSEEKER = "jobseeker"
@@ -34,6 +35,9 @@ export class User {
 
     @OneToMany(() => Posts, post => post.user)
     posts: Posts[];
+    
+    @OneToMany(() => Comment, comment => comment.user) 
+    comments: Comment[]; 
 
     @Column({nullable:true})
     imageProfile:string;
