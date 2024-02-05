@@ -9,11 +9,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChatRoom } from '../chatroom/chat.entity';
 import { Comment } from './comment.entity';
 import { User } from '../users/user.entity';
+import { Posts } from 'src/posts/post.entity';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Comment,User]),JwtModule,
+    TypeOrmModule.forFeature([Comment,User,Posts]),JwtModule,
     ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule], 

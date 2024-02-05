@@ -13,7 +13,7 @@ export class CommentsController {
     @Public()
     @Post()
     create(@Body() createCommentDto: CreateCommentDto) {
-        return this.commentsService.create(createCommentDto.text, createCommentDto.userId);
+        return this.commentsService.create(createCommentDto.text, createCommentDto.userId,createCommentDto.postId);
     }
     @Public()
 

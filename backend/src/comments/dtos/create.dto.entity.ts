@@ -1,4 +1,4 @@
-import {   IsNumber, IsString, isNumber } from "class-validator";
+import {   IsNumber, IsString } from "class-validator";
 
 export class CreateCommentDto{
 
@@ -6,6 +6,8 @@ export class CreateCommentDto{
     text?:string
     @IsNumber()
     userId?:number
+    @IsNumber()
+    postId?:number
 
 
 }
