@@ -3,6 +3,8 @@ import axios from 'axios';
 
 const PostComponent = ({ user }) => {
   const [allPosts, setAllPosts] = useState([]);
+  const [comments, setComments] = useState({});
+  const [postButtonForPost, setPostButtonForPost] = useState(null);
 
   useEffect(() => {
     const getAllPosts = async () => {
@@ -16,6 +18,29 @@ const PostComponent = ({ user }) => {
   const LoveImageUrl = "https://static.licdn.com/aero-v1/sc/h/cpho5fghnpme8epox8rdcds22";
   const LikeImageUrl = "https://static.licdn.com/aero-v1/sc/h/8ekq8gho1ruaf8i7f86vd1ftt";
 
+  const handleCommentSubmit = async (postId) => {
+    try{
+      const info =  {
+        userId : user.id,
+        text: comments[postId] || '',
+        postId : postId
+      }
+
+     
+      
+    
+
+    await axios.post(`http://localhost:4000/comments`, info);
+    setComments({ ...comments, [postId]: '' });
+    setPostButtonForPost(null);
+  } catch (error) {
+    console.error('Error posting:', error);
+  }
+  
+
+  
+  };
+  
   const getTimePassed = (publishDate) => {
     const currentDate = new Date();
     const postDate = new Date(publishDate);
@@ -143,6 +168,37 @@ const PostComponent = ({ user }) => {
             <button>Repost</button>
             <button>Send</button>
           </div>
+
+          <div className='comments'>
+  <div className='Image_andImput flex items-center'>
+    <img className='ml-3 mt-3 w-10 h-10 mb-2' style={{ borderRadius: '50%', objectFit: 'cover' }} src={user.imageProfile} alt={'p'} />
+    <div className='input-container'>
+      <input
+        type="text"
+        placeholder="Add a comment..."
+        value={comments[postItem.posts[0].id] || ''} // Use comments[postId] as the input value
+        onClick={() => setPostButtonForPost(postItem.posts[0].id)}
+        onChange={(e) => setComments({ ...comments, [postItem.posts[0].id]: e.target.value })}
+        style={{ backgroundColor: 'transparent', width: '475px', border: '1px solid black', color: 'grey', marginRight: '8px' }}
+        className='text-sm h-10 font-semibold ml-2 rounded-full pl-4 focus:outline-none'
+      />
+    </div>
+  </div>
+  {postButtonForPost === postItem.posts[0].id &&(
+    <div className='comment-input-container'>
+      <button
+        className='ml-14 rounded-full'
+        onClick={() => handleCommentSubmit(postItem.posts[0].id)}
+        style={{ backgroundColor: '#0a66c2', color: 'white', padding: '2px 12px'}}
+      >
+        Post
+      </button>
+    </div>
+  )}
+</div>
+
+  
+      
         </div>
         </div>
       ))}
