@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { Link } from 'react-router-dom';
 import UploadImageModal from '../Profile/Modals/UploadImageModal';
-import axios from 'axios';
 
 const UserFeedComponent = ({user}) => {
+  console.log(user)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
 
@@ -28,7 +28,7 @@ const UserFeedComponent = ({user}) => {
         </div>
         <div className="flex flex-col items-center">
           <Link to={'/profile'}>
-            <p className='text-center mt-7 font-semibold'>Welcome, Ferat!</p>
+            <p className='text-center mt-7 font-semibold'>Welcome,{user.name}!</p>
           </Link>
           <button className='text-sm mx-auto mt-2' style={{ color: '#0a66c2' }} onClick={openModal}>Add Photo</button>
         </div>

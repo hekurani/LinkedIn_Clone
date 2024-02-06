@@ -12,9 +12,9 @@ const scrypt=promisify(_scrypt);
 export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>,@InjectRepository(Posts) private postRepository: Repository<Posts>) {}
 
-  async create(email: string, password: string,imageProfile:string) {
+  async create(name:string,lastname:string,email: string, password: string,imageProfile:string) {
     console.log("here");
-    const user = this.repo.create({ email, password,imageProfile });
+    const user = this.repo.create({ name,lastname,email, password,imageProfile });
     return this.repo.save(user);
   }
 
@@ -25,7 +25,7 @@ export class UsersService {
   
     const user = await this.repo.findOne({
       where: { id },
-      select: ['id', 'email', 'imageProfile'],
+      select: ['id', 'email', 'imageProfile','name','lastname'],
     });
   
     return user ?? null;

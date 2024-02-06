@@ -96,11 +96,11 @@ const PostComponent = ({ user }) => {
       
         <div key={index} className='mb-4'>
           <div className='header m-3 flex'>
-            <img src={user.imageProfile} style={{ borderRadius: '50%', objectFit: 'cover' }} className='w-12 h-12 mt-1' alt={'userprofile'} />
+            <img src={postItem.user.imageProfile} style={{ borderRadius: '50%', objectFit: 'cover' }} className='w-12 h-12 mt-1' alt={'userprofile'} />
             <div className='profileinfo text-left ml-2'>
-              <p>Ferat Gashi</p>
+              <p>{postItem.user.name} {postItem.user.lastname}</p>
               <p className='position text-xs'>Software Developer</p>
-              <p className='time text-xs'>{getTimePassed(postItem.posts[0].publishDate)} •</p>
+              <p className='time text-xs'>{getTimePassed(postItem.post.publishDate)} •</p>
             </div>
             <div className='ml-auto flex'>
               <p>•••</p>
@@ -109,20 +109,20 @@ const PostComponent = ({ user }) => {
           </div>
 
           <div className='description m-4 text-sm max-h-96'>
-            <p>{postItem.posts[0].description}</p>
+            <p>{postItem.post.description}</p>
           </div>
           
-          {postItem.posts[0].postImages.length > 0 && (
+          {postItem.post.postImages.length > 0 && (
               <div className='media flex flex-wrap' style={{ border: '1px solid black', maxWidth: '555px', height: '400px', maxHeight: '300px', overflow: 'hidden' }}>
-                {postItem.posts[0].postImages.map((image, imageIndex) => (
+                {postItem.post.postImages.map((image, imageIndex) => (
                   <img
                     key={imageIndex}
                     src={image}
                     alt={`media-${index}-${imageIndex}`}
                     style={{
-                      width: postItem.posts[0].postImages.length === 1 ? '100%' : (postItem.posts[0].postImages.length === 3 && imageIndex === 2) ? '100%' : '50%',
-                      height: postItem.posts[0].postImages.length === 3 && imageIndex === 2 ? '100%' : 'auto',
-                      marginBottom: postItem.posts[0].postImages.length === 2 ? '5px' : '0',
+                      width: postItem.post.postImages.length === 1 ? '100%' : (postItem.post.postImages.length === 3 && imageIndex === 2) ? '100%' : '50%',
+                      height: postItem.post.postImages.length === 3 && imageIndex === 2 ? '100%' : 'auto',
+                      marginBottom: postItem.post.postImages.length === 2 ? '5px' : '0',
                     }}
                   />
                 ))}
@@ -176,25 +176,41 @@ const PostComponent = ({ user }) => {
       <input
         type="text"
         placeholder="Add a comment..."
-        value={comments[postItem.posts[0].id] || ''} // Use comments[postId] as the input value
-        onClick={() => setPostButtonForPost(postItem.posts[0].id)}
-        onChange={(e) => setComments({ ...comments, [postItem.posts[0].id]: e.target.value })}
+        value={comments[postItem.post.id] || ''} // nese ka comment e merr vleren e saj
+        onClick={() => setPostButtonForPost(postItem.post.id)}
+        onChange={(e) => setComments({ ...comments, [postItem.post.id]: e.target.value })}
         style={{ backgroundColor: 'transparent', width: '475px', border: '1px solid black', color: 'grey', marginRight: '8px' }}
         className='text-sm h-10 font-semibold ml-2 rounded-full pl-4 focus:outline-none'
       />
     </div>
   </div>
-  {postButtonForPost === postItem.posts[0].id &&(
+  {postButtonForPost === postItem.post.id &&(
     <div className='comment-input-container'>
       <button
         className='ml-14 rounded-full'
-        onClick={() => handleCommentSubmit(postItem.posts[0].id)}
-        style={{ backgroundColor: '#0a66c2', color: 'white', padding: '2px 12px'}}
+        onClick={() => handleCommentSubmit(postItem.post.id)}
+        style={{ backgroundColor: '#0a66c2', color: 'white',marginBottom:'10px', padding: '2px 12px'}}
       >
         Post
       </button>
     </div>
   )}
+   <div className='AllCommnets'>
+
+   
+                {postItem.post.comments && postItem.post.comments.map((comment, commentIndex) => (
+                  <div key={commentIndex} className='flex'>
+                    <img className='ml-3 mt-3 w-10 h-10 mb-2' style={{ borderRadius: '50%', objectFit: 'cover' }} src={comment.user.imageProfile} alt={'p'} />
+                    <div className='ml-2 ' style={{backgroundColor:'#f5f5ef'}}>
+                      <p>{comment.user.name} {comment.user.lastname}</p>
+                       <p>{comment.text}</p>
+      
+                    </div>
+                  </div>
+                ))}
+          
+</div>
+
 </div>
 
   

@@ -8,19 +8,32 @@ import { Posts } from 'src/posts/post.entity';
 export class CommentsService {
   constructor(@InjectRepository(Comment) private repo: Repository<Comment>,@InjectRepository(Posts) private postRepository: Repository<Posts>,@InjectRepository(User) private userRepository: Repository<User>) {}
 
-   async create(text:string,userId:number,postId:number) {
-    const user = await this.userRepository.findOne({where:{id:userId}});
-    const post = await this.postRepository.findOne({where:{id:postId}});
-    if(!user){
+  async create(text: string, userId: number, postId: number) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const post = await this.postRepository.findOne({ where: { id: postId }, relations: ['comments'] });
+  
+    if (!user) {
       throw new NotFoundException('User not found');
     }
-    if(!post){
+    if (!post) {
       throw new NotFoundException('Post not found');
     }
+  
+    const comment = this.repo.create({ text, user, post, publishDate: new Date() });
+    const savedComment = await this.repo.save(comment);
+  
+    //check nese e inicializume si array
+    post.comments = post.comments || [];
     
-    const comment =  this.repo.create({ text ,user,post,publishDate:new Date()});
-    return this.repo.save(comment);
+    //saved comment e shtojme ne array
+    post.comments = [...post.comments, savedComment];
+  
+    // e save postin
+    await this.postRepository.save(post);
+  
+    return 'Comment created successfully';
   }
+  
 async findOne(id: number) {
     if (!id) {
         return null;
