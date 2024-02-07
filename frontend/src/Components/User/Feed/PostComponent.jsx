@@ -31,6 +31,21 @@ const PostComponent = ({ user }) => {
     
 
     await axios.post(`http://localhost:4000/comments`, info);
+    setAllPosts((prevPosts) =>
+    prevPosts.map((post) =>
+      post.post.id === postId
+        ? {
+            ...post,
+            post: {
+              ...post.post,
+              comments: [{ text: info.text, user: user }, ...(post.post.comments || [])],
+            },
+          }
+        : post
+    )
+  );
+  
+  
     setComments({ ...comments, [postId]: '' });
     setPostButtonForPost(null);
   } catch (error) {
@@ -43,30 +58,29 @@ const PostComponent = ({ user }) => {
   
   const getTimePassed = (publishDate) => {
     const currentDate = new Date();
-    const postDate = new Date(publishDate);
-    const timeDifference = currentDate - postDate; 
-
-
-    const seconds = Math.floor(timeDifference / 1000);// turn milisekondat ne sekonda
-
-    if (seconds < 60) { //nese ne secods e kemi
-      return `${seconds} s`; // retunrn sekondat 
+    const postDate = publishDate ? new Date(publishDate) : currentDate;
+    const timeDifference = currentDate - postDate;
+  
+    const seconds = Math.floor(timeDifference / 1000);
+  
+    if (seconds < 60) {
+      return `${seconds} s`;
     }
-
+  
     const minutes = Math.floor(seconds / 60);
-
-    if (minutes < 60) { //nese ne minuta
-      return `${minutes} min`; //return minutat
+  
+    if (minutes < 60) {
+      return `${minutes} min`;
     }
-
+  
     const hours = Math.floor(minutes / 60);
-
-    if (hours < 24) { // nese ne or 
-      return `${hours} h`; // return minutat
-    } 
-
+  
+    if (hours < 24) {
+      return `${hours} h`;
+    }
+  
     const days = Math.floor(hours / 24);
-
+  
     if (days < 7) {
       return `${days} d`;
     }
@@ -87,6 +101,7 @@ const PostComponent = ({ user }) => {
   
     return `${years} y`;
   };
+  
 
   return (
     <>
@@ -170,18 +185,20 @@ const PostComponent = ({ user }) => {
           </div>
 
           <div className='comments'>
-  <div className='Image_andImput flex items-center'>
+  <div className='Image_andImput flex items-center' style={{flexWrap:'wrap'}}>
     <img className='ml-3 mt-3 w-10 h-10 mb-2' style={{ borderRadius: '50%', objectFit: 'cover' }} src={user.imageProfile} alt={'p'} />
     <div className='input-container'>
-      <input
-        type="text"
-        placeholder="Add a comment..."
-        value={comments[postItem.post.id] || ''} // nese ka comment e merr vleren e saj
-        onClick={() => setPostButtonForPost(postItem.post.id)}
-        onChange={(e) => setComments({ ...comments, [postItem.post.id]: e.target.value })}
-        style={{ backgroundColor: 'transparent', width: '475px', border: '1px solid black', color: 'grey', marginRight: '8px' }}
-        className='text-sm h-10 font-semibold ml-2 rounded-full pl-4 focus:outline-none'
-      />
+    <input
+  type="text"
+  placeholder="Add a comment..."
+  value={comments[postItem.post.id] || ''}
+  onClick={() => setPostButtonForPost(postItem.post.id)}
+  onChange={(e) => setComments({ ...comments, [postItem.post.id]: e.target.value })}
+  style={{ backgroundColor: 'transparent', width: '475px', border: '1px solid black', wordWrap: 'break-word', overflowWrap: 'break-word', color: 'grey', marginRight: '8px' }}
+  className='text-sm h-10 font-semibold ml-2 rounded-full pl-4 focus:outline-none'
+/>
+
+
     </div>
   </div>
   {postButtonForPost === postItem.post.id &&(
@@ -195,19 +212,28 @@ const PostComponent = ({ user }) => {
       </button>
     </div>
   )}
-   <div className='AllCommnets'>
+   <div className='AllCommnets mt-2 mb-10'>
 
    
-                {postItem.post.comments && postItem.post.comments.map((comment, commentIndex) => (
-                  <div key={commentIndex} className='flex'>
-                    <img className='ml-3 mt-3 w-10 h-10 mb-2' style={{ borderRadius: '50%', objectFit: 'cover' }} src={comment.user.imageProfile} alt={'p'} />
-                    <div className='ml-2 ' style={{backgroundColor:'#f5f5ef'}}>
-                      <p>{comment.user.name} {comment.user.lastname}</p>
-                       <p>{comment.text}</p>
-      
-                    </div>
-                  </div>
-                ))}
+   {postItem.post.comments &&
+  postItem.post.comments
+    .slice() 
+    .sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate))
+    .map((comment, commentIndex) => (
+      <div key={commentIndex} className='flex mt-7' style={{ display: 'flex', alignItems: 'flex-start', maxHeight: '1000px' }}>
+        <img className='ml-3 mt-3 w-10 h-10 mb-2' style={{ borderRadius: '50%', objectFit: 'cover' }} src={comment.user.imageProfile} alt={'p'} />
+        <div className='ml-2 flex-column w-96 h-auto p-2 pl-3 pr-5' style={{ backgroundColor: '#f5f5ef', wordWrap: 'break-word' }}>
+          <div className='flex'>
+          <p className='font-semibold'>{comment.user.name} {comment.user.lastname}</p>
+          <p className='text-xs mt-2 ml-auto'>{getTimePassed(comment.publishDate)}</p>
+          </div>
+
+          <p className='mt-3'>{comment.text}</p>
+
+        </div>
+      </div>
+    ))}
+
           
 </div>
 
