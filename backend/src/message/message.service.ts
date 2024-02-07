@@ -26,10 +26,12 @@ export class MessageService {
   }
 
   async findOne(id: number) {
+    
     if (!id) {
       return null;
     }
-    let message = await this.repo.find({ where: { id: id } });
+    let message = await this.repo.find({ where: { id: id },
+    relations: ['user']});
     return message;
   }
 
