@@ -6,6 +6,7 @@ import { Skill } from '../../skills/skills.entity';
 import {ConfigModule,ConfigService} from '@nestjs/config';
 import { Message } from 'src/message/message.entity';
 import { ChatRoom } from 'src/chatroom/chat.entity';
+import { Comment } from 'src/comments/comment.entity';
  const createDataSourceOptions = (configService: ConfigService): DataSourceOptions & SeederOptions => {
     return {
         type:'postgres',
@@ -14,7 +15,7 @@ import { ChatRoom } from 'src/chatroom/chat.entity';
         username:'postgres',
         port:configService.get('PORT'),
         password:'1234',
-        entities: [User,Posts,Skill,Message,ChatRoom],
+        entities: [User,Posts,Skill,Message,ChatRoom,Comment],
         migrations: [__dirname + '/../migrations/*{.ts,.js}'],
         seeds: ['dist/db/seeds/**/*.js'],
         synchronize: false,

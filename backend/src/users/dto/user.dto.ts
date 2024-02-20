@@ -6,6 +6,10 @@ export class UserDto {
     @Expose()
     email:string;
     @Expose()
+    name:string;
+    @Expose()
+    lastname:string;
+    @Expose()
     imageProfile:string;
       
 }

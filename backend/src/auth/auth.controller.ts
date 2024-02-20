@@ -47,7 +47,7 @@ this.authService.googleLogIn(logInDto?.token);
   ) file:Express.Multer.File){
     try{
       console.log(signUpDto.password)
-        return await this.authService.signUp(signUpDto.email,signUpDto.password,file?.filename);
+        return await this.authService.signUp(signUpDto.name,signUpDto.lastname,signUpDto.email,signUpDto.password,file?.filename);
     }
     catch(err){
       console.log(err);

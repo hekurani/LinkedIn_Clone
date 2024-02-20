@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Posts } from './post.entity';
 import { User } from 'src/users/user.entity';
+import { Comment } from 'src/comments/comment.entity';
 import { CreatePostDto } from './dtos/create-post-dto';
 @Injectable()
 export class PostsService {
@@ -42,14 +43,20 @@ export class PostsService {
     return user.posts;
   }
 
-  async findAll(): Promise<{ user: User; posts: Posts[] }[]> {
-    const postsWithUsers = await this.repo.find({ relations: ['user'] });
-  
-    return postsWithUsers.map((post) => ({
-      user: post.user,
-      posts: [post],
+  async findAll(): Promise<{ user: User; post: Posts; comments: Comment[] }[]> {
+    const postsWithUsersAndComments = await this.repo.find({
+        relations: ['user', 'comments', 'comments.user'], //me perfshi userin e postit dhe komentet e postit
+    });
+
+    return postsWithUsersAndComments.map((post) => ({
+        user: post.user,
+        post: post,
+        comments: post.comments, // perfshej komentet e postit
     }));
-  }
+}
+
+  
+  
   
 
 

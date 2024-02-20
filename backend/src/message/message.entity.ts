@@ -10,8 +10,8 @@ export class Message {
     @Column()
     description: string;
 
-    @CreateDateColumn()
-    createdAt: Date;
+   @Column({ default: () => 'CURRENT_TIMESTAMP' })
+   publishDate: Date;
 
     @ManyToOne(() => User)
     user: User;
