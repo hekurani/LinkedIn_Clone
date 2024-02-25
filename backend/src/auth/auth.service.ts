@@ -59,7 +59,7 @@ return user;
             if(users.length){
              throw new ForbiddenException("The email is used before");
             }
-            const user=await this.usersService.create(payLoad?.email,null,null);
+            const user=await this.usersService.create(null,null,payLoad?.email,null,null);
             const payload_access = {userId:user?.id} as JWTpayload;
             const payload_refresh={userId:user?.id} as JWTpayloadRt;
             const access_token=await this.jwtService.signAsync(payload_access);
@@ -92,7 +92,7 @@ return user;
            } as Tokens;
              
          }
-        async signUp(email:string,password:string,image:string){
+        async signUp(name:string,lastname:string,email:string,password:string,image:string){
             try{
             
                 const users=await this.usersService.find(email);
@@ -107,7 +107,7 @@ return user;
                 // join the salt at the encoded password as the strings
                 const result=salt+'.'+hash.toString('hex')
                 //Create the user
-                const user=await this.usersService.create(email,result,image);
+                const user=await this.usersService.create(name,lastname,email,result,image);
                 const payload_access = {userId:user?.id} as JWTpayload;
                 const payload_refresh={userId:user?.id} as JWTpayloadRt;
                 const access_token=await this.jwtService.signAsync(payload_access);

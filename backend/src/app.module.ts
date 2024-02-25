@@ -20,6 +20,7 @@ import { ChatGateway } from './chat.gateway';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { FriendsModule } from './friends/friends.module';
+import { CommentsModule } from './comments/comments.module';
 
 const cookieSession=require('cookie-session')
 @Module({
@@ -72,7 +73,7 @@ TypeOrmModule.forRoot(dataSourceOptions)/* ({
 // }
   // })
   
-  ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule, FriendsModule],
+  ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule, FriendsModule,CommentsModule],
   controllers: [AppController],
   providers: [AppService,ChatGateway,
   {

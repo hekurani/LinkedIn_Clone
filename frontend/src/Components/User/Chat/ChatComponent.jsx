@@ -16,6 +16,7 @@ function ChatPage({user,onCloseChat }) {
     const fetchData = async () => {
       const response = await axios.get('http://localhost:4000/chatroom/allMessages/1');// per testim kem qu id 1
       const apiMessages = response.data;
+      console.log(apiMessages)
       setMessages(apiMessages);
     };
 
@@ -23,9 +24,10 @@ function ChatPage({user,onCloseChat }) {
 
     socket = io('http://localhost:8001');
     socket.on('message', (message) => {
-      setMessages((prevMessages) => [...prevMessages, { description: message }]);
+      setMessages((prevMessages) => [...prevMessages, message]);
       scrollToBottom();
     });
+    
 
     return () => {
       socket.disconnect();
@@ -44,17 +46,28 @@ function ChatPage({user,onCloseChat }) {
 
   const handleMessageSubmit = async () => {
     if (input) {
-      socket.emit('message', input);
-
+      const messageData = {
+        description: input,
+        user: {
+          id: user.id, 
+          name: user.name,
+          lastname: user.lastname, 
+          imageProfile: user.imageProfile, 
+        },
+      };
+  
+      socket.emit('message', messageData);
+  
       await axios.post('http://localhost:4000/message/sendMessage', {
-        userId: 1,//id per testim
-        chatId: 1,//id per testim
+        userId: `${user.id}`, 
+        chatId: 1, 
         message: input,
       });
       setInput('');
       scrollToBottom();
     }
   };
+  
 
   const handleToggleChat = () => {
     setIsChatOpen(!isChatOpen);
@@ -93,10 +106,19 @@ function ChatPage({user,onCloseChat }) {
         </span>
       </div>
 
-      <div className='max-h-56 w-80 overflow-y-auto pb-5 pl-2 mb-1' style={{ borderBottom: '1px solid grey' }} >
+      <div className='max-h-56 w-80 overflow-y-auto pb-5 pl-2 mb-1 h-96' style={{ borderBottom: '1px solid grey' }} >
+       
         <ul style={{ wordWrap: 'break-word' }}>
           {messages.map((message, index) => (
-            <li className='w-52 ' key={index}>{message.description}</li>
+            <div className='flex mb-5'>
+            
+        <img src={message.user.imageProfile} className='ml-2  mt-2 h-10 w-10' alt='profili' style={{borderRadius:'50%',objectFit:'cover'}}/>
+        <div className='ml-2'>
+          <p className='font-semibold'>{message.user.name} {message.user.lastname}</p>
+        <li className='w-52 ' key={index}>{message.description}</li>
+        </div>
+            
+            </div>
           ))}
         </ul>
         <div ref={messagesEndRef}></div>

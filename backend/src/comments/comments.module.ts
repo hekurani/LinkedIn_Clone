@@ -1,20 +1,20 @@
 import { Module } from '@nestjs/common';
-import { FriendsController } from './friends.controller';
-import { FriendsService } from './friends.service';
+import { CommentsController } from './comments.controller';
+import { CommentsService } from './comments.service';
 import { JwtModule } from '@nestjs/jwt/dist';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthentGuard } from '../auth/guards/auth.guard'; 
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChatRoom } from '../chatroom/chat.entity';
-import { Friend } from './friends.entity';
+import { Comment } from './comment.entity';
 import { User } from '../users/user.entity';
-import { UsersModule } from 'src/users/users.module';
+import { Posts } from 'src/posts/post.entity';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Friend]),JwtModule,
+    TypeOrmModule.forFeature([Comment,User,Posts]),JwtModule,
     ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule], 
@@ -24,10 +24,10 @@ import { UsersModule } from 'src/users/users.module';
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: '600s' },
       }),
-    }),UsersModule
+    }),
   ],
-  controllers: [FriendsController],
-  exports:[FriendsService],
-  providers: [FriendsService],
+  controllers: [CommentsController],
+  exports:[CommentsService],
+  providers: [CommentsService],
 })
-export class FriendsModule {}
+export class CommentsModule {}
