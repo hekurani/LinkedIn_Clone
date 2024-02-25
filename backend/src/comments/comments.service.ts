@@ -54,6 +54,7 @@ async findAll() {
   async remove(id: number) {
     const comment = await this.repo.findOne({where:{id}});
     if (!comment) {
+      console.log('test');
       throw new NotFoundException(
         'The comment that you wanted to delete doesnt exist at all!',
       );
