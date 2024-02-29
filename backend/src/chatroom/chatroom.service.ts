@@ -3,12 +3,16 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChatRoom } from './chat.entity';
 import { Message } from '../message/message.entity';
+import { User } from 'src/users/user.entity';
 @Injectable()
 export class ChatRoomService {
-  constructor(@InjectRepository(ChatRoom) private repo: Repository<ChatRoom> ,@InjectRepository(Message) private messageRepository: Repository<Message>) {}
+  constructor(@InjectRepository(ChatRoom) private repo: Repository<ChatRoom> ,@InjectRepository(User) private userRepository:Repository<User>,@InjectRepository(Message) private messageRepository: Repository<Message>) {}
 
-    async createChatRoom(){
-       const chat =  this.repo.create();
+    async createChatRoom(userOneId:number,userTwoId:number){
+      console.log(userOneId,userTwoId)
+      const userOne = await this.userRepository.findOne({where:{id:userOneId}});
+      const userTwo = await this.userRepository.findOne({where:{id:userTwoId}});
+       const chat =  this.repo.create({user1:userOne,user2:userTwo});
         await this.repo.save(chat);
         return chat;
     }
@@ -17,7 +21,7 @@ export class ChatRoomService {
     if (!id) {
       return null;
     }
-    let chatroom = await this.repo.find({ where: { id: id } });
+    let chatroom = await this.repo.find({ where: { id: id } ,relations:['user1','user2']});
     return chatroom;
   }
 
@@ -48,6 +52,11 @@ export class ChatRoomService {
     Object.assign(chat, attrs);
     return this.repo.save(chat);
   }
+  async getAllChatRooms() :Promise<ChatRoom[]>{//metod qe gjen gjitha chatrooms{
+    //also user object to return
+    return this.repo.find({relations:['user1','user2']}) ;
+  }
+
 /*   async sendMessage1(senderId: string, receiverId: string, messageText: string) {//metod per me send message e krijon nje chat nese nuk ekziston
     // id i qesim ne number preseim number
     const senderIdNumber = parseInt(senderId);

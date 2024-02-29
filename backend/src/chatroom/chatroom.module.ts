@@ -8,11 +8,13 @@ import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChatRoom } from '../chatroom/chat.entity';
 import { Message } from '../message/message.entity';
+import { UsersModule } from 'src/users/users.module';
+import { User } from 'src/users/user.entity';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Message,ChatRoom]),JwtModule,
+    TypeOrmModule.forFeature([Message,ChatRoom,User]),JwtModule,
     ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule], 

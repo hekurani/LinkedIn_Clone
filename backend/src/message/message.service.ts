@@ -24,7 +24,11 @@ export class MessageService {
     return this.repo.save(message);
 
   }
-
+  
+ async findAllMessages () {
+    return  await this.repo.find({relations: ['user']});
+  }
+ 
   async findOne(id: number) {
     
     if (!id) {

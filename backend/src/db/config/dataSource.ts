@@ -14,7 +14,7 @@ import { Comment } from 'src/comments/comment.entity';
         host:configService.get('HOST'),
         username:'postgres',
         port:configService.get('PORT'),
-        password:'1234',
+        password:'password',
         entities: [User,Posts,Skill,Message,ChatRoom,Comment],
         migrations: [__dirname + '/../migrations/*{.ts,.js}'],
         seeds: ['dist/db/seeds/**/*.js'],

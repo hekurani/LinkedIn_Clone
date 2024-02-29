@@ -6,7 +6,12 @@ import { Public } from 'src/auth/decorators/Public-Api.decorator';
 @Controller('message')
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}
-
+  @Public()
+  @Get('/messages')
+  findAllMessages(){
+      return this.messageService.findAllMessages();
+  }
+  
   @Public()////per testim duhet te largohet me pas ne implementim front-back
   @Post('/sendMessage')
   async sendMessage(
@@ -24,6 +29,9 @@ export class MessageController {
       }
       return this.messageService.findOne(parseInt(id));
   }
+ 
+
+  
   @Delete('/:id')
   remove(@Param('id') id:string){
       return this.messageService.remove(parseInt(id));
