@@ -2,6 +2,7 @@ import React ,{useState,useEffect} from 'react'
 import ProfileInfo from '../Components/User/Profile/ProfileInfo';
 import ChatPage from '../Components/User/Chat/ChatComponent';
 import ChatListingComponent from '../Components/User/Chat/ChatListingComponent';
+import ProfileSection from '../Components/User/Profile/ProfileSection';
 import axios  from 'axios';
 const Profile = () => {
   const [user,setUser] = useState([])
@@ -18,6 +19,7 @@ const Profile = () => {
   return (
     <div>
    <ProfileInfo user={user}/>
+<ProfileSection user={user}/>
    <ChatPage user={user}/>
    <ChatListingComponent user={user}/>
     </div>
