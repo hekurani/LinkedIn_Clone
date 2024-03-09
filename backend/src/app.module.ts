@@ -25,6 +25,7 @@ import { FriendRequestService } from './friend-request/friend-request.service';
 import { FriendRequestModule } from './friend-request/friend-request.module';
 import { AuthentGuard } from './auth/guards/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
+import { ProfileModule } from './profile/profile.module';
 
 const cookieSession=require('cookie-session')
 @Module({
@@ -48,7 +49,7 @@ const cookieSession=require('cookie-session')
     }),
 TypeOrmModule.forRoot(dataSourceOptions)
   ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule, FriendsModule,CommentsModule,FriendRequestModule
-],
+,ProfileModule],
   controllers: [AppController],
   providers: [AppService,ChatGateway,
   {

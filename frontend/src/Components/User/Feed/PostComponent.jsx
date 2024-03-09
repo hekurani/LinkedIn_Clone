@@ -19,7 +19,14 @@ const PostComponent = ({ user }) => {
   const LikeImageUrl = "https://static.licdn.com/aero-v1/sc/h/8ekq8gho1ruaf8i7f86vd1ftt";
 
   const handleCommentSubmit = async (postId) => {
-    try{
+    try {
+      const commentText = comments[postId].trim(); //trim per mi largu hapsirat e panevojshme
+  
+      if (!commentText) {
+        //nese commenti eshte i zbrazet
+        console.error('Comment cannot be empty');
+        return;
+      }
       const info =  {
         userId : user.id,
         text: comments[postId] || '',

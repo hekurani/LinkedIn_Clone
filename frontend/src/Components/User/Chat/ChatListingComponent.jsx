@@ -1,27 +1,66 @@
-import React, { useState } from 'react';
-import profile from "../../../assets/profile.png";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const ChatListingComponent = ({ user,onChatRowClick  }) => {
-  const repeatCount = 12;
+const ChatListingComponent = ({ user, onChatRowClick }) => {
+  const [chatRooms, setChatRooms] = useState([]);
+  const [messages, setAllMessages] = useState([]);
+  const [loggedInUser, setLoggedInUser] = useState({})
+
+  useEffect(() => {
+    const getAllChats = async () => {
+      try {
+        const response = await axios.get('/chatroom/allChatRooms');
+        console.log(response.data);
+        setChatRooms(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getAllChats();
+
+    const fetchData = async () => {
+      const response = await axios.get(`http://localhost:4000/users/users/${user.id}`);
+      setLoggedInUser(response.data);
+    };
+
+    fetchData();
+    const fetchAllMessages = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/message/messages');
+        setAllMessages(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchAllMessages();
+  }, [user.id]);
+
+  const findMessageById = (messageId) => {   
+      console.log(messages.find(message => message.id == messageId))
+    return messages.find(message => message.id == messageId);
+  };
+
+
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const toggleChatListing = () => {
     setIsCollapsed(!isCollapsed);
   };
   const handleChatRowClick = () => {
-    onChatRowClick(); // This will trigger the function passed from the parent (Feed) to open the chat
+    onChatRowClick();
   };
+
   return (
     <div className={`w-72 fixed bottom-0 right-0 mr-5 ${isCollapsed ? 'h-12' : 'rounded-t-md'}`} style={{ border: '1px solid grey', backgroundColor: 'white', height: isCollapsed ? 'auto' : '80vh' }}>
       <div className='header h-12 flex justify-items-center items-center' style={{ borderBottom: '1px solid grey' }}>
         <img className='ml-2 h-8 w-8 mr-2' src={user.imageProfile} style={{ borderRadius: '50%', objectFit: 'cover' }} alt="profili" />
         <p className='font-semibold items-center mb-1'>Messaging</p>
-
         <svg className="artdeco-button__icon ml-auto mr-5" role="button" onClick={toggleChatListing} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" data-supported-dps="16x16" data-test-icon={isCollapsed ? "chevron-up-small" : "chevron-down-small"}>
           <path d={isCollapsed ? "M1 9l7-4.61L15 9V6.61L8 1 1 6.61z" : "M1 5l7 4.61L15 5v2.39L8 12 1 7.39z"}></path>
         </svg>
       </div>
-
       {isCollapsed ? null : (
         <>
           <div className='h-14 flex justify-center items-center' style={{ position: 'relative' }}>
@@ -32,25 +71,32 @@ const ChatListingComponent = ({ user,onChatRowClick  }) => {
               </svg>
             </span>
           </div>
+          <div className='list h-96 flex-grow overflow-y-auto'>
+            {chatRooms.map((chatroom, index) => {
 
-          <div className='list h-96 overflow-y-auto'>
-            {Array.from({ length: repeatCount }, (_, index) => (
-              <div key={index} className='p-2 oneProfile h-16 flex justify-items-center items-center' style={{ border: '1px solid grey', borderBottom: '0px', borderLeft: '0px' }} onClick={handleChatRowClick}>
-                <img className='h-10 w-10' src={profile} alt="profili" />
-                <div>
-                  <p className='name ml-1'>Hekuran Kokolli</p>
-                  <p className='description ml-1 text-xs'>You: hello</p>
+              const otherUserImage = user.id === chatroom.user1.id ? chatroom.user2.imageProfile : chatroom.user1.imageProfile;
+              const lastMessageId = chatroom.messages[chatroom.messages.length - 1];
+              const lastMessage = findMessageById(lastMessageId);
+              const lastMessageUser = lastMessage?.user;
+              return (
+                <div key={chatroom.id} className='p-2 oneProfile h-16 flex justify-items-center items-center ' style={{ border: '1px solid grey', borderBottom: '0px', borderLeft: '0px' }} onClick={handleChatRowClick}>
+                  <img className='h-10 w-10 rounded-full object-cover' src={otherUserImage} alt="profili" />
+                  <div className=''>
+                    <p className='name ml-1'>{chatroom.user1.id === user.id ? chatroom.user2.name : chatroom.user1.name} {chatroom.user1.id === user.id ? chatroom.user2.lastname : chatroom.user1.lastname}</p>
+                    <p className='description ml-1 text-xs'>{`${lastMessageUser?.name}: ${lastMessage ? lastMessage.description : 'ol'}`}</p>
+                  </div>
+                
+                  <div className='date mx-auto'>
+                    <p className='text-sm'>Jan 21</p>
+                  </div>
                 </div>
-                <div className='date mx-auto'>
-                  <p className='text-sm'>Jan 21</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </>
       )}
     </div>
   );
-}
+};
 
 export default ChatListingComponent;

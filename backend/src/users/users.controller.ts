@@ -83,6 +83,7 @@ findUser(@Param('id') id:string) {
 }
     return this.usersService.findOne(parseInt(id));
 }
+@Public()
 @Get('/users')
 findAllUsers(@Query('email') email:string){
     return this.usersService.find(email);
