@@ -65,11 +65,7 @@ async getUserSkills(@Param('id') userId: string): Promise<number[] | null> {
   return this.usersService.getUserSkills(parseInt(userId));
 }
 
-@Get('/colors')
-getColors(@Session() session:any){
-    console.log("session "+session.color)
-    return session.color
-}
+
     @Post('/register')
 async createUser(@Body() body: CreateUserDto,@Session() session:any){
 

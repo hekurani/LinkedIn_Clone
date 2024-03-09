@@ -127,6 +127,8 @@ return user;
         }
         async refreshToken(userId:number,rt:string){
          const user=await this.usersService.findOne(userId);
+                  console.log(user,userId)
+
          if(!user || !user.RefreshToken){
             throw new NotFoundException("The user is not found");
          }

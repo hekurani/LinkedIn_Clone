@@ -25,7 +25,7 @@ export class UsersService {
   
     const user = await this.repo.findOne({
       where: { id },
-      select: ['id', 'email', 'imageProfile','name','lastname'],
+      select: ['id', 'email', 'imageProfile','name','lastname','RefreshToken'],
     });
   
     return user ?? null;

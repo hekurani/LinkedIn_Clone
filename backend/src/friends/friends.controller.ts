@@ -8,16 +8,16 @@ import { User } from 'src/users/user.entity';
 export class FriendsController {
     constructor(private friendsService:FriendsService ){}
     @Get()
-    async getFriends(@AuthUser() user:User) {
-        const friends = await this.friendsService.getFriends(user);
+    async getFriends(@AuthUser() user:{userId:number}) {
+        const friends = await this.friendsService.getFriends(user?.userId);
         return friends;
     }
 
     @Delete(':id')
-    async deleteFriend(@AuthUser() user: User, @Param('id', ParseIntPipe) removeUserId: number) {
-        const friend = await this.friendsService.deleteFriend({ userId: user.id, deleteFriendId:removeUserId });
+    async deleteFriend(@AuthUser() user: {userId:number}, @Param('id', ParseIntPipe) removeUserId: number) {
+        const friend = await this.friendsService.deleteFriend({ userId: user?.userId, deleteFriendId:removeUserId });
         return {
-            userId: user.id,
+            userId: user?.userId,
             friend,
         };
     }
