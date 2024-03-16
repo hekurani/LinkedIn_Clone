@@ -8,7 +8,8 @@ import { UsersService } from 'src/users/users.service';
 @Injectable()
 export class FriendsService {
 constructor(@InjectRepository(Friend) private friend: Repository<Friend>,private userService:UsersService){}
-    async getFriends(user:User){
+    async getFriends(userId:number){
+        const user=await this.userService.findOne(userId);
 return this.friend.find({
     where: [
         { sender: user },
@@ -40,13 +41,16 @@ return this.friend.find({
         })
     }
     async deleteFriend({userId,deleteFriendId}){
+        console.log(userId,deleteFriendId)
 const user=await this.userService.findOne(userId);
     const deleteFriend=await this.userService.findOne(deleteFriendId);
-if(!user || !deleteFriend)
+if(!user || !deleteFriend){
 throw new NotFoundException("User not found")
+}
 const friend=await this.getFriend({userId,friendId:deleteFriendId});
-if(!friend)
+if(!friend){
 throw new NotFoundException("Friend not found");
+}
 this.friend.delete({
     id:friend.id
 });

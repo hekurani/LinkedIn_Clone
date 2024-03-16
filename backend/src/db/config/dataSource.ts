@@ -7,6 +7,8 @@ import {ConfigModule,ConfigService} from '@nestjs/config';
 import { Message } from 'src/message/message.entity';
 import { ChatRoom } from 'src/chatroom/chat.entity';
 import { Comment } from 'src/comments/comment.entity';
+import { Friend } from 'src/friends/friends.entity';
+import { FriendRequest } from 'src/friend-request/friend-request.entity';
 import { ProfileSection } from 'src/profile/entities/profile-section.entity';
  const createDataSourceOptions = (configService: ConfigService): DataSourceOptions & SeederOptions => {
     return {
@@ -15,8 +17,8 @@ import { ProfileSection } from 'src/profile/entities/profile-section.entity';
         host:configService.get('HOST'),
         username:'postgres',
         port:configService.get('PORT'),
-        password:'password',
-        entities: [User,Posts,Skill,Message,ChatRoom,Comment,ProfileSection],
+        password:'1234',
+        entities: [User,Posts,Skill,Message,ChatRoom,Comment,Friend,FriendRequest,ProfileSection],
         migrations: [__dirname + '/../migrations/*{.ts,.js}'],
         seeds: ['dist/db/seeds/**/*.js'],
         synchronize: false,

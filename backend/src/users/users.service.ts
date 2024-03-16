@@ -7,34 +7,15 @@ import {randomBytes,scrypt as _scrypt} from 'crypto'
 
 import { FindManyOptions } from 'typeorm';
 import { promisify } from 'util';
-import { ProfileSection } from 'src/profile/entities/profile-section.entity';
 const scrypt=promisify(_scrypt);
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private repo: Repository<User>,@InjectRepository(Posts) private postRepository: Repository<Posts>,@InjectRepository(ProfileSection) private profileRepo :Repository<ProfileSection>) {}
+  constructor(@InjectRepository(User) private repo: Repository<User>,@InjectRepository(Posts) private postRepository: Repository<Posts>) {}
 
   async create(name:string,lastname:string,email: string, password: string,imageProfile:string) {
     console.log("here");
     const user = this.repo.create({ name,lastname,email, password,imageProfile });
     return this.repo.save(user);
-  }
-
-  async addProfileSectionToUser(userId: number, profileSectionId: number): Promise<User | null> {
-    const user = await this.findOne(userId);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-   const profileSection = await this.profileRepo.findOne({where:{id:profileSectionId}});
-   if(!profileSection){
-       throw new NotFoundException('Profile Section not found');
-    }
-
-    if (!user.profileSections.includes(profileSection)) {
-      user.profileSections.push(profileSection);
-      await this.repo.save(user);
-    }
-
-    return user;
   }
 
   async findOne(id: number) {
@@ -44,8 +25,7 @@ export class UsersService {
   
     const user = await this.repo.findOne({
       where: { id },
-      select: ['id', 'email', 'imageProfile','name','lastname'],
-      relations: ['posts', 'comments', 'profileSections'],
+      select: ['id', 'email', 'imageProfile','name','lastname','RefreshToken'],
     });
   
     return user ?? null;
@@ -62,9 +42,7 @@ export class UsersService {
   }
 
   findAll() {
-    return this.repo.find({
-      relations: ['posts', 'comments', 'profileSections'],
-    });
+    return this.repo.find();
   }
 
   find(email: string) {

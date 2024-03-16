@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module,ValidationPipe } from '@nestjs/common';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import {ConfigModule,ConfigService} from '@nestjs/config';
 import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -21,11 +21,24 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { FriendsModule } from './friends/friends.module';
 import { CommentsModule } from './comments/comments.module';
+import { FriendRequestService } from './friend-request/friend-request.service';
+import { FriendRequestModule } from './friend-request/friend-request.module';
+import { AuthentGuard } from './auth/guards/auth.guard';
+import { JwtModule } from '@nestjs/jwt';
 import { ProfileModule } from './profile/profile.module';
 
 const cookieSession=require('cookie-session')
 @Module({
   imports: [
+     // Make sure ConfigModule is imported to provide access to ConfigService
+    JwtModule.registerAsync({
+      imports: [ConfigModule], // Import ConfigModule here too
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        global: true,
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '600s' },
+      })}),
     ConfigModule.forRoot({
       isGlobal:true,
       envFilePath:`.env.${process.env.NODE_ENV}`
@@ -34,47 +47,9 @@ const cookieSession=require('cookie-session')
       serveRoot: '/Images',
       rootPath: join(__dirname, '..', '..', 'Images'),
     }),
-TypeOrmModule.forRoot(dataSourceOptions)/* ({
-  inject:[ConfigService],
-  useFactory:(config:ConfigService)=>{
-    return {
-      type:'postgres',
-      
-      database:config.get<string>('DB_NAME'),
-      host:config.get<string>('HOST'),
-      username:'postgres',
-      port:+config.get<string>('PORT'),
-      password:'1234',
-      entities:[User,Posts,Skill,ChatRoom,Message],
-      synchronize:true
-    }
-  }
-}) */
-  //   TypeOrmModule.forRoot({
-  //   type:'sqlite',
-  //   database:'db.sqlite',
-  //   entities:[User,Report],
-  //   synchronize:true,
-//{
-//   inject:[ConfigService],
-//   useFactory:(config:ConfigService)=>{
-//     return {
-//       type:'postgres',
-//       database:config.get<string>('DB_NAME'),
-//       host:config.get<string>('HOST'),
-//       username:'postgres',
-//       port:+config.get<string>('PORT'),
-//       password:'1234',
-//       entities:[User,Posts,Skill],
-//       synchronize:true,
-//       seeds: ["src/db/seeding/seeds/**/*{.ts,.js}"],
-//       factories: ["src/db/seeding/factories/**/*{.ts,.js}"]
-//     }
-//   }
-// }
-  // })
-  
-  ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule, FriendsModule,CommentsModule, ProfileModule],
+TypeOrmModule.forRoot(dataSourceOptions)
+  ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule, FriendsModule,CommentsModule,FriendRequestModule
+,ProfileModule],
   controllers: [AppController],
   providers: [AppService,ChatGateway,
   {
@@ -82,6 +57,9 @@ TypeOrmModule.forRoot(dataSourceOptions)/* ({
     useValue:new ValidationPipe({
       whitelist:true
     })
+  },{
+    provide: APP_GUARD,
+    useClass: AuthentGuard
   }
   ],
 })
