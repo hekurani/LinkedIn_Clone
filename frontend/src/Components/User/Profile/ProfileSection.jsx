@@ -8,7 +8,7 @@ const ProfileSection = () => {
                     <p>Name</p>
                 </div>
 
-                <div className='options flex justify-between'>
+                <div className='options flex ml-auto'>
                     <p><svg role="img" aria-hidden="false" aria-label="Add new education" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" data-supported-dps="24x24" data-test-icon="add-medium">
 
 
