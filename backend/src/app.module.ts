@@ -25,7 +25,6 @@ import { FriendRequestService } from './friend-request/friend-request.service';
 import { FriendRequestModule } from './friend-request/friend-request.module';
 import { AuthentGuard } from './auth/guards/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
-import { ProfileModule } from './profile/profile.module';
 
 const cookieSession=require('cookie-session')
 @Module({
@@ -48,8 +47,7 @@ const cookieSession=require('cookie-session')
       rootPath: join(__dirname, '..', '..', 'Images'),
     }),
 TypeOrmModule.forRoot(dataSourceOptions)
-  ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule, FriendsModule,CommentsModule,FriendRequestModule
-,ProfileModule],
+  ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule, FriendsModule,CommentsModule,FriendRequestModule],
   controllers: [AppController],
   providers: [AppService,ChatGateway,
   {

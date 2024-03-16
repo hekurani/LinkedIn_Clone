@@ -9,7 +9,6 @@ import { ChatRoom } from 'src/chatroom/chat.entity';
 import { Comment } from 'src/comments/comment.entity';
 import { Friend } from 'src/friends/friends.entity';
 import { FriendRequest } from 'src/friend-request/friend-request.entity';
-import { ProfileSection } from 'src/profile/entities/profile-section.entity';
  const createDataSourceOptions = (configService: ConfigService): DataSourceOptions & SeederOptions => {
     return {
         type:'postgres',
@@ -17,8 +16,8 @@ import { ProfileSection } from 'src/profile/entities/profile-section.entity';
         host:configService.get('HOST'),
         username:'postgres',
         port:configService.get('PORT'),
-        password:'1234',
-        entities: [User,Posts,Skill,Message,ChatRoom,Comment,Friend,FriendRequest,ProfileSection],
+        password:'password',
+        entities: [User,Posts,Skill,Message,ChatRoom,Comment,Friend,FriendRequest],
         migrations: [__dirname + '/../migrations/*{.ts,.js}'],
         seeds: ['dist/db/seeds/**/*.js'],
         synchronize: false,

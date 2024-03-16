@@ -15,10 +15,9 @@ import Feed from './User/Feed';
 import Profile from "./User/Profile";
 
 import { FormProvider } from './User/context/FormContext';
+import Job from './Jobs/Job';
+import JobListing from './Components/Jobs/JobListing';
 
-//chat
-import ChatComponent from './Components/User/Chat/ChatComponent';
-import ChatListingComponent from './Components/User/Chat/ChatListingComponent';
 
 function App() {
   return (
@@ -36,9 +35,8 @@ function App() {
     <Route path="/verification-code-forgotpass" element={<EnterCodeForgotPassword />} />
     <Route path="/success-reset-change-password" element={<ResetPassword />} />
 
-
-    <Route path="/chat" element={<ChatComponent />} />
-    <Route path="/chat-listing" element={<ChatListingComponent />} />
+    <Route path="/job" element={<Job />} />
+    <Route path="/job-listing" element={<JobListing />} />
     
     
 
