@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { faCalendarDays, faClock, faImage, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
+import defaultProfile from '../../../../assets/profile.png'
+
 
 const AddPostModal = ({ user ,closeModal}) => {
   const [description, setDescription] = useState('');
@@ -38,7 +40,7 @@ const AddPostModal = ({ user ,closeModal}) => {
     <div className='main fixed inset-0 flex items-center justify-center' style={{ zIndex: 50 }}>
       <div className='w-96 h-96 rounded shadow-2xl' style={{ backgroundColor: 'white', width: '700px', height: '90vh' }}>
         <div className='header m-7 flex'>
-          <img className='ml-1 w-14 h-14 mb-2' style={{ borderRadius: '50%', objectFit: 'cover' }} src={user.imageProfile} alt={'p'} />
+          <img className='ml-1 w-14 h-14 mb-2' style={{ borderRadius: '50%', objectFit: 'cover' }} src={user.imageProfile?user.imageProfile:defaultProfile} alt={'p'} />
           <div className='ml-5'>
             <p className='font-semibold text-lg'>Ferat Gashi</p>
             <p className='text-sm'>Post to anyone</p>

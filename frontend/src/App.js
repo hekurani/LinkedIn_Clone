@@ -21,6 +21,7 @@ import JobListing from './Components/Jobs/JobListing';
 
 
 function App() {
+  
   return (
     <BrowserRouter>
      {getToken()&&<HeaderComponent/>}
@@ -38,8 +39,6 @@ function App() {
 
     <Route path="/job" element={<Job />} />
     <Route path="/job-listing" element={<JobListing />} />
-    
-    
 
     </Routes>
     </EmailProvider>

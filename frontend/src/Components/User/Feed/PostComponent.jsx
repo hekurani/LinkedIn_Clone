@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import defaultProfile from '../../../assets/profile.png'
 
 const PostComponent = ({ user }) => {
   const [allPosts, setAllPosts] = useState([]);
@@ -118,7 +119,7 @@ const PostComponent = ({ user }) => {
       
         <div key={index} className='mb-4'>
           <div className='header m-3 flex'>
-            <img src={postItem.user.imageProfile} style={{ borderRadius: '50%', objectFit: 'cover' }} className='w-12 h-12 mt-1' alt={'userprofile'} />
+            <img src={postItem.user.imageProfile?postItem.user.imageProfile:defaultProfile} style={{ borderRadius: '50%', objectFit: 'cover' }} className='w-12 h-12 mt-1' alt={'userprofile'} />
             <div className='profileinfo text-left ml-2'>
               <p>{postItem.user.name} {postItem.user.lastname}</p>
               <p className='position text-xs'>Software Developer</p>
