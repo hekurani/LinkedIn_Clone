@@ -25,9 +25,9 @@ export const FormProvider = ({ children }) => {
 
     const [data, setData] = useState({
         email:"",
-        password:'',
-        firstName:'',
-        lastName:''
+        password:"",
+        firstName:"",
+        lastName:""
     })
      const canSubmit=  page === Object.keys(title).length-1;
      const[error,setError]=useState({});

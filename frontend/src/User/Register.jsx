@@ -1,5 +1,5 @@
-
 import React from 'react';
+import { AlertModal } from '../InformationModal/AlertModal.jsx';
 import { useNavigate,Link } from 'react-router-dom';
 import useFormContext from "./context/FormContext"
 import logo from "../assets/LinkedIn-logo.png";
@@ -7,15 +7,54 @@ import FormInputs from './RegistrationComponents/FormInputs';
 import { GoogleLogin,GoogleOAuthProvider } from '@react-oauth/google';
 import {jwtDecode} from 'jwt-decode'
 import axiosInstance  from '../axios/axios.tsx';
+import { useState } from 'react';
 const Register = () => {
   const navigate = useNavigate();
-
+  let message,isSuccess;
+  const [isOpen,setIsOpen]=useState(false);
 async function responseGoogle(response){
+  
+  try{
 const token=response.credential;
-const responseGoogle=await axiosInstance.post('/google/signUp',{token});
+const responseGoogle=await axiosInstance.post('auth/google/signUp',{token});
+localStorage.setItem('access_token',responseGoogle?.data?.access_token);
+localStorage.setItem('refresh_token',responseGoogle?.data?.refresh_token);
 console.log(responseGoogle);
-
+setIsOpen(true);
+setResponse(prevResp=>{
+         
+  return {
+status:true,
+message:'user loged in successfuly!'
+  }
+})
+setTimeout(()=>{
+  setIsOpen(false);
+  navigate('/');
+},2000);
 }
+  catch(err){
+    console.log("err: ",err)
+    message=err?.response?.data?.message?err?.response?.data?.message:'Something went wrong!';
+    isSuccess=false;
+  setResponse(prevResp=>{
+   
+    return {
+ status:isSuccess,
+ message:message
+    }
+  })
+  setIsOpen(true);
+  setTimeout(()=>{
+    setIsOpen(false);
+  }
+  ,2000)
+  }
+}
+const [response,setResponse]=useState({
+  status:null,
+  message:null
+});
   const {setPage,data,canSubmit,error,setError}=useFormContext();
   const handleNext = (e) => {
     e.preventDefault();
@@ -57,10 +96,50 @@ if (data.lastName.length <3 ) {
       return;
     }
     
-    navigate('/Login'); 
+    try{
+    await axiosInstance.post('http://localhost:4000/auth/signUp',{
+      name:data.firstName,
+      email:data.email,
+      lastname:data.lastName,
+      password:data.password
+    });
+    setIsOpen(true);
+    setResponse(prevResp=>{
+   
+      return {
+   status:true,
+   message:'User created successsfuly!'
+      }
+    })
+    setTimeout(()=>{
+      setIsOpen(false);
+      navigate('/');
+    },2000);
+    
+    localStorage.setItem('access_token',response?.data?.access_token);
+    localStorage.setItem('refresh_token',response?.data?.refresh_token);
   }
+  catch(err){
+    message=err?.response?.data?.message?err?.response?.data?.message:'Something went wrong!';
+    isSuccess=false;
+    setIsOpen(true);
+    setTimeout(()=>{
+      setIsOpen(false);
+    },2000);
 
-return (
+    setResponse(prevResp=>{
+   
+    return {
+ status:isSuccess,
+ message:message
+    }
+  })
+  }
+  }
+  
+
+return (<>
+{isOpen?<AlertModal status={response.status} message={response.message} />:null}
       <div className='page bg-gray-100 m-0 p-0 ' style={{height:'800px'}}> {/* div kryesor */}
       {/* Header Section */}
       <div className='header' > {/* pjesa e header perfshin pjesen e logos edhe pjesen e h1-shit */}
@@ -91,13 +170,13 @@ return (
             <p className='text-center pt-2'>or</p>
             <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}> <GoogleLogin
   onSuccess={responseGoogle}
-><button type="submit" style={{ backgroundColor: 'transparent',color:'black',border:'1px solid black' }} className='w-80 h-12 font-semibold text-white rounded-full mt-3 mb-3'>Sign In with Google</button></GoogleLogin></GoogleOAuthProvider>
+><button type="submit" style={{ backgroundColor: 'transparent',color:'black',border:'1px solid black' }} className='w-80 h-12 font-semibold text-white rounded-full mt-3 mb-3'>Sign up with Google</button></GoogleLogin></GoogleOAuthProvider>
             <p className='mt-5 text-center'>Already on LinkedIn? <span className='font-semibold' style={{ color: '#0a66c2' }}> <Link to={'/Login'}>Sign in</Link></span></p>
           </form>
         </div>
       </div>
     </div>
+    </>
     );
-};
-
+  }
 export default Register;

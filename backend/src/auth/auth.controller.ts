@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards,Request,Req, Injectable, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, HttpStatus, ParseFilePipeBuilder } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards,Request,Req, Injectable, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, HttpStatus, ParseFilePipeBuilder, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
 import { SignUpDto } from './dto/signUp.dto';
@@ -31,12 +31,12 @@ export class AuthController {
     @Post('/google/signUp')
     @Public()
     async googleSignUp(@Body() signUpDto:{token:string}){
-this.authService.googleSignUp(signUpDto?.token);
+return this.authService.googleSignUp(signUpDto?.token);
     }
     @Post('/google/logIn')
     @Public()
     async googleLogIn(@Body() logInDto:{token:string}){
-this.authService.googleLogIn(logInDto?.token);
+return this.authService.googleLogIn(logInDto?.token);
     }
     
     
@@ -44,14 +44,12 @@ this.authService.googleLogIn(logInDto?.token);
     @Public()
     @UseInterceptors(FileInterceptor('image', { storage,fileFilter:imageFileFilter }))
    async signUp(@Body() signUpDto:SignUpDto,@UploadedFile( 
-  ) file:Express.Multer.File){
-    try{
+  ) file:Express.Multer.File, @Res({passthrough: true}) response: Response){
+    
       console.log(signUpDto.password)
-        return await this.authService.signUp(signUpDto.name,signUpDto.lastname,signUpDto.email,signUpDto.password,file?.filename);
-    }
-    catch(err){
-      console.log(err);
-    }
+return await this.authService.signUp(signUpDto.name,signUpDto.lastname,signUpDto.email,signUpDto.password,file?.filename);
+      
+    
       }
    @Post('/login')
    @Public()

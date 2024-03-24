@@ -1,4 +1,4 @@
-import { BeforeInsert,BeforeRemove,BeforeUpdate } from "typeorm";
+import { BeforeInsert,BeforeRemove,BeforeUpdate, Unique } from "typeorm";
 import { Entity,Column,PrimaryGeneratedColumn,OneToMany } from "typeorm";
 import { Exclude } from "class-transformer";
 import { Posts } from "../posts/post.entity";
@@ -29,7 +29,7 @@ export class User {
     role: UserRole
     
     @Exclude()
-    @Column()
+    @Column({nullable:true})
     password:string;
 
     @Column("simple-array", { default: [] }) // deefault e ka vleren nje array boshe

@@ -16,7 +16,7 @@ import { FriendRequest } from 'src/friend-request/friend-request.entity';
         host:configService.get('HOST'),
         username:'postgres',
         port:configService.get('PORT'),
-        password:'password',
+        password:'1234',
         entities: [User,Posts,Skill,Message,ChatRoom,Comment,Friend,FriendRequest],
         migrations: [__dirname + '/../migrations/*{.ts,.js}'],
         seeds: ['dist/db/seeds/**/*.js'],
