@@ -72,4 +72,7 @@ return await this.repo.find({where:{id:id}});
     Object.assign(post, attrs);
     return this.repo.save(post);
   }
+  async getPosts(){
+    return this.repo.find();
+  }
 }

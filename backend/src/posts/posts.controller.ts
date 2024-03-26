@@ -79,7 +79,10 @@ export class PostsController {
     getPostComments(@Param('id') id:string){
 return this.postService.getPostComments(parseInt(id));
     }
-
+@Get()
+getPosts(){
+  return this.postService.getPosts();
+}
   
 
 }
