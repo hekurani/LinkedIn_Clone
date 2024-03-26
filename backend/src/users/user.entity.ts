@@ -35,6 +35,7 @@ export class User {
     @Column("simple-array", { default: [] }) // deefault e ka vleren nje array boshe
     skills: number[]; // Array qe na ndihmone te ruajm skillsId's per user
 
+    @Exclude()
     @Column({nullable:true})
     RefreshToken:string;
 

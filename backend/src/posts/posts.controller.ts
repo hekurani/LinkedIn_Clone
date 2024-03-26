@@ -59,11 +59,7 @@ export class PostsController {
         throw new NotFoundException('User not found');
       }
     }
-    @Public()
-    @Get('/allPosts')
-    findAllUsers(){
-        return this.postService.findAll();
-    }
+  
     @Get('/:id')
     findPost(@Param('id') id:string){
         if(!id){

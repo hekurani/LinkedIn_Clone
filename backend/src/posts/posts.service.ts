@@ -45,17 +45,7 @@ export class PostsService {
     return user.posts;
   }
 
-  async findAll(): Promise<{ user: User; post: Posts; comments: Comment[] }[]> {
-    const postsWithUsersAndComments = await this.repo.find({
-        relations: ['user', 'comments', 'comments.user'], //me perfshi userin e postit dhe komentet e postit
-    });
 
-    return postsWithUsersAndComments.map((post) => ({
-        user: post.user,
-        post: post,
-        comments: post.comments, // perfshej komentet e postit
-    }));
-}
 
   
   
@@ -73,6 +63,7 @@ return await this.repo.find({where:{id:id}});
     return this.repo.save(post);
   }
   async getPosts(){
-    return this.repo.find();
+   return this.repo.find({relations:['user']});
+    
   }
 }
