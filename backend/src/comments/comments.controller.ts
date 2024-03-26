@@ -1,9 +1,9 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Patch } from '@nestjs/common';
 import { Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 
 import { CommentsService } from './comments.service';
-import { CreateCommentDto } from './dtos/create.dto.entity';
-import { UpdateCommentDto } from './dtos/update.dto.entity';
+import { CreateCommentDto } from './dto/create.dto.entity';
+import { UpdateCommentDto } from './dto/update.dto.entity';
 import { Public } from 'src/auth/decorators/Public-Api.decorator';
 
 
@@ -22,7 +22,6 @@ export class CommentsController {
         return this.commentsService.findOne(id);
     }
     @Public()
-
     @Delete(':id')
     remove(@Param('id') id: number) {
         return this.commentsService.remove(id);
@@ -35,7 +34,7 @@ export class CommentsController {
     }
     @Public()
 
-    @Put(':id')
+    @Patch(':id')
     update(@Param('id') id: number, @Body() updateCommentDto: UpdateCommentDto) {
         return this.commentsService.update(id, updateCommentDto);
     }

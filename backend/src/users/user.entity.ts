@@ -2,7 +2,7 @@ import { BeforeInsert,BeforeRemove,BeforeUpdate, Unique } from "typeorm";
 import { Entity,Column,PrimaryGeneratedColumn,OneToMany } from "typeorm";
 import { Exclude } from "class-transformer";
 import { Posts } from "../posts/post.entity";
-import { Comment } from "../comments/comment.entity";
+import { Comment } from "../comments/Entity/comment.entity";
 export enum UserRole {
     ADMIN = "admin",
     JOBSEEKER = "jobseeker"

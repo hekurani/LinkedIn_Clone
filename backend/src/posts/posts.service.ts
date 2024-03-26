@@ -3,16 +3,18 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Posts } from './post.entity';
 import { User } from 'src/users/user.entity';
-import { Comment } from 'src/comments/comment.entity';
-import { CreatePostDto } from './dtos/create-post-dto';
+import { Comment } from 'src/comments/Entity/comment.entity';
+import { CreatePostDto } from './dto/create-post-dto';
+import { UsersService } from 'src/users/users.service';
 @Injectable()
 export class PostsService {
-  constructor(@InjectRepository(Posts) private repo: Repository<Posts>,@InjectRepository(User) private userRepository: Repository<User>) {}
+  constructor(private usersService:UsersService,@InjectRepository(Posts) private repo: Repository<Posts>,@InjectRepository(User) private userRepository: Repository<User>) {}
 
-   create(id,payload: CreatePostDto,response:string[]) {
+   async create(id:number,payload: CreatePostDto,response:string[]) {
      const {description} = payload;
     if(!description && response.length===0) throw new BadRequestException("You have to add description or images to post")
-    const post =  this.repo.create({ description,postImages:response,user:id,});
+    const user=await this.usersService.findOne(id);
+    const post =  this.repo.create({ description,postImages:response,user});
     return this.repo.save(post);
   }
 
@@ -58,7 +60,9 @@ export class PostsService {
   
   
   
-
+async getPostComments(id:number){
+return await this.repo.find({where:{id:id}});
+}
 
   async update(id: number, attrs: Partial<Posts>) {
     const post = await this.findOne(id);

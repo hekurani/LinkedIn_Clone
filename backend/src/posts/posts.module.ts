@@ -8,6 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Posts } from './post.entity';
 import { User } from '../users/user.entity';
+import { UsersService } from 'src/users/users.service';
 
 
 @Module({
@@ -26,6 +27,6 @@ import { User } from '../users/user.entity';
   ],
   controllers: [PostsController],
   exports:[PostsService],
-  providers: [PostsService,],
+  providers: [PostsService,UsersService],
 })
 export class PostsModule {}

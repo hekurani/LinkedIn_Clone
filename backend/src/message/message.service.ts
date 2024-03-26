@@ -1,12 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Message } from './message.entity';
+import { Message } from './Entity/message.entity';
 import { User } from '../users/user.entity';
 import { ChatRoom } from '../chatroom/chat.entity';
+import { EditedMessage } from './Entity/editedmessage.entity';
+import { DeletedMessage } from './Entity/deletedmessage.entity';
 @Injectable()
 export class MessageService {
-  constructor(@InjectRepository(Message) private repo: Repository<Message>,@InjectRepository(User) private userRepository: Repository<User>,@InjectRepository(ChatRoom) private chatRepository: Repository<ChatRoom>) {}
+  constructor(@InjectRepository(Message) private repo: Repository<Message>,@InjectRepository(User) private userRepository: Repository<User>,@InjectRepository(ChatRoom) private chatRepository: Repository<ChatRoom>,@InjectRepository(Message) private editMessageRepository: Repository<EditedMessage>,@InjectRepository(Message) private deletedMessageRepository: Repository<DeletedMessage>) {}
 
   async sendMessage(messageText: string, userId: number, chatId: number) {
     const user = await this.userRepository.findOne({where:{id:userId}});
@@ -46,6 +48,12 @@ export class MessageService {
         'The message that you wanted to delete doesnt exist at all!',
       );
     }
+    const deletedMessage= this.deletedMessageRepository.create({message});
+    if(!deletedMessage){
+      throw new InternalServerErrorException("Somethiing went wrong!");
+    }
+    await this.deletedMessageRepository.save(deletedMessage);
+
     return this.repo.remove(message);
   }
 
@@ -56,6 +64,11 @@ export class MessageService {
     if (!message) {
       throw new NotFoundException('Message not found');
     }
+    const editedMessage= this.editMessageRepository.create({message});
+    if(!editedMessage){
+      throw new InternalServerErrorException("Somethiing went wrong!");
+    }
+
     Object.assign(message, attrs);
     return this.repo.save(message);
   }

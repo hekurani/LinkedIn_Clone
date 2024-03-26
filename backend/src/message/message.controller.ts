@@ -1,18 +1,18 @@
 import { Controller, Post, Body,Get,Delete,Param,Put } from '@nestjs/common';
 import { MessageService } from './message.service';
-import { UpdateMessageDTO } from './dtos/update.message.dto';
+import { UpdateMessageDTO } from './dto/update.message.dto';
 import { Public } from 'src/auth/decorators/Public-Api.decorator';
 
 @Controller('message')
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}
-  @Public()
+
   @Get('/messages')
   findAllMessages(){
       return this.messageService.findAllMessages();
   }
   
-  @Public()////per testim duhet te largohet me pas ne implementim front-back
+////per testim duhet te largohet me pas ne implementim front-back
   @Post('/sendMessage')
   async sendMessage(
     @Body('userId') userId: number,

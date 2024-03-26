@@ -8,7 +8,7 @@ import { CurrentUserInterceptor } from './interceptors/current-user.interceptor'
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { Posts } from '../posts/post.entity';
-import { Comment } from 'src/comments/comment.entity';
+import { Comment } from 'src/comments/Entity/comment.entity';
 
 @Module({
   imports:[TypeOrmModule.forFeature([User,Posts,Comment]),JwtModule],

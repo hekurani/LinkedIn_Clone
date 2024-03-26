@@ -7,14 +7,15 @@ import { AuthentGuard } from '../auth/guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChatRoom } from '../chatroom/chat.entity';
-import { Comment } from './comment.entity';
+import { Comment } from './Entity/comment.entity';
 import { User } from '../users/user.entity';
 import { Posts } from 'src/posts/post.entity';
+import { EditedComment } from './Entity/editedcomment.entity';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Comment,User,Posts]),JwtModule,
+    TypeOrmModule.forFeature([Comment,User,Posts,EditedComment]),JwtModule,
     ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule], 
