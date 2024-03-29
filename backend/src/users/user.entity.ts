@@ -29,14 +29,14 @@ export class User {
     role: UserRole
     
     @Exclude()
-    @Column({nullable:true})
+    @Column({nullable:true,select:false})
     password:string;
 
     @Column("simple-array", { default: [] }) // deefault e ka vleren nje array boshe
     skills: number[]; // Array qe na ndihmone te ruajm skillsId's per user
 
     @Exclude()
-    @Column({nullable:true})
+    @Column({nullable:true,select:false})
     RefreshToken:string;
 
     @OneToMany(() => Posts, post => post.user)

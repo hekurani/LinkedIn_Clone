@@ -1,4 +1,4 @@
-import { Controller, Post, Body,Get,Delete,Param,Put } from '@nestjs/common';
+import { Controller, Post, Body,Get,Delete,Param,Put, Patch } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { UpdateMessageDTO } from './dto/update.message.dto';
 import { Public } from 'src/auth/decorators/Public-Api.decorator';
@@ -24,9 +24,6 @@ export class MessageController {
 
   @Get('/:id')
   findMessage(@Param('id') id:string){
-      if(!id){
-          return null;
-      }
       return this.messageService.findOne(parseInt(id));
   }
  
@@ -36,7 +33,7 @@ export class MessageController {
   remove(@Param('id') id:string){
       return this.messageService.remove(parseInt(id));
   }
-  @Put('/:id')
+  @Patch('/:id')
   async update(@Param('id') id: string, @Body() updateMessageDto: UpdateMessageDTO) {
     return this.messageService.update(parseInt(id), updateMessageDto);
   }

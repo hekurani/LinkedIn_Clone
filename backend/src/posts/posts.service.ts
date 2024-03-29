@@ -27,9 +27,7 @@ export class PostsService {
   }
 
   async remove(id: number) {
-    console.log(id) //comming 1 (which is ok)
-    const post = await this.repo.findOne({where:{id}});//kushit gabim ka 
-    console.log(post)  //coming like null (to be fixed)
+    const post = await this.repo.findOne({where:{id}});
     if (!post) {
       throw new NotFoundException(
         'The post that you wanted to delete doesnt exist at all!',
@@ -54,7 +52,7 @@ async getPostComments(id:number){
 return await this.repo.find({where:{id:id}});
 }
 
-  async update(id: number, attrs: Partial<Posts>) {
+async update(id: number, attrs: Partial<Posts>) {
     const post = await this.findOne(id);
     if (!post) {
       throw new NotFoundException('User not found');
@@ -64,6 +62,5 @@ return await this.repo.find({where:{id:id}});
   }
   async getPosts(){
    return this.repo.find({relations:['user']});
-    
   }
 }

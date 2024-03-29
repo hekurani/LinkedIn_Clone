@@ -32,7 +32,9 @@ export class CommentsService {
     // e save postin
     await this.postRepository.save(post);
   
-    return 'Comment created successfully';
+    return {
+      status:'Success'
+    }
   }
   
 async findOne(id: number) {
@@ -72,6 +74,8 @@ async update(id: number, attrs: Partial<Comment>) {
 const editedComment= this.editedCommentRepository.create({coment:comment});
 this.editedCommentRepository.save(editedComment);
     await this.repo.update(id, attrs);
-    return "Updated comment successfully!";
+    return {
+     status: "Success"
+    }
 }
 } 
