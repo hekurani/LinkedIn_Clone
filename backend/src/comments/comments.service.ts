@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException, Post } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Comment } from './comment.entity';
+import { Comment } from './Entity/comment.entity';
 import { User } from '../users/user.entity';
 import { Posts } from 'src/posts/post.entity';
+import { EditedComment } from './Entity/editedcomment.entity';
 @Injectable()
 export class CommentsService {
-  constructor(@InjectRepository(Comment) private repo: Repository<Comment>,@InjectRepository(Posts) private postRepository: Repository<Posts>,@InjectRepository(User) private userRepository: Repository<User>) {}
+  constructor(@InjectRepository(Comment) private repo: Repository<Comment>,@InjectRepository(Posts) private postRepository: Repository<Posts>,@InjectRepository(User) private userRepository: Repository<User>,@InjectRepository(EditedComment) private editedCommentRepository: Repository<EditedComment>) {}
 
   async create(text: string, userId: number, postId: number) {
     const user = await this.userRepository.findOne({ where: { id: userId } });
@@ -31,7 +32,9 @@ export class CommentsService {
     // e save postin
     await this.postRepository.save(post);
   
-    return 'Comment created successfully';
+    return {
+      status:'Success'
+    }
   }
   
 async findOne(id: number) {
@@ -68,8 +71,11 @@ async update(id: number, attrs: Partial<Comment>) {
     if (!comment) {
         throw new NotFoundException('Comment not found');
     }
-
+const editedComment= this.editedCommentRepository.create({coment:comment});
+this.editedCommentRepository.save(editedComment);
     await this.repo.update(id, attrs);
-    return "Updated comment successfully!";
+    return {
+     status: "Success"
+    }
 }
 } 

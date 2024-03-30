@@ -3,18 +3,59 @@ import {useNavigate,Link} from "react-router-dom";
 import {jwtDecode} from 'jwt-decode'
 import logo from "../assets/LinkedIn-logo.png";
 import { GoogleLogin,GoogleOAuthProvider } from '@react-oauth/google';
+import { AlertModal } from '../InformationModal/AlertModal.jsx';
 import axiosInstance  from '../axios/axios.tsx';
 const Login = () => {
-  console.log(process.env.REACT_APP_CLIENT_ID)
+  let message,isSuccess;
+  const [isOpen,setIsOpen]=useState(false);
   const navigate = useNavigate();
-
+  const [response,setResponse]=useState({
+    status:null,
+    message:null
+  });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({}); 
-  function responseGoogle(response){
-    const decoded=jwtDecode(response.credential);
-    console.log(decoded);
-    const email = decoded.email;
+  async function responseGoogle(response){
+    const token=response.credential;
+    try{
+      
+      const responseGoogle=await axiosInstance.post('auth/google/logIn',{token});
+      localStorage.setItem('access_token',responseGoogle?.data?.access_token);
+      localStorage.setItem('refresh_token',responseGoogle?.data?.refresh_token);
+      console.log(responseGoogle);
+      setResponse(prevResp=>{
+         
+        return {
+     status:true,
+     message:'user loged in successfuly!'
+        }
+      })
+      setIsOpen(true);
+
+      setTimeout(()=>{
+        setIsOpen(false);
+        navigate('/');
+      },2000);
+      }
+        catch(err){
+          console.log("err: ",err)
+          message=err?.response?.data?.message?err?.response?.data?.message:'Something went wrong!';
+          isSuccess=false;
+        setResponse(prevResp=>{
+         
+          return {
+       status:isSuccess,
+       message:message
+          }
+        })
+        setIsOpen(true);
+        setTimeout(()=>{
+          setIsOpen(false);
+        }
+        ,2000)
+        }
+
     }
   const signIn = async (e) => {
     e.preventDefault();
@@ -46,25 +87,46 @@ if (password.length > 0 && password.length <6 ) {
       password:password
      };
      try {
-      const result=await axiosInstance.post("/auth/login", loginInfo);
-    if(result.data.status==='success'){
-      navigate('/');
-    }
+    await axiosInstance.post("auth/login", loginInfo);
+      setIsOpen(true);
+      setResponse(prevResp=>{
+   
+        return {
+     status:true,
+     message:'User logged in successfully!'
+        }
+      })
+      setTimeout(()=>{
+        setIsOpen(false);
+        navigate('/');
+      },2000);
+      
+    
     } catch (err) {
       console.log(err);
-      if (err.response && err.response.data && err.response.data.message) {
-        // eshfaqim errorin per pjesen e password nese ka 
-        setErrors({ password: err.response.data.message });
-      } else {
-        // Nese nuk ka ndonje error specifik 
-        setErrors({ password: "Login failed. Please try again." });
+      message=err?.response?.data?.message?err?.response?.data?.message:'Something went wrong!';
+      isSuccess=false;
+      setIsOpen(true);
+      setTimeout(()=>{
+        setIsOpen(false);
+      },2000);
+  
+      setResponse(prevResp=>{
+     
+      return {
+   status:isSuccess,
+   message:message
       }
+    })
     }
+
     // nese gjithcka eshte ne rregull na dergon tek Register ne kete pjese vetem per testim 
     //pasi te shtojm pjesen e home dhe feed e dergojm userin aty
   
   }
   return (
+    <>
+    {isOpen?<AlertModal status={response.status} message={response.message} />:null}
     <div className='page  m-0 p-0  ' style={{height:'800px'}}> {/* div kryesor */}
       {/* Header Section */}
         <div  className="image ml-14 pt-2">
@@ -104,7 +166,7 @@ if (password.length > 0 && password.length <6 ) {
           
         </div>
       </div>
-    </div>
+    </div></>
   );
 };
 

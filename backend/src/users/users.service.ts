@@ -44,9 +44,15 @@ export class UsersService {
   findAll() {
     return this.repo.find();
   }
-
+  findByPassword(email: string,isPasswordNull:Boolean) {
+    if(isPasswordNull){
+    return this.repo.find({ where: { email ,password:null} });
+    }
+    return  this.repo.find({ where: { email }});
+  }
   find(email: string) {
-    return this.repo.find({ where: { email } });
+    
+    return  this.repo.find({ where: { email }});
   }
   async addSkillToUser(userId: number, skillId: number): Promise<User | null> { //,metod qe na mudeson te shtojm nje skil per nje user
     const user = await this.findOne(userId); //gjejm userin

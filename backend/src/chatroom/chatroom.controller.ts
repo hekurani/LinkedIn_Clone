@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ChatRoomService } from './chatroom.service';
 import { Public } from 'src/auth/decorators/Public-Api.decorator';
-import { CreateChatRoomDto } from './dtos/create.chatroom.dto';
+import { CreateChatRoomDto } from './dto/create.chatroom.dto';
 @Controller('chatroom')
 export class ChatroomController {
     constructor(private readonly chatService:ChatRoomService) {}

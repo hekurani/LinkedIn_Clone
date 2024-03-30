@@ -8,7 +8,7 @@ import { JWTpayload } from './types/JWTpayload.type';
 import { JWTpayloadRt } from './types/JWTpayloadRt.type';
 import * as argon from 'argon2';
 import { OAuth2Client } from 'google-auth-library';
-
+import { Response } from 'express';
 const client = new OAuth2Client(
  process.env.GOOGLE_CLIENT_ID,
  process.env.GOOGLE_CLIENT_SECRET,
@@ -19,11 +19,11 @@ export class AuthService {
     constructor(private usersService:UsersService,
        private jwtService:JwtService){}
         async signIn(email:string,password:string){
-            const [user] = await this.usersService.find(email);
-            if(!user){
+            const [user] = await this.usersService.findByPassword(email,false);
+            if(!user || !user.password){
                 throw new NotFoundException("User not found");
             }
-            const [salt,storedHash]=user.password.split('.');
+            const [salt,storedHash]=user?.password.split('.');
             const hash=(await scrypt(password,salt,32)) as Buffer
             if(storedHash!==hash.toString('hex')){
                 return new BadRequestException('Wrong password!')
@@ -55,13 +55,16 @@ return user;
                 audience: process.env.GOOGLE_CLIENT_ID,
             });
             const payLoad = (await ticket).getPayload();
-            const users=await this.usersService.find(payLoad?.email);
-            if(users.length){
+            console.log(payLoad.given_name,payLoad.family_name);
+            const users=await this.usersService.findByPassword(payLoad?.email,true);
+
+            console.log(users);
+            if(users.length && users.find((user)=>!user?.password)){
              throw new ForbiddenException("The email is used before");
             }
-            const user=await this.usersService.create(null,null,payLoad?.email,null,null);
+            const user=await this.usersService.create(payLoad?.given_name,payLoad.family_name,payLoad?.email,null,null);
             const payload_access = {userId:user?.id} as JWTpayload;
-            const payload_refresh={userId:user?.id} as JWTpayloadRt;
+            const payload_refresh={userId:user?.id,email:user.email} as JWTpayloadRt;
             const access_token=await this.jwtService.signAsync(payload_access);
             const refresh_token=await this.jwtService.signAsync(payload_refresh);
             const refresh_hash = await argon.hash(refresh_token);
@@ -78,7 +81,11 @@ return user;
                  audience: process.env.GOOGLE_CLIENT_ID,
              });
              const payLoad = (await ticket).getPayload();
-             const [user]=await this.usersService.find(payLoad?.email);
+             console.log(payLoad);
+             const [user]=await this.usersService.findByPassword(payLoad?.email,true);
+             if(!user){
+                throw new NotFoundException("User not found!");
+             }
              const payload_access = {userId:user?.id} as JWTpayload;
              const payload_refresh={userId:user?.id} as JWTpayloadRt;
              const access_token=await this.jwtService.signAsync(payload_access);
@@ -93,13 +100,13 @@ return user;
              
          }
         async signUp(name:string,lastname:string,email:string,password:string,image:string){
-            try{
+         
             
-                const users=await this.usersService.find(email);
+                const users=await this.usersService.findByPassword(email,false);
                 if(users.length){
                 throw new BadRequestException("Email is used before")
                 }
-                console.log()
+              
                 // Generate Salt
                 const salt=randomBytes(8).toString('hex');
                 //hash the salt and the password together
@@ -116,13 +123,18 @@ return user;
                 await this.usersService.update(user?.id, {}, refresh_hash);
 
                 return {
+                    status:'success',
                 access_token,
                 refresh_token
               } as Tokens;
-            }
-            catch(err){
-                console.log("err",err);
-            }
+            
+            // catch(err){
+            //     return {
+            //         status:'failure',
+            //         statusCode:err?.response?.statusCode? err?.response?.statusCode:500,
+            //         message:err.response.message?err.response.message:'something went wrong!'
+            //     }
+            // }
                
         }
         async refreshToken(userId:number,rt:string){

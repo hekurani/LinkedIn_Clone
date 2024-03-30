@@ -43,10 +43,10 @@ axiosInstance.interceptors.response.use(
               },
             })
               .then(async (response) => {
-                localStorage.setItem("token", response?.data?.token);
+                localStorage.setItem("access_token", response?.data?.access_token);
                 localStorage.setItem(
-                  "refreshToken",
-                  response?.data?.refreshToken
+                  "refresh_token",
+                  response?.data?.refresh_token
                 );
                 return axiosInstance(originalRequest);
               })

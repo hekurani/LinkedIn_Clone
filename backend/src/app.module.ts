@@ -15,7 +15,7 @@ import {Skill} from "./skills/skills.entity";
 import { ChatRoomModule } from './chatroom/chatroom.module';
 import { MessageModule } from './message/message.module';
 import { ChatRoom } from './chatroom/chat.entity';
-import { Message } from './message/message.entity';
+import { Message } from './message/Entity/message.entity';
 import { ChatGateway } from './chat.gateway';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';

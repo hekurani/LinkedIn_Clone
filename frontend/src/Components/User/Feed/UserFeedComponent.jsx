@@ -1,7 +1,7 @@
 import React, {  useState } from 'react';
 import { Link } from 'react-router-dom';
 import UploadImageModal from '../Profile/Modals/UploadImageModal';
-
+import defaultProfile from '../../../assets/profile.png'
 const UserFeedComponent = ({user}) => {
   console.log(user)
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,7 +21,7 @@ const UserFeedComponent = ({user}) => {
   <img
     className='absolute ml-20 mt-4 w-16 h-16'
     style={{borderRadius:'50%',objectFit:'cover',border:'2px solid white'}}
-    src={user.imageProfile}
+    src={user.imageProfile?user.imageProfile:defaultProfile}
     alt={'Profile'}
   />
 )}

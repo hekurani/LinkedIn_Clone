@@ -1,8 +1,8 @@
-import { BeforeInsert,BeforeRemove,BeforeUpdate } from "typeorm";
+import { BeforeInsert,BeforeRemove,BeforeUpdate, Unique } from "typeorm";
 import { Entity,Column,PrimaryGeneratedColumn,OneToMany } from "typeorm";
 import { Exclude } from "class-transformer";
 import { Posts } from "../posts/post.entity";
-import { Comment } from "../comments/comment.entity";
+import { Comment } from "../comments/Entity/comment.entity";
 export enum UserRole {
     ADMIN = "admin",
     JOBSEEKER = "jobseeker"
@@ -29,13 +29,14 @@ export class User {
     role: UserRole
     
     @Exclude()
-    @Column()
+    @Column({nullable:true,select:false})
     password:string;
 
     @Column("simple-array", { default: [] }) // deefault e ka vleren nje array boshe
     skills: number[]; // Array qe na ndihmone te ruajm skillsId's per user
 
-    @Column({nullable:true})
+    @Exclude()
+    @Column({nullable:true,select:false})
     RefreshToken:string;
 
     @OneToMany(() => Posts, post => post.user)

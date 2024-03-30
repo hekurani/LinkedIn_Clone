@@ -1,7 +1,7 @@
-import { BeforeInsert,BeforeRemove,BeforeUpdate,ManyToOne, OneToMany } from "typeorm"; //importojm hooks qe na ndihmojn me vone
+import { BeforeInsert,BeforeRemove,BeforeUpdate,JoinColumn,JoinTable,ManyToOne, OneToMany } from "typeorm"; //importojm hooks qe na ndihmojn me vone
 import { Entity,Column,PrimaryGeneratedColumn } from "typeorm"; //primarygeneratedcolumn eshte qe e definon AI(AuotaIncrement) per id ne rastin tone
 import { User } from "../users/user.entity";
-import { Comment } from "../comments/comment.entity";
+import { Comment } from "../comments/Entity/comment.entity";
 @Entity()
 export class Posts {
     @PrimaryGeneratedColumn()
@@ -10,8 +10,6 @@ export class Posts {
     @Column({ default: () => 'CURRENT_TIMESTAMP' })
    publishDate: Date;
 
-
-
    @OneToMany(() => Comment, comment => comment.post)  // Establish one-to-many relationship with Comment entity
    comments: Comment[];
 
@@ -19,6 +17,7 @@ export class Posts {
     description:string;
     
     @ManyToOne(() => User, user => user.posts)
+    @JoinColumn()
   user: User;
   @Column("simple-array")
   postImages: string[]

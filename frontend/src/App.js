@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 //user auth pages
 import Register from "./User//Register";
 import Login from "./User/Login";
+import { getToken } from './utilities/getToken';
 //forgot password feature
 import EmailInput from './User/ForgotPassword/EmailInput';
 import EnterCodeForgotPassword from './User/ForgotPassword/EnterCode';
@@ -20,9 +21,10 @@ import JobListing from './Components/Jobs/JobListing';
 
 
 function App() {
+  
   return (
     <BrowserRouter>
-     <HeaderComponent/>
+     {getToken()&&<HeaderComponent/>}
 <EmailProvider>
 
 
@@ -37,8 +39,6 @@ function App() {
 
     <Route path="/job" element={<Job />} />
     <Route path="/job-listing" element={<JobListing />} />
-    
-    
 
     </Routes>
     </EmailProvider>

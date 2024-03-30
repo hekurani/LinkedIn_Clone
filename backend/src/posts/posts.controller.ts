@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, UseGuards,Request, Injectable, Param, Delete, UseInterceptors, UploadedFiles } from '@nestjs/common';
-import { PostDTO } from './dtos/post.dto'; 
+import { PostDTO } from './dto/post.dto'; 
 import { AuthentGuard } from '../auth/guards/auth.guard';
 import { PostsService } from './posts.service';
 import { Public } from '../auth/decorators/Public-Api.decorator';
@@ -8,7 +8,8 @@ import { NotFoundException } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { CreatePostDto } from './dtos/create-post-dto';
+import { CreatePostDto } from './dto/create-post-dto';
+import { AuthUser } from 'src/auth/decorators/AuthUser-decorator';
 const imageFileFilter = (req, file, callback) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
     return callback(new Error('Only image files are allowed!'), false);
@@ -28,25 +29,22 @@ const storage = diskStorage({
 export class PostsController {
     constructor(private postService:PostsService){}
     
-    @Post('/create/:id')
-    @Public()
+    @Post()
     @UseInterceptors(
       FilesInterceptor('image', 20, {
         storage: storage,
         fileFilter: imageFileFilter,
       }),
     )
-    createPost(@Param('id') id: string,@Body() postDTO:CreatePostDto,@UploadedFiles() files){
+    createPost(@AuthUser() user: {userId:number},@Body() postDTO:CreatePostDto,@UploadedFiles() files){
       const response = [];
-      console.log(postDTO)
-      console.log(files)
       if(files) {
         files.forEach(file => {
           response.push(file.filename);
         });
       }
 
-        return this.postService.create(id,postDTO,response);
+        return this.postService.create(user?.userId,postDTO,response);
        
     }
     @Get('/user/:userId')
@@ -61,11 +59,7 @@ export class PostsController {
         throw new NotFoundException('User not found');
       }
     }
-    @Public()
-    @Get('/allPosts')
-    findAllUsers(){
-        return this.postService.findAll();
-    }
+  
     @Get('/:id')
     findPost(@Param('id') id:string){
         if(!id){
@@ -77,7 +71,14 @@ export class PostsController {
     remove(@Param('id') id:string){
         return this.postService.remove(parseInt(id));
     }
-
+    @Get('/:id/comments')
+    getPostComments(@Param('id') id:string){
+return this.postService.getPostComments(parseInt(id));
+    }
+@Get()
+getPosts(){
+  return this.postService.getPosts();
+}
   
 
 }

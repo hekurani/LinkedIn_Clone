@@ -34,6 +34,8 @@ const ProfileInfo = ({user}) => {
  {/*                    <div className='mutal-connections flex relative mt-1'>
 
                             !!!!!!!!! QIJKO E KOMENTUME NA VYN PER OTHERS PROFILE JASHTA USER PROFILE
+                            
+                            OKEJ.
                  
                     <img src={profile} alt={'mutalfriend'} className='relative' style={{width:'30px',height:'30px'}} />
                     <img src={profile} alt={'mutalfriend'} className='absolute ml-4' style={{width:'30px',height:'30px'}}/>
