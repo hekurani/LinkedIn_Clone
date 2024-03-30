@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards,Request,Req, Injectable, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, HttpStatus, ParseFilePipeBuilder, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards,Request,Req, Injectable, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, HttpStatus, ParseFilePipeBuilder, Res,Response } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
 import { SignUpDto } from './dto/signUp.dto';

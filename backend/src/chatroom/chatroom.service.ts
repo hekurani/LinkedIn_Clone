@@ -17,6 +17,15 @@ export class ChatRoomService {
         return chat;
     }
 
+    async getChatRoomByUser(id: number) {
+      return this.repo.createQueryBuilder('chatroom')
+        .leftJoinAndSelect('chatroom.user1', 'user1')
+        .leftJoinAndSelect('chatroom.user2', 'user2')
+        .where('chatroom.user1 = :id', { id })
+        .orWhere('chatroom.user2 = :id', { id })
+        .getMany();
+    }
+
   async findOne(id: number) {
     if (!id) {
       return null;

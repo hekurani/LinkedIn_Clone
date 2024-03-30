@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import UploadImageModal from '../Profile/Modals/UploadImageModal';
 import defaultProfile from '../../../assets/profile.png'
 const UserFeedComponent = ({user}) => {
-  console.log(user)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
 
