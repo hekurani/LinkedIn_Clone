@@ -7,7 +7,6 @@ function FormInputs({errors}){
         0: <FormAuthenthication errors={errors} />,
         1: <FormPersonalDetails errors={errors}/>
     }
-    console.log(page);
     const content = (
        <>
             {display[page]}

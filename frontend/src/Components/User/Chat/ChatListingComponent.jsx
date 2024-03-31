@@ -10,7 +10,6 @@ const ChatListingComponent = ({ user, onChatRowClick }) => {
     const getAllChats = async () => {
       try {
         const response = await axios.get(`/chatroom/chatByUser/${user.id}`);
-        console.log(response.data);
         setChatRooms(response.data);
       } catch (error) {
         console.log(error);
@@ -49,8 +48,10 @@ const ChatListingComponent = ({ user, onChatRowClick }) => {
   const toggleChatListing = () => {
     setIsCollapsed(!isCollapsed);
   };
-  const handleChatRowClick = () => {
-    onChatRowClick();
+
+  const handleChatRowClick = (chatRoomId) => {
+    console.log("Chat Room ID:", chatRoomId);
+    onChatRowClick(chatRoomId);
   };
 
   return (
@@ -81,7 +82,7 @@ const ChatListingComponent = ({ user, onChatRowClick }) => {
               const lastMessageUser = lastMessage?.user;
               const lastMessageUserName = lastMessageUser?.id == loggedInUser.id ? 'You' : lastMessageUser?.name;
               return (
-                <div key={chatroom.id} className='p-2 oneProfile h-16 flex justify-items-center items-center ' style={{ border: '1px solid grey', borderBottom: '0px', borderLeft: '0px' }} onClick={handleChatRowClick}>
+                <div key={chatroom.id}  onClick={() => handleChatRowClick(chatroom.id)} className='p-2 oneProfile h-16 flex justify-items-center items-center ' style={{ border: '1px solid grey', borderBottom: '0px', borderLeft: '0px' }}>
                   <img className='h-10 w-10 rounded-full object-cover' src={otherUserImage} alt="profili" />
                   <div className=''>
                     <p className='name ml-1'>{chatroom.user1.id === user.id ? chatroom.user2.name : chatroom.user1.name} {chatroom.user1.id === user.id ? chatroom.user2.lastname : chatroom.user1.lastname}</p>

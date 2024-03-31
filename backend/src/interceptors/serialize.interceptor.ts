@@ -18,7 +18,6 @@ return UseInterceptors(new SerializeInterceptor(dto));
 export class SerializeInterceptor implements NestInterceptor{
  constructor(private dto:any){}
     intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
-        console.log('Im running before the request is handled ',context);
         return next.handle().pipe(
             map((data:any)=>{
               return plainToClass(this.dto,data,{

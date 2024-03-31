@@ -28,7 +28,6 @@ export class ChatroomController {
     @Public()
     @Post('/createChat')
     createChat(@Body() body:CreateChatRoomDto){
-        console.log(body);
         return this.chatService.createChatRoom(body.userOneId,body.userTwoId);
     }
     @Delete('/:id')

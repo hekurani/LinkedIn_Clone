@@ -55,10 +55,8 @@ return user;
                 audience: process.env.GOOGLE_CLIENT_ID,
             });
             const payLoad = (await ticket).getPayload();
-            console.log(payLoad.given_name,payLoad.family_name);
             const users=await this.usersService.findByPassword(payLoad?.email,true);
 
-            console.log(users);
             if(users.length && users.find((user)=>!user?.password)){
              throw new ForbiddenException("The email is used before");
             }
@@ -81,7 +79,6 @@ return user;
                  audience: process.env.GOOGLE_CLIENT_ID,
              });
              const payLoad = (await ticket).getPayload();
-             console.log(payLoad);
              const [user]=await this.usersService.findByPassword(payLoad?.email,true);
              if(!user){
                 throw new NotFoundException("User not found!");
@@ -139,7 +136,6 @@ return user;
         }
         async refreshToken(userId:number,rt:string){
          const user=await this.usersService.findOne(userId);
-                  console.log(user,userId)
 
          if(!user || !user.RefreshToken){
             throw new NotFoundException("The user is not found");

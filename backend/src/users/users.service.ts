@@ -13,7 +13,6 @@ export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>,@InjectRepository(Posts) private postRepository: Repository<Posts>) {}
 
   async create(name:string,lastname:string,email: string, password: string,imageProfile:string) {
-    console.log("here");
     const user = this.repo.create({ name,lastname,email, password,imageProfile });
     return this.repo.save(user);
   }

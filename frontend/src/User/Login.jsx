@@ -23,7 +23,6 @@ const Login = () => {
       const responseGoogle=await axiosInstance.post('auth/google/logIn',{token});
       localStorage.setItem('access_token',responseGoogle?.data?.access_token);
       localStorage.setItem('refresh_token',responseGoogle?.data?.refresh_token);
-      console.log(responseGoogle);
       setResponse(prevResp=>{
          
         return {

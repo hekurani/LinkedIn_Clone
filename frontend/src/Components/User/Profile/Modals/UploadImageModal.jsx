@@ -21,7 +21,6 @@ const UploadImageModal = ({ isOpen, onRequestClose }) => {
 
   const handleFileUpload = async (file) => {
     try {
-      console.log(file)
       const formData = new FormData();
       formData.append('image', file);
 

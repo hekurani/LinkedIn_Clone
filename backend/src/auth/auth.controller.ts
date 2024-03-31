@@ -46,7 +46,6 @@ return this.authService.googleLogIn(logInDto?.token);
    async signUp(@Body() signUpDto:SignUpDto,@UploadedFile( 
   ) file:Express.Multer.File, @Res({passthrough: true}) response: Response){
     
-      console.log(signUpDto.password)
 return await this.authService.signUp(signUpDto.name,signUpDto.lastname,signUpDto.email,signUpDto.password,file?.filename);
       
     
@@ -71,9 +70,7 @@ return await this.authService.refreshToken(req?.user?.userId,req?.user?.rt);
     verifyOTP(@Body() body: {code:string}){
     try{
       const { code } = body;
-      console.log(code)
       const result =  this.mailService.verifyOTP(code);
-      console.log(result)
       return result;
     }
     catch(error){

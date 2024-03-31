@@ -11,7 +11,6 @@ const PostComponent = ({ user }) => {
     const getAllPosts = async () => {
       const response = await axios.get('http://localhost:4000/posts/allPosts');
       setAllPosts(response.data);
-      console.log(response.data)
     }
     getAllPosts();
   }, [])

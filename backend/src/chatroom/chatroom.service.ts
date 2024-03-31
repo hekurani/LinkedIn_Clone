@@ -9,7 +9,6 @@ export class ChatRoomService {
   constructor(@InjectRepository(ChatRoom) private repo: Repository<ChatRoom> ,@InjectRepository(User) private userRepository:Repository<User>,@InjectRepository(Message) private messageRepository: Repository<Message>) {}
 
     async createChatRoom(userOneId:number,userTwoId:number){
-      console.log(userOneId,userTwoId)
       const userOne = await this.userRepository.findOne({where:{id:userOneId}});
       const userTwo = await this.userRepository.findOne({where:{id:userTwoId}});
        const chat =  this.repo.create({user1:userOne,user2:userTwo});

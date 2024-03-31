@@ -6,7 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 let socket;
 
-function ChatPage({user,onCloseChat }) {
+function ChatPage({user,onCloseChat,chatRoomId }) {
+  console.log("Chat ID ID:", chatRoomId);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isChatOpen, setIsChatOpen] = useState(true);//me handle chat open/close
@@ -14,25 +15,25 @@ function ChatPage({user,onCloseChat }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get('http://localhost:4000/chatroom/allMessages/1');// per testim kem qu id 1
+      const response = await axios.get(`http://localhost:4000/chatroom/allMessages/${chatRoomId}`);
       const apiMessages = response.data;
-      console.log(apiMessages)
       setMessages(apiMessages);
     };
-
-    fetchData();
-
-    socket = io('http://localhost:8001');
-    socket.on('message', (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-      scrollToBottom();
-    });
-    
-
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+  
+    if (chatRoomId) {
+      fetchData();
+  
+      socket = io('http://localhost:8001');
+      socket.on('message', (message) => {
+        setMessages((prevMessages) => [...prevMessages, message]);
+        scrollToBottom();
+      });
+  
+      return () => {
+        socket.disconnect();
+      };
+    }
+  }, [chatRoomId]);
 
   useEffect(() => {
     //scroll ne fund masi bohet enter new message
