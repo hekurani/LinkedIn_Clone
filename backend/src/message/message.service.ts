@@ -8,48 +8,50 @@ import { EditedMessage } from './Entity/editedmessage.entity';
 import { DeletedMessage } from './Entity/deletedmessage.entity';
 @Injectable()
 export class MessageService {
-  constructor(@InjectRepository(Message) private repo: Repository<Message>,@InjectRepository(User) private userRepository: Repository<User>,@InjectRepository(ChatRoom) private chatRepository: Repository<ChatRoom>,@InjectRepository(Message) private editMessageRepository: Repository<EditedMessage>,@InjectRepository(Message) private deletedMessageRepository: Repository<DeletedMessage>) {}
+  constructor(@InjectRepository(Message) private repo: Repository<Message>, @InjectRepository(User) private userRepository: Repository<User>, @InjectRepository(ChatRoom) private chatRepository: Repository<ChatRoom>, @InjectRepository(Message) private editMessageRepository: Repository<EditedMessage>, @InjectRepository(Message) private deletedMessageRepository: Repository<DeletedMessage>) { }
 
   async sendMessage(messageText: string, userId: number, chatId: number) {
-    const user = await this.userRepository.findOne({where:{id:userId}});
-    const chat = await this.chatRepository.findOne({where:{id:chatId}});
-  
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const chat = await this.chatRepository.findOne({ where: { id: chatId } });
+
     if (!user || !chat) {
       throw new NotFoundException('User or chat not found');
     }
-    const message = this.repo.create({ description:messageText, user, chat });
-    const savedMessage =  await this.repo.save(message);
-     chat.messages.push((savedMessage.id)); 
+    const message = this.repo.create({ description: messageText, user, chat });
+    const savedMessage = await this.repo.save(message);
+    chat.messages.push((savedMessage.id));
     await this.chatRepository.save(chat);
 
-  
+
     return this.repo.save(message);
 
   }
-  
- async findAllMessages () {
-    return  await this.repo.find({relations: ['user']});
+
+  async findAllMessages() {
+    return await this.repo.find({ relations: ['user'] });
   }
- 
+
   async findOne(id: number) {
-    
+
     if (!id) {
       return null;
     }
-    let message = await this.repo.find({ where: { id: id },
-    relations: ['user']});
+    let message = await this.repo.find({
+      where: { id: id },
+      relations: ['user']
+    });
     return message;
   }
 
   async remove(id: number) {
-    const message = await this.repo.findOne({where:{id}});
+    const message = await this.repo.findOne({ where: { id } });
     if (!message) {
       throw new NotFoundException(
         'The message that you wanted to delete doesnt exist at all!',
       );
     }
-    const deletedMessage= this.deletedMessageRepository.create({message});
-    if(!deletedMessage){
+    const deletedMessage = this.deletedMessageRepository.create({ message });
+    if (!deletedMessage) {
       throw new InternalServerErrorException("Somethiing went wrong!");
     }
     await this.deletedMessageRepository.save(deletedMessage);
@@ -60,12 +62,12 @@ export class MessageService {
 
 
   async update(id: number, attrs: Partial<Message>) {
-    const message = await this.repo.findOne({where:{id:id}});
+    const message = await this.repo.findOne({ where: { id: id } });
     if (!message) {
       throw new NotFoundException('Message not found');
     }
-    const editedMessage= this.editMessageRepository.create({message});
-    if(!editedMessage){
+    const editedMessage = this.editMessageRepository.create({ message });
+    if (!editedMessage) {
       throw new InternalServerErrorException("Somethiing went wrong!");
     }
 

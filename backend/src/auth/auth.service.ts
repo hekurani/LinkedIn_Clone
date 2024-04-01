@@ -20,7 +20,8 @@ export class AuthService {
        private jwtService:JwtService){}
         async signIn(email:string,password:string){
             const [user] = await this.usersService.findByPassword(email,false);
-            if(!user || !user.password){
+            console.log(user);
+            if(!user|| !user?.password){
                 throw new NotFoundException("User not found");
             }
             const [salt,storedHash]=user?.password.split('.');

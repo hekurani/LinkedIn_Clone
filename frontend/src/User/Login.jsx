@@ -37,7 +37,9 @@ const Login = () => {
         setIsOpen(false);
         navigate('/');
       },2000);
-      }
+      localStorage.setItem('access_token',response?.data?.access_token);
+    localStorage.setItem('refresh_token',response?.data?.refresh_token);  
+    }
         catch(err){
           console.log("err: ",err)
           message=err?.response?.data?.message?err?.response?.data?.message:'Something went wrong!';

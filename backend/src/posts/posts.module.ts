@@ -9,11 +9,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Posts } from './post.entity';
 import { User } from '../users/user.entity';
 import { UsersService } from 'src/users/users.service';
+import { Skill } from 'src/skills/skills.entity';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User,Posts]),JwtModule,
+    TypeOrmModule.forFeature([User,Posts,Skill]),JwtModule,
     ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule], 

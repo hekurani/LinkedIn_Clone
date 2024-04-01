@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, UseGuards,Request, Injectable, Param, Delete } from '@nestjs/common';
-import { SkillsDTO } from './dtos/skills.dto';
+import { SkillsDTO } from './dto/skills.dto';
 import { AuthentGuard } from '../auth/guards/auth.guard';
 import { SkillsService } from './skills.service';
 import { Public } from '../auth/decorators/Public-Api.decorator';
@@ -8,7 +8,7 @@ import { NotFoundException } from '@nestjs/common';
 @Controller('skills')
 export class SkillsController {
     constructor(private skillsService:SkillsService){}
-    @Post('/create')
+    @Post()
     createPost(@Body() SkillsDTO:SkillsDTO){
         return this.skillsService.create(SkillsDTO.name);
     }

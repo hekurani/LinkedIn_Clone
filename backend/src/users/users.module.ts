@@ -9,9 +9,10 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { Posts } from '../posts/post.entity';
 import { Comment } from 'src/comments/Entity/comment.entity';
+import { Skill } from 'src/skills/skills.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([User,Posts,Comment]),JwtModule],
+  imports:[TypeOrmModule.forFeature([User,Posts,Comment,Skill]),JwtModule],
   exports:[UsersService],
   controllers: [UsersController],
   providers: [UsersService,AuthService,{provide:APP_INTERCEPTOR,useClass:CurrentUserInterceptor}]

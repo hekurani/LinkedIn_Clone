@@ -8,15 +8,14 @@ import { User } from './user.entity';
 import { AuthService } from '../auth/auth.service';
 import { Session, UploadedFile } from '@nestjs/common/decorators';
 import { CurrentUser } from './Decorators/current-user.decorator';
-import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
-import { AuthentGuard } from '../auth/guards/auth.guard';
-import {UseGuards} from '@nestjs/common';
 import { Posts } from '../posts/post.entity';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Public } from 'src/auth/decorators/Public-Api.decorator';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthUser } from 'src/auth/decorators/AuthUser-decorator';
+import { Skill } from 'src/skills/skills.entity';
 
 const imageFileFilter = (req, file, callback) => {
     if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -35,7 +34,6 @@ const imageFileFilter = (req, file, callback) => {
   });
 
 @Controller('/users')
-@Serialize(UserDto)
 
 export class UsersController 
 {
@@ -50,26 +48,28 @@ async getMe(@CurrentUser() user:User){
 signout(@Session() session:any){
     session.userId=null;
 }
-// @UseGuards(RolesGuard)
-// @SetMetadata('roles', ['jobseeker']) //caktojm rolin qe duhet me qen useri per me u qas 
-@Patch('/:id/add-skill/:skillId')
+
+@Post('/add-skill')
 async addSkillToUser(
-  @Param('id') userId: string,
-  @Param('skillId') skillId: string,
-): Promise<User | null> {
-  return this.usersService.addSkillToUser(parseInt(userId), parseInt(skillId));
+  @AuthUser() user: {userId:number},
+  @Query('skillId') skillId: string[],
+) {
+let skillIds:number[]=[];
+if (Array.isArray(skillId)) {
+  skillIds = skillId.map(id => +id);
+} else {
+  skillIds = [+skillId];
 }
-//metod per mi marr krejt skill te userit
-@Get('/:id/skills') // New endpoint to get user's skills
-async getUserSkills(@Param('id') userId: string): Promise<number[] | null> {
-  return this.usersService.getUserSkills(parseInt(userId));
+return this.usersService.addSkillToUser(user?.userId, skillIds);
+  
 }
 
+@Get('/:id/skills') 
+async getUserSkills(@AuthUser() user: {userId:number}): Promise<Skill[]> {
 
-    @Post('/register')
-async createUser(@Body() body: CreateUserDto,@Session() session:any){
-
+  return this.usersService.getUserSkills(user?.userId);
 }
+
 @Get('/:id/posts')
 async getUserPosts(@Param('id') userId: string): Promise<Posts[]> {
   const posts = await this.usersService.getUserPosts(parseInt(userId));
@@ -82,11 +82,6 @@ findUser(@Param('id') id:string) {
     return null;
 }
     return this.usersService.findOne(parseInt(id));
-}
-@Public()
-@Get('/users')
-findAllUsers(@Query('email') email:string){
-    return this.usersService.find(email);
 }
 @Delete('/users/:id')
 remove(@Param('id') id:string){
