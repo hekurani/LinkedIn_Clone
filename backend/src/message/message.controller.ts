@@ -6,13 +6,14 @@ import { Public } from 'src/auth/decorators/Public-Api.decorator';
 @Controller('message')
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}
-
+ @Public()
   @Get('/messages')
   findAllMessages(){
       return this.messageService.findAllMessages();
   }
   
 ////per testim duhet te largohet me pas ne implementim front-back
+@Public()
   @Post('/sendMessage')
   async sendMessage(
     @Body('userId') userId: number,

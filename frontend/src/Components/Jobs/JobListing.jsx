@@ -3,7 +3,7 @@ import "./style/JobListing.css";
 import cover from "../../assets/cover.jpg";
 
 const JobListing = () => {
-  const [setAlert, setSetAlert] = useState(true);
+  const [alert, setAlert] = useState(false);
 
   return (
     <div className="main">
@@ -14,9 +14,9 @@ const JobListing = () => {
         </div>
         <div className="alert flex mr-5">
           <div className="alerText mr-2">
-            {setAlert ? <p>Alert on</p> : <p>Set alert</p>}
+            <p>{alert ? 'Alert on' : 'Set alert'}</p>
           </div>
-          <div className="checkbox-wrapper-7">
+          <div className="checkbox-wrapper-7" onClick={() => setAlert(true)}>
             <input className="tgl tgl-ios" id="cb2-7" type="checkbox" />
             <label className="tgl-btn" htmlFor="cb2-7" />
           </div>

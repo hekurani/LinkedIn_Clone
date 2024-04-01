@@ -32,7 +32,6 @@ else if (!email.includes("@") || !email.endsWith(".com")) {
     }
 
     setEmail(email);
-    console.log(email)
     axios
       .post("/auth/send_recovery_email", { email: email})
       .then((response) => {

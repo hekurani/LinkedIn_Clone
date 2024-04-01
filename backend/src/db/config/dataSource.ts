@@ -19,7 +19,7 @@ import { EditedMessage } from 'src/message/Entity/editedmessage.entity';
         host:configService.get('HOST'),
         username:'postgres',
         port:configService.get('PORT'),
-        password:'1234',
+        password:'password',
         entities: [User,Posts,Skill,Message,ChatRoom,Comment,Friend,FriendRequest,EditedComment,DeletedMessage,EditedMessage],
         migrations: [__dirname + '/../migrations/*{.ts,.js}'],
         seeds: ['dist/db/seeds/**/*.js'],

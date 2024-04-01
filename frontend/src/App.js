@@ -18,6 +18,7 @@ import Profile from "./User/Profile";
 import { FormProvider } from './User/context/FormContext';
 import Job from './Jobs/Job';
 import JobListing from './Components/Jobs/JobListing';
+import Connections from './User/Connections';
 
 
 function App() {
@@ -39,6 +40,8 @@ function App() {
 
     <Route path="/job" element={<Job />} />
     <Route path="/job-listing" element={<JobListing />} />
+
+    <Route path="/connections" element={<Connections />} />
 
     </Routes>
     </EmailProvider>

@@ -10,6 +10,7 @@ import axios from 'axios';
 const Feed = () => {
   const [user, setUser] = useState([]);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatRoomId, setChatRoomId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,8 +21,10 @@ const Feed = () => {
     fetchData();
   }, []);
 
-  const handleOpenChatPage = () => {
+  const handleOpenChatPage = (chatRoomId) => {
+    console.log("Chat Room ID:", chatRoomId);
     setIsChatOpen(true);
+    setChatRoomId(chatRoomId);
   };
 
   const handleCloseChatPage = () => {
@@ -35,7 +38,7 @@ const Feed = () => {
         <AddPostComponent user={user} />
         <PostComponent user={user} />
         <ChatListingComponent user={user} onChatRowClick={handleOpenChatPage} />
-        {isChatOpen && <ChatPage user={user} onCloseChat={handleCloseChatPage} />}
+        {isChatOpen && <ChatPage user={user} onCloseChat={handleCloseChatPage} chatRoomId={chatRoomId}/>}
       </div>
     </div>
   );

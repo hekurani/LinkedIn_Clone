@@ -15,7 +15,7 @@
 
 .contents {
     max-height: 1300px;
-    overflow-y: auto;
+    overflow-y: auto !important;
     white-space: nowrap;
   }
   

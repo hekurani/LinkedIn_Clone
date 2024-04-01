@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards,Request,Req, Injectable, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, HttpStatus, ParseFilePipeBuilder, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards,Request,Req, Injectable, UseInterceptors, UploadedFile, MaxFileSizeValidator, FileTypeValidator, HttpStatus, ParseFilePipeBuilder, Res,Response } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
 import { SignUpDto } from './dto/signUp.dto';
@@ -46,7 +46,6 @@ return this.authService.googleLogIn(logInDto?.token);
    async signUp(@Body() signUpDto:SignUpDto,@UploadedFile( 
   ) file:Express.Multer.File, @Res({passthrough: true}) response: Response){
     
-      console.log(signUpDto.password)
 return await this.authService.signUp(signUpDto.name,signUpDto.lastname,signUpDto.email,signUpDto.password,file?.filename);
       
     
@@ -71,9 +70,7 @@ return await this.authService.refreshToken(req?.user?.userId,req?.user?.rt);
     verifyOTP(@Body() body: {code:string}){
     try{
       const { code } = body;
-      console.log(code)
       const result =  this.mailService.verifyOTP(code);
-      console.log(result)
       return result;
     }
     catch(error){

@@ -17,6 +17,10 @@ export class ChatroomController {
         return this.chatService.getAllChatRooms();
     }
     @Public()
+    @Get('/chatByUser/:id')//me get chatrooms per user
+    getChatRoomByUser(@Param('id') id:number){
+        return this.chatService.getChatRoomByUser(id);
+    }
     @Get('/:id')
     findOne(@Param('id') id:string){
         return this.chatService.findOne(parseInt(id));
@@ -24,7 +28,6 @@ export class ChatroomController {
     @Public()
     @Post('/createChat')
     createChat(@Body() body:CreateChatRoomDto){
-        console.log(body);
         return this.chatService.createChatRoom(body.userOneId,body.userTwoId);
     }
     @Delete('/:id')

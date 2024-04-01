@@ -9,7 +9,6 @@ export class FriendRequestController {
 constructor(private readonly FriendRequestService:FriendRequestService){}
     @Post()
     async createFriendRequest(@AuthUser() user: {userId:number}, @Body() { id }: CreateFriendRequestDto) {
- console.log("user: "+user)
 
  return this.FriendRequestService.createFriendRequest(user?.userId,id);
     }

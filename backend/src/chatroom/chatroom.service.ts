@@ -9,12 +9,20 @@ export class ChatRoomService {
   constructor(@InjectRepository(ChatRoom) private repo: Repository<ChatRoom> ,@InjectRepository(User) private userRepository:Repository<User>,@InjectRepository(Message) private messageRepository: Repository<Message>) {}
 
     async createChatRoom(userOneId:number,userTwoId:number){
-      console.log(userOneId,userTwoId)
       const userOne = await this.userRepository.findOne({where:{id:userOneId}});
       const userTwo = await this.userRepository.findOne({where:{id:userTwoId}});
        const chat =  this.repo.create({user1:userOne,user2:userTwo});
         await this.repo.save(chat);
         return chat;
+    }
+
+    async getChatRoomByUser(id: number) {
+      return this.repo.createQueryBuilder('chatroom')
+        .leftJoinAndSelect('chatroom.user1', 'user1')
+        .leftJoinAndSelect('chatroom.user2', 'user2')
+        .where('chatroom.user1 = :id', { id })
+        .orWhere('chatroom.user2 = :id', { id })
+        .getMany();
     }
 
   async findOne(id: number) {
