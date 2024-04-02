@@ -1,7 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, OneToMany } from 'typeorm';
 import { User } from '../../users/user.entity';
 import { Posts } from 'src/posts/post.entity';
-import { EditedComment } from './editedcomment.entity';
 
 @Entity()
 export class Comment {
@@ -20,7 +19,13 @@ export class Comment {
     @ManyToOne(() => Posts, post => post.comments)
     post: Posts;
 
-    @OneToOne(()=>EditedComment,(editedcoment)=>editedcoment.coment)
-    editedcomment:EditedComment
+    @OneToMany(() => Comment, comment => comment.parentComment)
+    childComments: Comment[];
+
+    @ManyToOne(() => Comment, comment => comment.childComments)
+    parentComment: Comment;
+
+    @Column({onUpdate:'CURRENT_TIMESTAMP',nullable:true})
+    updatedAt:Date;
 
 }

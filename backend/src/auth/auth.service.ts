@@ -125,14 +125,6 @@ return user;
                 access_token,
                 refresh_token
               } as Tokens;
-            
-            // catch(err){
-            //     return {
-            //         status:'failure',
-            //         statusCode:err?.response?.statusCode? err?.response?.statusCode:500,
-            //         message:err.response.message?err.response.message:'something went wrong!'
-            //     }
-            // }
                
         }
         async refreshToken(userId:number,rt:string){

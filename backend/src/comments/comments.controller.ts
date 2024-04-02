@@ -5,16 +5,22 @@ import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create.dto.entity';
 import { UpdateCommentDto } from './dto/update.dto.entity';
 import { Public } from 'src/auth/decorators/Public-Api.decorator';
+import { CreateReplyDto } from './dto/createreply.dto';
+import { AuthUser } from 'src/auth/decorators/AuthUser-decorator';
 
 
 @Controller('comments')
 export class CommentsController {
     constructor(private readonly commentsService: CommentsService) {}
     @Post()
-    create(@Body() createCommentDto: CreateCommentDto) {
-        return this.commentsService.create(createCommentDto.text, createCommentDto.userId,createCommentDto.postId);
+    create(@Body() createCommentDto: CreateCommentDto,@AuthUser() user: {userId:number}) {
+        console.log(user.userId)
+        return this.commentsService.create(createCommentDto.text,user.userId,createCommentDto.postId);
     }
-
+    @Post('/:id/reply')
+    createReply(@Body() createReplyDto:CreateReplyDto,@Param('id') id:number){
+return this.commentsService.createReply(createReplyDto.reply,id);
+    }
     @Get(':id')
     findOne(@Param('id') id: number) {
         return this.commentsService.findOne(id);

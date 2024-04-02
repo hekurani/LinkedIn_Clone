@@ -1,13 +1,12 @@
 import { Injectable, NotFoundException, Post } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Comment } from './Entity/comment.entity';
 import { User } from '../users/user.entity';
 import { Posts } from 'src/posts/post.entity';
-import { EditedComment } from './Entity/editedcomment.entity';
 @Injectable()
 export class CommentsService {
-  constructor(@InjectRepository(Comment) private repo: Repository<Comment>,@InjectRepository(Posts) private postRepository: Repository<Posts>,@InjectRepository(User) private userRepository: Repository<User>,@InjectRepository(EditedComment) private editedCommentRepository: Repository<EditedComment>) {}
+  constructor(@InjectRepository(Comment) private repo: Repository<Comment>,@InjectRepository(Posts) private postRepository: Repository<Posts>,@InjectRepository(User) private userRepository: Repository<User>) {}
 
   async create(text: string, userId: number, postId: number) {
     const user = await this.userRepository.findOne({ where: { id: userId } });
@@ -51,7 +50,18 @@ async findOne(id: number) {
 async findAll() {
     return this.repo.find({ relations: ['user', 'post'] });
 }
+async createReply(reply:string,id:number){
+const comment=await this.repo.findOne({where:{id}});
+console.log(comment);
+if(!comment){
+  throw new NotFoundException("There are no comment with this id!");
+}
+const replyComment= this.repo.create({text:reply,parentComment:comment});
+ const Comment= await this.repo.save(replyComment);
+ console.log(Comment);
+ return Comment;
 
+}
  
 
   async remove(id: number) {
@@ -61,7 +71,10 @@ async findAll() {
         'The comment that you wanted to delete doesnt exist at all!',
       );
     }
-    return this.repo.remove(comment);
+    await this.repo.update(id, {updatedAt:new Date()});
+    return {
+      status:"success"
+    }
   }
 
  
@@ -71,11 +84,9 @@ async update(id: number, attrs: Partial<Comment>) {
     if (!comment) {
         throw new NotFoundException('Comment not found');
     }
-const editedComment= this.editedCommentRepository.create({coment:comment});
-this.editedCommentRepository.save(editedComment);
     await this.repo.update(id, attrs);
     return {
-     status: "Success"
+     status: "success"
     }
 }
 } 

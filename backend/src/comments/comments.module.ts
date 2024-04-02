@@ -10,12 +10,11 @@ import { ChatRoom } from '../chatroom/chat.entity';
 import { Comment } from './Entity/comment.entity';
 import { User } from '../users/user.entity';
 import { Posts } from 'src/posts/post.entity';
-import { EditedComment } from './Entity/editedcomment.entity';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Comment,User,Posts,EditedComment]),JwtModule,
+    TypeOrmModule.forFeature([Comment,User,Posts]),JwtModule,
     ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule], 

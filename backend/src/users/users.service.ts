@@ -84,7 +84,7 @@ user.skills=skills;
     }
   }
 
-  async getUserSkills(userId: number): Promise<Skill[] | null> { //metod per mi marr krejt skills te userit
+  async getUserSkills(userId: number): Promise<Skill[]> { //metod per mi marr krejt skills te userit
     const user = await this.findOne(userId);//e gjem
     if (!user) { //nese nuk e gjejm
       throw new NotFoundException('User not found');//not found excp
