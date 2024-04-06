@@ -9,6 +9,7 @@ import { CreateReplyDto } from './dto/createreply.dto';
 import { AuthUser } from 'src/auth/decorators/AuthUser-decorator';
 
 
+
 @Controller('comments')
 export class CommentsController {
     constructor(private readonly commentsService: CommentsService) {}
@@ -17,10 +18,12 @@ export class CommentsController {
         console.log(user.userId)
         return this.commentsService.create(createCommentDto.text,user.userId,createCommentDto.postId);
     }
+    
     @Post('/:id/reply')
-    createReply(@Body() createReplyDto:CreateReplyDto,@Param('id') id:number){
-return this.commentsService.createReply(createReplyDto.reply,id);
+    createReply(@Body() createReplyDto:CreateReplyDto,@Param('id') id:number,@AuthUser() user: {userId:number}){
+return this.commentsService.createReply(createReplyDto.reply,id,user?.userId);
     }
+
     @Get(':id')
     findOne(@Param('id') id: number) {
         return this.commentsService.findOne(id);
@@ -34,8 +37,8 @@ return this.commentsService.createReply(createReplyDto.reply,id);
     findAll() {
         return this.commentsService.findAll();
     }
-    @Public()
 
+    @Public()
     @Patch(':id')
     update(@Param('id') id: number, @Body() updateCommentDto: UpdateCommentDto) {
         return this.commentsService.update(id, updateCommentDto);

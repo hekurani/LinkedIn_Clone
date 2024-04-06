@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserRole } from './user.entity';
 import { Posts } from '../posts/post.entity';
@@ -129,5 +129,8 @@ user.skills=skills;
     };
   
     return this.postRepository.find(options);
+  }
+  getUsers(userId:number){
+    return this.repo.find({ where: { id: Not(userId) } });
   }
 }

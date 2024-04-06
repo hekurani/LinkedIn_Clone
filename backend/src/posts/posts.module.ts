@@ -10,11 +10,13 @@ import { Posts } from './post.entity';
 import { User } from '../users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { Skill } from 'src/skills/skills.entity';
+import { FriendsService } from 'src/friends/friends.service';
+import { Friend } from 'src/friends/friends.entity';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User,Posts,Skill]),JwtModule,
+    TypeOrmModule.forFeature([User,Posts,Skill,Friend]),JwtModule,
     ConfigModule,
     JwtModule.registerAsync({
       imports: [ConfigModule], 
@@ -28,6 +30,6 @@ import { Skill } from 'src/skills/skills.entity';
   ],
   controllers: [PostsController],
   exports:[PostsService],
-  providers: [PostsService,UsersService],
+  providers: [PostsService,UsersService,FriendsService],
 })
 export class PostsModule {}

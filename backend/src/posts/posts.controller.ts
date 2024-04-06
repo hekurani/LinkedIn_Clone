@@ -76,8 +76,8 @@ export class PostsController {
 return this.postService.getPostComments(parseInt(id));
     }
 @Get()
-getPosts(){
-  return this.postService.getPosts();
+getPosts(@AuthUser() user: {userId:number}){
+  return this.postService.getPosts(user.userId);
 }
   
 

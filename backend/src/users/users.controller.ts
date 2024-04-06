@@ -95,4 +95,9 @@ async updateUser(@Param('id') id:string,@Body() body: UpdateUserDto,@UploadedFil
   body.imageProfile = file?.filename;
 return this.usersService.update(parseInt(id),body);
 }
+
+@Get()
+getUSers(@AuthUser() user: {userId:number}){
+  return this.usersService.getUsers(user.userId);
+}
 }

@@ -13,19 +13,18 @@ export class Comment {
     @Column({ default: () => 'CURRENT_TIMESTAMP' })
     publishDate: Date;
 
-    @ManyToOne(() => User, user => user.comments)
+    @ManyToOne(() => User, user => user.comments,{eager:true})
     user: User;
 
     @ManyToOne(() => Posts, post => post.comments)
     post: Posts;
 
-    @OneToMany(() => Comment, comment => comment.parentComment)
+    @OneToMany(() => Comment, comment => comment.parentComment,{lazy:true})
     childComments: Comment[];
 
-    @ManyToOne(() => Comment, comment => comment.childComments)
+    @ManyToOne(() => Comment, comment => comment.childComments, { onDelete: 'CASCADE',onUpdate:'CASCADE',lazy:true })
     parentComment: Comment;
 
     @Column({onUpdate:'CURRENT_TIMESTAMP',nullable:true})
     updatedAt:Date;
-
 }

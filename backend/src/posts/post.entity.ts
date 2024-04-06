@@ -10,7 +10,7 @@ export class Posts {
     @Column({ default: () => 'CURRENT_TIMESTAMP' })
     publishDate: Date;
 
-    @OneToMany(() => Comment, comment => comment.post) 
+    @OneToMany(() => Comment, comment => comment.post,{eager:true}) 
     comments: Comment[];
 
     @Column({ nullable: true })

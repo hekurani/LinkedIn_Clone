@@ -151,6 +151,7 @@ return {
         }
        async logout(userId:number){
             const user=await this.usersService.findOne(userId);
+            console.log(userId);
             if(!user){
                 throw new NotFoundException("No user is found")
             }

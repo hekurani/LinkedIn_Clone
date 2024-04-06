@@ -10,6 +10,7 @@ import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express
 import { MailService } from '../mailer-forgot-password/mail.service';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
+import { AuthUser } from './decorators/AuthUser-decorator';
 const imageFileFilter = (req, file, callback) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
     return callback(new Error('Only image files are allowed!'), false);
@@ -89,9 +90,8 @@ return await this.authService.refreshToken(req?.user?.userId,req?.user?.rt);
      }
    }
    @Get('/logout')
-   @Public()
-   async logOut(@Request() req){
-    return this.authService.logout(req?.user?.userId);
+   async logOut(@AuthUser() user: {userId:number}){
+    return this.authService.logout(user?.userId);
    }
 }
 

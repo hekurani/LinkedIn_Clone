@@ -6,9 +6,10 @@ import { User } from 'src/users/user.entity';
 import { Comment } from 'src/comments/Entity/comment.entity';
 import { CreatePostDto } from './dto/create-post-dto';
 import { UsersService } from 'src/users/users.service';
+import { FriendsService } from 'src/friends/friends.service';
 @Injectable()
 export class PostsService {
-  constructor(private usersService:UsersService,@InjectRepository(Posts) private repo: Repository<Posts>,@InjectRepository(User) private userRepository: Repository<User>) {}
+  constructor(private friendService:FriendsService,private usersService:UsersService,@InjectRepository(Posts) private repo: Repository<Posts>,@InjectRepository(User) private userRepository: Repository<User>) {}
 
    async create(id:number,payload: CreatePostDto,response:string[]) {
      const {description} = payload;
@@ -49,7 +50,7 @@ export class PostsService {
   
   
 async getPostComments(id:number){
-return await this.repo.find({where:{id:id}});
+return await this.repo.find({where:{id:id},relations:['comments','comments.childComments','comments.parentComment']});
 }
 
 async update(id: number, attrs: Partial<Posts>) {
@@ -60,7 +61,40 @@ async update(id: number, attrs: Partial<Posts>) {
     Object.assign(post, attrs);
     return this.repo.save(post);
   }
-  async getPosts(){
-   return this.repo.find({relations:['user']});
+  isFriendInComment(comment:Comment,userId:number){
+    console.log("userId comment: ",comment.user.id,"authUserId: ",userId);
+    if(this.friendService.getFriend({userId,friendId:comment.user.id})){
+      return comment
+    }
+    let isFriendInReplies=comment.childComments.some((comment)=>{
+      while(comment.childComments.length===0){
+        if(this.friendService.getFriend({userId,friendId:comment.user.id})){
+          return true;
+        }
+}
+    })
+    if(isFriendInReplies)
+    {
+      return comment;
+    }
+    return null;
+
+    
+  }
+  async getPosts(userId:number){
+   const posts =await this.repo.find({relations:['user','comments.childComments','comments.parentComment','comments.user']}) as any;
+
+   posts.forEach(post=>{
+post.numberComments=post.comments.length;
+    let comments=post.comments.filter(async (comment)=>{
+  return await comment?.parentComment===null
+})
+comments=comments.filter((comment)=>{
+  return this.isFriendInComment(comment,userId)!==null
+})
+post.comments=comments;
+})
+console.log("numberComments",posts[0].numberComments)
+return {posts} as any;
   }
 }
