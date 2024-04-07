@@ -10,11 +10,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { Posts } from '../posts/post.entity';
 import { Comment } from 'src/comments/Entity/comment.entity';
 import { Skill } from 'src/skills/skills.entity';
+import { RolesService } from 'src/roles/roles.service';
+import { Role } from 'src/roles/Roles.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([User,Posts,Comment,Skill]),JwtModule],
+  imports:[TypeOrmModule.forFeature([User,Posts,Comment,Skill,Role]),JwtModule],
   exports:[UsersService],
   controllers: [UsersController],
-  providers: [UsersService,AuthService,{provide:APP_INTERCEPTOR,useClass:CurrentUserInterceptor}]
+  providers: [UsersService,AuthService,RolesService,{provide:APP_INTERCEPTOR,useClass:CurrentUserInterceptor}]
 })
 export class UsersModule {}

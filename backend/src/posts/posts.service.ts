@@ -41,6 +41,7 @@ export class PostsService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
+    console.log(user.posts)
     return user.posts;
   }
 
@@ -94,7 +95,6 @@ comments=comments.filter((comment)=>{
 })
 post.comments=comments;
 })
-console.log("numberComments",posts[0].numberComments)
 return {posts} as any;
   }
 }

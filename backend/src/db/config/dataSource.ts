@@ -9,6 +9,7 @@ import { ChatRoom } from 'src/chatroom/chat.entity';
 import { Comment } from 'src/comments/Entity/comment.entity';
 import { Friend } from 'src/friends/friends.entity';
 import { FriendRequest } from 'src/friend-request/friend-request.entity';
+import { Role } from 'src/roles/Roles.entity';
 
 
  const createDataSourceOptions = (configService: ConfigService): DataSourceOptions & SeederOptions => {
@@ -19,7 +20,7 @@ import { FriendRequest } from 'src/friend-request/friend-request.entity';
         username:'postgres',
         port:configService.get('PORT'),
         password:'1234',
-        entities: [User,Posts,Skill,Message,ChatRoom,Comment,Friend,FriendRequest],
+        entities: [User,Posts,Skill,Message,ChatRoom,Comment,Friend,FriendRequest,Role],
         migrations: [__dirname + '/../migrations/*{.ts,.js}'],
         seeds: ['dist/db/seeds/**/*.js'],
         synchronize: false,

@@ -4,10 +4,8 @@ import { Exclude } from "class-transformer";
 import { Posts } from "../posts/post.entity";
 import { Comment } from "../comments/Entity/comment.entity";
 import { Skill } from "src/skills/skills.entity";
-export enum UserRole {
-    ADMIN = "admin",
-    JOBSEEKER = "jobseeker"
-}
+import { Role } from "src/roles/Roles.entity";
+import { ArrayNotEmpty } from "class-validator";
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
@@ -22,12 +20,10 @@ export class User {
     @Column()
     email:string;
 
-    @Column({
-        type: "enum",
-        enum: UserRole,
-        default: UserRole.JOBSEEKER
-    })
-    role: UserRole
+@ManyToMany(()=>Role)
+@ArrayNotEmpty()
+@JoinTable()
+roles:Role[]
     
     @Exclude()
     @Column({nullable:true,select:false})
@@ -52,6 +48,8 @@ export class User {
 
     @Column({nullable:true})
     gender:String;
+
+
 @BeforeRemove()
 beforeRemove(){
     console.log(`The removed user id is ${this.id}`);

@@ -49,15 +49,8 @@ export class PostsController {
     }
     @Get('/user/:userId')
     async findPostsByUser(@Param('userId') userId: string) {
-      try {
-        const posts = await this.postService.findPostsByUser(parseInt(userId));
-        if (posts.length === 0) {
-          throw new NotFoundException('No posts found for the specified user');
-        }
-        return posts;
-      } catch (error) {
-        throw new NotFoundException('User not found');
-      }
+      return await this.postService.findPostsByUser(parseInt(userId));
+     
     }
   
     @Get('/:id')

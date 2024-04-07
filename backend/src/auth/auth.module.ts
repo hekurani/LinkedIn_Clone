@@ -8,10 +8,14 @@ import { AuthentGuard } from './guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { MulterModule } from '@nestjs/platform-express';
 import { MailService } from 'src/mailer-forgot-password/mail.service';
+import { RolesService } from 'src/roles/roles.service';
+import { Role } from 'src/roles/Roles.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([Role]),
     UsersModule,
     ConfigModule, // Make sure ConfigModule is imported to provide access to ConfigService
     JwtModule.registerAsync({
@@ -27,7 +31,7 @@ import { MailService } from 'src/mailer-forgot-password/mail.service';
     })
   ],
   controllers: [AuthController],
-  providers: [AuthService,MailService, {
+  providers: [AuthService,MailService,RolesService, {
     provide: APP_GUARD,
     useClass: AuthentGuard
   }],

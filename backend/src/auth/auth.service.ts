@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import {randomBytes,scrypt as _scrypt} from 'crypto'
@@ -9,6 +9,8 @@ import { JWTpayloadRt } from './types/JWTpayloadRt.type';
 import * as argon from 'argon2';
 import { OAuth2Client } from 'google-auth-library';
 import { Response } from 'express';
+import { UserRole } from 'src/roles/types/role.type';
+import { RolesService } from 'src/roles/roles.service';
 const client = new OAuth2Client(
  process.env.GOOGLE_CLIENT_ID,
  process.env.GOOGLE_CLIENT_SECRET,
@@ -17,10 +19,9 @@ const scrypt=promisify(_scrypt);
 @Injectable()
 export class AuthService {
     constructor(private usersService:UsersService,
-       private jwtService:JwtService){}
+       private jwtService:JwtService,private rolesService:RolesService){}
         async signIn(email:string,password:string){
             const [user] = await this.usersService.findByPassword(email,false);
-            console.log(user);
             if(!user|| !user?.password){
                 throw new NotFoundException("User not found");
             }
@@ -46,7 +47,7 @@ export class AuthService {
         }
         async findById(id){
 const user=await this.usersService.findOne(id);
-if(!user)
+if(!user) 
 throw new NotFoundException("User not found");
 return user;
         }
@@ -61,7 +62,11 @@ return user;
             if(users.length && users.find((user)=>!user?.password)){
              throw new ForbiddenException("The email is used before");
             }
-            const user=await this.usersService.create(payLoad?.given_name,payLoad.family_name,payLoad?.email,null,null);
+            const role=await this.rolesService.findRole(UserRole.JOBSEEKER);
+            if(!role){
+                throw new InternalServerErrorException("Somethig went wrong");
+            }
+            const user=await this.usersService.create(payLoad?.given_name,payLoad.family_name,payLoad?.email,null,null,role);
             const payload_access = {userId:user?.id} as JWTpayload;
             const payload_refresh={userId:user?.id,email:user.email} as JWTpayloadRt;
             const access_token=await this.jwtService.signAsync(payload_access);
@@ -111,8 +116,12 @@ return user;
                 const hash=(await scrypt(password,salt,32)) as Buffer;
                 // join the salt at the encoded password as the strings
                 const result=salt+'.'+hash.toString('hex')
+                const role=await this.rolesService.findRole(UserRole.JOBSEEKER);
+                if(!role){
+                    throw new InternalServerErrorException("Somethig went wrong");
+                }
                 //Create the user
-                const user=await this.usersService.create(name,lastname,email,result,image);
+                const user=await this.usersService.create(name,lastname,email,result,image,role);
                 const payload_access = {userId:user?.id} as JWTpayload;
                 const payload_refresh={userId:user?.id} as JWTpayloadRt;
                 const access_token=await this.jwtService.signAsync(payload_access);

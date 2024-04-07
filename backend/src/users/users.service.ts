@@ -1,20 +1,26 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User, UserRole } from './user.entity';
+import { User } from './user.entity';
 import { Posts } from '../posts/post.entity';
 import {randomBytes,scrypt as _scrypt} from 'crypto'
 
 import { FindManyOptions } from 'typeorm';
 import { promisify } from 'util';
 import { Skill } from 'src/skills/skills.entity';
+import { UserRole } from 'src/roles/types/role.type';
+import { Role } from 'src/roles/Roles.entity';
 const scrypt=promisify(_scrypt);
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(User) private repo: Repository<User>,@InjectRepository(Posts) private postRepository: Repository<Posts>,@InjectRepository(Skill) private skillRepository: Repository<Skill>) {}
 
-  async create(name:string,lastname:string,email: string, password: string,imageProfile:string) {
+  async create(name:string,lastname:string,email: string, password: string,imageProfile:string,role:Role) {
     const user = this.repo.create({ name,lastname,email, password,imageProfile });
+    if(!user.roles){
+      user.roles=[]
+    }
+    user.roles.push(role);
     return this.repo.save(user);
   }
 
@@ -46,9 +52,9 @@ export class UsersService {
   }
   findByPassword(email: string,isPasswordNull:Boolean) {
     if(isPasswordNull){
-    return this.repo.find({ where: { email ,password:null},select:['id','name','lastname','email','gender','imageProfile','role','password'] });
+    return this.repo.find({ where: { email ,password:null},select:['id','name','lastname','email','gender','imageProfile','password'],relations:['roles'] });
     }
-    return  this.repo.find({ where: { email},select:['id','name','lastname','email','gender','imageProfile','role','password']});
+    return  this.repo.find({ where: { email},select:['id','name','lastname','email','gender','imageProfile','password'],relations:['roles']});
   }
   find(email: string) {
     
@@ -131,6 +137,6 @@ user.skills=skills;
     return this.postRepository.find(options);
   }
   getUsers(userId:number){
-    return this.repo.find({ where: { id: Not(userId) } });
+    return this.repo.find({ where: { id: Not(userId) } ,relations:['roles']});
   }
 }
