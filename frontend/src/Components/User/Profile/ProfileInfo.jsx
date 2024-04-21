@@ -15,8 +15,8 @@ const ProfileInfo = ({user}) => {
         };
 
   return (
-    <div className='main ml-20 mt-7 rounded-md' style={{border:'1px solid blue',width:'804px'}}>
-            <div className='header  rounded-md' style={{width:'804px',height:'201px',position:'relative',border:'1px solid blue'}} >
+    <div className='main mx-auto mt-7  left-3 rounded-md' style={{width:'804px'}}>
+            <div className='header  rounded-md' style={{width:'804px',height:'201px',position:'relative'}} >
                 <img src={cover} className="rounded-md" style={{position:'absolute'}} alt={'coveri'} />
                 <img src={user.imageProfile} style={{width:'152px',height:'152px',objectFit: 'cover',position:'absolute',borderRadius:'50%',border:'4px solid white',padding: '0px', boxSizing: 'border-box'}}  className='mt-28 ml-6' alt={'profile'} />
                 <div>

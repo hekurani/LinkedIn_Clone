@@ -19,7 +19,7 @@ const AddPostComponent = ({user}) => {
     setIsModalOpen(false);
   };
   return (
-    <div className='main ml-16 mr-auto  mt-6 rounded-md' style={{width:'555px',height:'116px',border:'1px solid black'}}>
+    <div className='main  mt-6 rounded-md' style={{width:'550px',height:'116px',border:'1px solid black'}}>
         <div className='Image_andImput flex'>
             <img  className='ml-3 mt-3 w-12 h-12 mb-2' style={{borderRadius:'50%',objectFit:'cover'}}src={user.imageProfile?user.imageProfile:defaultProfile} alt={'p'} />
             <button type="submit" style={{ backgroundColor: 'transparent',border:'1px solid black',width:'467px',textAlign:"left",color:'grey' }}  onClick={openModal} className=' text-sm h-12 font-semibold text-white rounded-full ml-2 mt-3  pl-4'>Start a post</button> 

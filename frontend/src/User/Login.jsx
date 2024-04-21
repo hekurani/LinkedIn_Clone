@@ -3,7 +3,6 @@ import {useNavigate,Link} from "react-router-dom";
 import {jwtDecode} from 'jwt-decode'
 import logo from "../assets/LinkedIn-logo.png";
 import { GoogleLogin,GoogleOAuthProvider } from '@react-oauth/google';
-import { AlertModal } from '../InformationModal/AlertModal.jsx';
 import axiosInstance  from '../axios/axios.tsx';
 const Login = () => {
   let message,isSuccess;
@@ -127,7 +126,6 @@ if (password.length > 0 && password.length <6 ) {
   }
   return (
     <>
-    {isOpen?<AlertModal status={response.status} message={response.message} />:null}
     <div className='page  m-0 p-0  ' style={{height:'800px'}}> {/* div kryesor */}
       {/* Header Section */}
         <div  className="image ml-14 pt-2">

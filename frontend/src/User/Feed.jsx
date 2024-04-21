@@ -34,7 +34,7 @@ const Feed = () => {
   return (
     <div className='feed-container'>
       <UserFeedComponent user={user} />
-      <div>
+      <div style={{marginLeft: 'calc(50vw - 520px)'}}>
         <AddPostComponent user={user} />
         <PostComponent user={user} />
         <ChatListingComponent user={user} onChatRowClick={handleOpenChatPage} />

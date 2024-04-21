@@ -1,5 +1,4 @@
 import React from 'react';
-import { AlertModal } from '../InformationModal/AlertModal.jsx';
 import { useNavigate,Link } from 'react-router-dom';
 import useFormContext from "./context/FormContext"
 import logo from "../assets/LinkedIn-logo.png";
@@ -138,7 +137,6 @@ if (data.lastName.length <3 ) {
   
 
 return (<>
-{isOpen?<AlertModal status={response.status} message={response.message} />:null}
       <div className='page bg-gray-100 m-0 p-0 ' style={{height:'800px'}}> {/* div kryesor */}
       {/* Header Section */}
       <div className='header' > {/* pjesa e header perfshin pjesen e logos edhe pjesen e h1-shit */}
