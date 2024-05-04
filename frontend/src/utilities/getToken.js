@@ -14,8 +14,7 @@ const getTokenForAxios = () => {
 const getRefreshToken = () => {
   const refreshToken = localStorage.getItem("refresh_token");
   if (!refreshToken) return null;
-  const decoded = jwtDecode(refreshToken);
-  if (decoded) return decoded;
+  if (refreshToken) return refreshToken;
   return null;
 };
 
