@@ -1,6 +1,8 @@
+import { jwtDecode } from "jwt-decode";
 const getToken = () => {
     const token = localStorage.getItem("access_token");
-    if (token) return token;
+    const decoded = jwtDecode(token);
+    if (decoded) return decoded;
     return null;
   };
   

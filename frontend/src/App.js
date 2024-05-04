@@ -32,7 +32,7 @@ function App() {
     <Routes>
     <Route path="/Register" element={<FormProvider><Register /></FormProvider>} />
     <Route path="/" element={<Feed />} />
-    <Route path="/profile" element={<Profile />} />
+    <Route path="/profile/:userId" element={<Profile />} />
     <Route path="/Login" element={<Login />} />
     <Route path="/reset-password-request-email" element={<EmailInput />} />
     <Route path="/verification-code-forgotpass" element={<EnterCodeForgotPassword />} />

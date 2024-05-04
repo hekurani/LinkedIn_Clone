@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 let socket;
 
 function ChatPage({user,onCloseChat,chatRoomId }) {
-  console.log("Chat ID ID:", chatRoomId);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isChatOpen, setIsChatOpen] = useState(true);//me handle chat open/close

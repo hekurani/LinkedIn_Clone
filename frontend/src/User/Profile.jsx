@@ -1,29 +1,45 @@
-import React ,{useState,useEffect} from 'react'
-import ProfileInfo from '../Components/User/Profile/ProfileInfo';
-import ChatPage from '../Components/User/Chat/ChatComponent';
-import ChatListingComponent from '../Components/User/Chat/ChatListingComponent';
-import ProfileSection from '../Components/User/Profile/ProfileSection';
-import axios  from 'axios';
+import React, { useState, useEffect } from "react";
+import ProfileLoggedUserInfo from "../Components/User/Profile/ProfileLoggedUser";
+import FriendsProfile from "../Components/User/Profile/ProfileSearchingUser";
+import ChatPage from "../Components/User/Chat/ChatComponent";
+import ChatListingComponent from "../Components/User/Chat/ChatListingComponent";
+import ProfileSection from "../Components/User/Profile/ProfileSection";
+import { useParams } from "react-router-dom";
+import getMe from "../utilities/user/getMe";
+import getUser from "../utilities/user/getUser";
+
 const Profile = () => {
-  const [user,setUser] = useState([])
+  const [loggedUser, setLoggedUser] = useState({});
+  const [foreignUser, setForeignUser] = useState({});
+  const { userId } = useParams();
 
-  useEffect(()=> {
-    const fetchData  = async() => {
-        const resposne = await axios.get("http://localhost:4000/users/users/1")
-          setUser(resposne.data)
-      }
- 
+  useEffect(() => {
+    const fetchLoggedUser = async () => {
+      const userData = await getMe();
+      setLoggedUser(userData);
+    };
 
-      fetchData();
-  },[])
+    const fetchForeignUser = async () => {
+      const userData = await getUser(userId);
+      setForeignUser(userData);
+    };
+
+    fetchLoggedUser();
+    fetchForeignUser();
+  }, [userId]);
+
   return (
     <div>
-   <ProfileInfo user={user}/>
-<ProfileSection user={user}/>
-   <ChatPage user={user}/>
-   <ChatListingComponent user={user}/>
+      {userId == loggedUser.id ? (
+        <ProfileLoggedUserInfo user={loggedUser} />
+      ) : (
+        <FriendsProfile user={foreignUser} />
+      )}
+      <ProfileSection user={loggedUser} />
+      <ChatPage user={loggedUser} />
+      <ChatListingComponent user={loggedUser} />
     </div>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;
