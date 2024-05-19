@@ -4,7 +4,6 @@ const getToken = () => {
   if (!token) return null;
   const decoded = jwtDecode(token);
   if (decoded) return decoded;
-  return null;
 };
 const getTokenForAxios = () => {
   const token = localStorage.getItem("access_token");

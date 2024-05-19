@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import cover from "../../../assets/cover.jpg";
 import profile from "../../../assets/profile.png";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { requestAddFriend } from "../../../utilities/friends/getFriends";
+import ShowAlert from "../../../utilities/alert/showAlert";
 const ProfileInfo = ({ user }) => {
+  const [status, setStatus] = useState('ConnectZ');
   const handleHover = (e) => {
     e.target.style.color = "blue";
   };
@@ -11,6 +14,16 @@ const ProfileInfo = ({ user }) => {
   const handleHoverOut = (e) => {
     e.target.style.color = "#0a66c2";
   };
+  const addFriend = async () => {
+    try{
+      await requestAddFriend(user.id);
+      setStatus('Pending');
+      ShowAlert({text: "Friend request sent", color: "blue"})
+    }
+    catch(err){
+      console.log(err);
+    }
+    }  
 
   return (
     <div
@@ -103,10 +116,11 @@ const ProfileInfo = ({ user }) => {
 
           <div className="mt-2">
             <button
-              className="rounded-full w-24 p-1 font-semibold"
+              onClick={() => addFriend()}
+              className="rounded-full w-24 p-1 pr-3 pb-1 font-semibold"
               style={{ color: "white", backgroundColor: "#0a66c2" }}
             >
-              Open to
+              {status}
             </button>
             <button
               className="rounded-full ml-2 pb-1 pt-1 pl-3 pr-3 font-semibold"
@@ -116,7 +130,7 @@ const ProfileInfo = ({ user }) => {
                 borderTop: "1.5px solid #0a66c2",
               }}
             >
-              Add profile section
+              Message
             </button>
             <button
               className="rounded-full ml-2
