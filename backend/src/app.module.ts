@@ -27,6 +27,7 @@ import { AuthentGuard } from './auth/guards/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { RolesModule } from './roles/roles.module';
 import { PostReactionModule } from './PostReaction/postreaction.module';
+import { CommentReactionModule } from './comment-reaction/comment-reaction.module';
 
 const cookieSession=require('cookie-session')
 @Module({
@@ -49,7 +50,7 @@ const cookieSession=require('cookie-session')
       rootPath: join(__dirname, '..', '..', 'Images'),
     }),
 TypeOrmModule.forRoot(dataSourceOptions)
-  ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule, FriendsModule,CommentsModule,FriendRequestModule, RolesModule, PostReactionModule],
+  ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule, FriendsModule,CommentsModule,FriendRequestModule, RolesModule, PostReactionModule, CommentReactionModule],
   controllers: [AppController],
   providers: [AppService,ChatGateway,
   {
