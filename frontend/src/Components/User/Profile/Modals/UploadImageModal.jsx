@@ -7,7 +7,7 @@ import CameraModal from './CameraModal';
 
 Modal.setAppElement('#root');
 
-const UploadImageModal = ({ isOpen, onRequestClose }) => {
+const UploadImageModal = ({ isOpen, user, onRequestClose }) => {
   const [isCameraModalOpen, setCameraModalOpen] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
 
@@ -25,7 +25,7 @@ const UploadImageModal = ({ isOpen, onRequestClose }) => {
       formData.append('image', file);
 
       // Upload  file ne  backend
-      await axios.patch('http://localhost:4000/users/users/1', formData);
+      await axios.patch(`http://localhost:4000/users/users/${user.id}`, formData);
 
       onRequestClose();
       setTimeout(()=> {
@@ -64,6 +64,7 @@ const UploadImageModal = ({ isOpen, onRequestClose }) => {
       <div className="fixed inset-0 flex items-center justify-center rounded-lg" style={{ zIndex: 50 }}>
         {isCameraModalOpen && (
           <CameraModal
+            user={user}
             isOpen={isCameraModalOpen}
             onRequestClose={closeCameraModal}
             onCapture={setCapturedImage}

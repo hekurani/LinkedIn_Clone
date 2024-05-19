@@ -1,10 +1,10 @@
 import { AxiosHeaders, InternalAxiosRequestConfig } from "axios";
-import { getToken } from "./getToken";
+import { getTokenForAxios } from "./getToken";
 
 const setAxiosHeader = (
   config: InternalAxiosRequestConfig<unknown>
 ): InternalAxiosRequestConfig<unknown> => {
-  const token = getToken();
+  const token = getTokenForAxios();
   if (token)
     (config.headers as AxiosHeaders).set("Authorization", `Bearer ${token}`);
   return config;
