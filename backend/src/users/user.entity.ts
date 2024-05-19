@@ -8,6 +8,7 @@ import { Role } from "src/roles/Roles.entity";
 import { ArrayNotEmpty } from "class-validator";
 import { postreaction } from "src/PostReaction/postreaction.entity";
 import { commentreaction } from "src/comment-reaction/comment-reaction.entity";
+import { Reposts } from "src/reposts/reposts.entity";
 
 @Entity()
 export class User {
@@ -59,6 +60,8 @@ roles:Role[]
     @Column({nullable:true})
     gender:String;
 
+@OneToMany(()=>Reposts,reposts=>reposts.user)
+reposts:Reposts[]
 
 @BeforeRemove()
 beforeRemove(){

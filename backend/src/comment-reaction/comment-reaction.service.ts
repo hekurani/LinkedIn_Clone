@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { commentreaction } from './comment-reaction.entity';
 import { UsersService } from 'src/users/users.service';
@@ -11,13 +11,18 @@ constructor( @InjectRepository(commentreaction)
 private readonly reactionRepository: Repository<commentreaction>,
 private readonly usersService: UsersService,
 private readonly commentsService: CommentsService){}
-   async createCommentReaction(userId:number,postId:number,reactionStatus:string){
+   async createCommentReaction(userId:number,commentId:number,reactionStatus:string){
         const user=await this.usersService.findOne(userId); 
-        const comment=await this.commentsService.findOne(postId);
+        const comment=await this.commentsService.findOne(commentId);
   
   if(!user) throw new NotFoundException("No user found!");
   if(!comment) throw new NotFoundException('No post was found with that id!')
-  
+    const commentReaction = await this.reactionRepository.find({
+        where: {
+            user:{id:userId}, comment:{id:commentId}
+        }
+    });
+    if(commentReaction.length) throw new ForbiddenException("This comment-reaction object already exists!");
   const reactionComment= this.reactionRepository.create({
     user,
     reactionType:reactionStatus,

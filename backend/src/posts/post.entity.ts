@@ -3,6 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "../users/user.entity";
 import { Comment } from "../comments/Entity/comment.entity";
 import { postreaction } from "src/PostReaction/postreaction.entity";
+import { Reposts } from "src/reposts/reposts.entity";
 @Entity()
 export class Posts {
     @PrimaryGeneratedColumn()
@@ -21,6 +22,8 @@ export class Posts {
     @JoinColumn()
     user: User;
 
+@OneToMany(()=>Reposts,reposts=>reposts.posts)
+reposts:Reposts[]
 
     @Column("simple-array")
     postImages: string[]

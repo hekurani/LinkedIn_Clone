@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { postreaction } from './postreaction.entity';
 import { Repository } from 'typeorm';
@@ -21,7 +21,12 @@ export class ReactionService {
 
 if(!user) throw new NotFoundException("No user found!");
 if(!post) throw new NotFoundException('No post was found with that id!')
-
+    const postReaction = await this.reactionRepository.find({
+        where: {
+            user:{id:userId}, post:{id:postId}
+        }
+    });
+    if(postReaction.length) throw new ForbiddenException("The object already exists!");
 const reactionPost= this.reactionRepository.create({
   user,
   reactionType:reactionStatus,
