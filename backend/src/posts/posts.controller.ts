@@ -47,6 +47,7 @@ export class PostsController {
         return this.postService.create(user?.userId,postDTO,response);
        
     }
+    
     @Get('/user/:userId')
     async findPostsByUser(@Param('userId') userId: string) {
       return await this.postService.findPostsByUser(parseInt(userId));

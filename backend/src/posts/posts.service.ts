@@ -36,6 +36,7 @@ export class PostsService {
     }
     return this.repo.remove(post);
   }
+
   async findPostsByUser(userId: number): Promise<Posts[]> {
     const user = await this.userRepository.findOne({where:{id:userId}});
     if (!user) {

@@ -2,6 +2,7 @@ import { BeforeInsert, BeforeRemove, BeforeUpdate, JoinColumn, JoinTable, ManyTo
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "../users/user.entity";
 import { Comment } from "../comments/Entity/comment.entity";
+import { postreaction } from "src/PostReaction/postreaction.entity";
 @Entity()
 export class Posts {
     @PrimaryGeneratedColumn()
@@ -23,6 +24,11 @@ export class Posts {
 
     @Column("simple-array")
     postImages: string[]
+
+    @OneToMany(()=>postreaction,postreaction=>postreaction.post)
+    @JoinColumn()
+    likes:postreaction[]
+
 
     @BeforeRemove() 
     beforeRemove() {

@@ -6,6 +6,8 @@ import { Comment } from "../comments/Entity/comment.entity";
 import { Skill } from "src/skills/skills.entity";
 import { Role } from "src/roles/Roles.entity";
 import { ArrayNotEmpty } from "class-validator";
+import { postreaction } from "src/PostReaction/postreaction.entity";
+
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
@@ -19,6 +21,11 @@ export class User {
 
     @Column()
     email:string;
+
+
+    @OneToMany(()=>postreaction,postreaction=>postreaction.user)
+    likes:postreaction[]
+
 
 @ManyToMany(()=>Role)
 @ArrayNotEmpty()

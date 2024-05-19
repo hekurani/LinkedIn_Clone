@@ -9,5 +9,4 @@ constructor(private rolesService:RolesService){}
     createRole(@Body() createRole:CreateRoleDto){
       return this.rolesService.createRole(createRole.role,createRole.description);
     }
-   
 }

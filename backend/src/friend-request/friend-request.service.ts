@@ -257,7 +257,7 @@ export class FriendRequestService {
     });
     return friendRequest;
   }
-  async blockFriendRequest(id: number, userId: number): Promise<void> {
+  async blockFriendRequest(id: number, userId: number) {
     const user = await this.usersService.findOne(id);
     if (!user) {
       throw new NotFoundException('User is not authenthicated!');
@@ -300,7 +300,9 @@ export class FriendRequestService {
     }
     friendRequest.status = 'blocked';
     await this.friendRequestRepository.save(friendRequest);
-    return;
+    return {
+      status:'success'
+    };
   }
   async unBlockFriendRequest(id: number, userId: number) {
     const user = await this.usersService.findOne(id);
@@ -332,6 +334,8 @@ export class FriendRequestService {
       );
     }
     await this.friendRequestRepository.delete(friendRequest);
-    return;
+    return {
+      status:'success'
+    };
   }
 }
