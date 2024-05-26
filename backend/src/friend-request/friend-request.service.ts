@@ -148,6 +148,7 @@ export class FriendRequestService {
       throw new ForbiddenException('You cant accept request of yourself');
     }
     friendRequest.status = 'accepted';
+   await this.friendRequestRepository.save(friendRequest)
     const friend = this.friendRepository.create({
       sender: {
         id: friendRequest.sender.id,
