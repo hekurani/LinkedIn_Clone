@@ -14,4 +14,10 @@ const getRequestSendedToMe = async () => {
   const { data } = await axiosInstance.get(`friend-request`);
   return data;
 }
-export { getFriends, requestAddFriend, getRequestSendedToMe,sentRequestsByMe };
+const cancelRequest = async (id) => {
+  await axiosInstance.delete(`friend-request/${id}/cancel`)
+}
+const acceptRequest = async (id) => {
+  await axiosInstance.post(`friend-request/${id}/accept`)
+}
+export { getFriends, requestAddFriend, getRequestSendedToMe,sentRequestsByMe,cancelRequest,acceptRequest };

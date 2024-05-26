@@ -98,6 +98,7 @@ export class FriendRequestService {
         status: 'pending',
         sender: user,
       },
+      relations: ['sender', 'receiver'],
     });
   }
   async getReceivedRequestsByUserId(userId: number): Promise<FriendRequest[]> {

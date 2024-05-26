@@ -1,42 +1,65 @@
 import React, { useEffect, useState } from "react";
-import { getRequestSendedToMe } from "../../utilities/friends/getFriends";
-import getUser from "../../utilities/user/getUser";
-
+import { acceptRequest, cancelRequest, getRequestSendedToMe } from "../../utilities/friends/getFriends";
+import defaultImage from "../../assets/default.png";
+import { Link } from "react-router-dom";
 const Invitation = () => {
   const [data, setData] = useState([]);
-  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await getRequestSendedToMe();
       setData(data);
-
-      const usersData = await Promise.all(
-        data.map(async (item) => {
-            console.log("Item:", item.senderId);
-          const { data } = await getUser(item.senderId);
-          return data;
-        })
-      );
-      console.log("Users data:", usersData); 
-      setUsers(usersData);
     };
-
     fetchData();
   }, []);
 
+  const cancelFriendRequest = async (id) => {
+      await cancelRequest(id);
+      const data = await getRequestSendedToMe();
+      setData(data); //to improve
+  }
+  const acceptFriendRequest = async (id) => {
+    await acceptRequest(id);
+    const data = await getRequestSendedToMe();
+    setData(data); //to improve
+}
+
   return (
-    <div style={{ border: "1px solid blue", width: "880px" }} className="mx-auto">
-      <div className="header flex items-center">
-        <p className="mr-auto m-3">Invitations</p>
+    <div
+      style={{ border: "1px solid #d3d3d3 ", width: "880px",borderRadius:'7px' }}
+      className="mx-auto p-5 mt-3"
+    >
+      <div className="header flex items-center mb-3">
+        <p className="mr-auto m-1">Invitations</p>
         <p className="m-3 font-semibold">See all {!!data && data.length}</p>
       </div>
       <div className="content flex">
-        {users.map((user, index) => (
-          <div key={index} className="invitation-item flex items-center">
-            <img src="" alt="" className="w-12 h-12 rounded-full mr-3" />
-            <p className="font-semibold">{user.name} {user.lastname}</p>
-          </div>
+      {data.map((request) => (
+          <>
+          <Link to={`/${request.sender.id}/profile`}>
+         
+            <div key={request.id} className="invitation-item grid grid-cols-3 ml-2">
+              <img
+                src={request.sender.imageProfile || defaultImage}
+                alt={`${request.sender.name}`}
+                className="w-12 h-12 rounded-full"
+              />
+              <p className="font-semibold mt-2">
+                {request.sender.name} {request.sender.lastname}
+              </p>
+            </div>
+            </Link>
+            <div className="flex  ml-auto mr-3">
+              <button onClick={(() => cancelFriendRequest(request.id))} className="mr-3">Ignore</button>
+              <button
+              onClick={(() => acceptFriendRequest(request.id))}
+                style={{ color:'#0a66c2',border:'1px solid #0a66c2',borderRadius:'10px' }}
+                className="h-12 w-20 font-semibold"
+              >
+                Accept
+                </button>
+            </div>
+          </>
         ))}
       </div>
     </div>

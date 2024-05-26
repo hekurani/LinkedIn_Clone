@@ -4,7 +4,7 @@ import Invitation from '../Components/Connection/Invitation'
 const Connections = () => {
   return (
     <div>
-       <Invitation />
+        <Invitation />
         <ConnectionComponent />
     </div>
   )
