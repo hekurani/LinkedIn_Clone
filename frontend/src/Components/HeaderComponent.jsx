@@ -1,4 +1,5 @@
 import React from "react";
+import './Header.css'; // Import the custom CSS file
 import logo from "../assets/logoHeader.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,104 +11,52 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import profile from "../assets/profile.png";
+
 const HeaderComponent = () => {
   return (
-    <div className="header h-16" style={{ border: "1px solid blue" }}>
-      <div className="logoAndSearch flex pt-3 pl-20">
-        <img
-          className="pt-1 pb-2"
-          src={logo}
-          width={30}
-          height={20}
-          alt={"nul"}
-        />
-        <input
-          type="text"
-          style={{ backgroundColor: "#e6f2ff" }}
-          className=" bg-current ml-2 mt-1 border pl-2 w-52 h-8 rounded-sm"
-          placeholder="Search"
-        />
-        <div
-          className="ml-28 flex justify-center items-center"
-          style={{ borderRight: "1px solid black" }}
-        >
-          <Link
-            to={"/"}
-            style={{
-              display: "inline-block",
-              textAlign: "center",
-              marginRight: "30px",
-            }}
-          >
-            <FontAwesomeIcon className="ml-3 block" icon={faHouse} />
-            <span className="text-sm">Home</span>
-          </Link>
-          <Link
-            to={"/connections"}
-            style={{
-              display: "inline-block",
-              textAlign: "center",
-              marginRight: "30px",
-            }}
-          >
-            <FontAwesomeIcon className="ml-9 block" icon={faUserPlus} />
-            <span className="text-sm">My Network</span>
-          </Link>
-          <Link
-            to={"/jobs"}
-            style={{
-              display: "inline-block",
-              textAlign: "center",
-              marginRight: "30px",
-            }}
-          >
-            <FontAwesomeIcon className="ml-1.5 block" icon={faBriefcase} />
-            <span className="text-sm">Jobs</span>
-          </Link>
-          <Link
-            to={"/messages"}
-            style={{
-              display: "inline-block",
-              textAlign: "center",
-              marginRight: "30px",
-            }}
-          >
-            <FontAwesomeIcon className="ml-7 block" icon={faCommentDots} />
-            <span className="text-sm">Messaging</span>
-          </Link>
-          <Link
-            to={"notifications"}
-            style={{
-              display: "inline-block",
-              textAlign: "center",
-              marginRight: "30px",
-            }}
-          >
-            <FontAwesomeIcon className="ml-8 block" icon={faBell} />
-            <span className="text-sm">Notifications</span>
-          </Link>
-          <Link
-            to={"/profile"}
-            style={{
-              display: "inline-block",
-              textAlign: "center",
-              marginRight: "30px",
-            }}
-          >
-            <img
-              className="ml-3"
-              src={profile}
-              width={20}
-              height={18}
-              alt={"profile"}
-            />
-            <span className="text-sm ml-3">Me</span>
-          </Link>
+    <div className="header h-16 grid grid-cols-12 items-center" style={{ border: "1px solid blue" }}>
+      <div className="logo-search col-span-4 lg:col-span-5 flex justify-center items-center">
+        <div className="logo flex justify-end items-center pr-2">
+          <img src={logo} width={30} height={20} alt="nul" className="hidden lg:block" />
         </div>
-        <div className="forBussinessAndPremium flex justify-center items-center">
-          <p className="ml-4">For Business</p>
-          <p className="ml-7 text-center">Try Premium for free</p>
+        <div className="search flex justify-start items-center">
+          <input
+            type="text"
+            style={{ backgroundColor: "#e6f2ff" }}
+            className="bg-current w-60 mt-1 border pl-2 h-8 rounded-sm hidden lg:block"
+            placeholder="Search"
+          />
         </div>
+      </div>
+      <div className="navigation col-span-8 lg:col-span-5 flex justify-start items-center space-x-10 border-r border-black">
+        <Link to="/" className="text-center mx-2">
+          <FontAwesomeIcon icon={faHouse} className="icon" />
+          <span className="text-sm block hidden lg:block">Home</span>
+        </Link>
+        <Link to="/connections" className="text-center mx-2">
+          <FontAwesomeIcon icon={faUserPlus} className="icon" />
+          <span className="text-sm block hidden lg:block">My Network</span>
+        </Link>
+        <Link to="/jobs" className="text-center mx-2">
+          <FontAwesomeIcon icon={faBriefcase} className="icon" />
+          <span className="text-sm block hidden lg:block">Jobs</span>
+        </Link>
+        <Link to="/messages" className="text-center mx-2">
+          <FontAwesomeIcon icon={faCommentDots} className="icon" />
+          <span className="text-sm block hidden lg:block">Messaging</span>
+        </Link>
+        <Link to="/notifications" className="text-center mx-2">
+          <FontAwesomeIcon icon={faBell} className="icon" />
+          <span className="text-sm block hidden lg:block">Notifications</span>
+        </Link>
+        <Link to="/profile" className="text-center mx-2 flex items-center">
+          <img src={profile} width={20} height={18} alt="profile" className="mr-1 hidden lg:block" />
+          <span className="text-sm hidden lg:block">Me</span>
+        </Link>
+      </div>
+      <div className="business col-span-4 lg:col-span-2 flex justify-center items-center hidden lg:flex">
+        <p className="mx-4">For Business</p>
+        <p className="mx-4">Try Premium for free</p>
       </div>
     </div>
   );

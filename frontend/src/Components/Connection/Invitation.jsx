@@ -31,7 +31,7 @@ const Invitation = () => {
     >
       <div className="header flex items-center mb-3">
         <p className="mr-auto m-1">Invitations</p>
-        <p className="m-3 font-semibold">See all {!!data && data.length}</p>
+        <p className="m-3 font-semibold">{!!data && data.length > 0 ? `See all ${data.length}` : ''}</p>
       </div>
       <div className="content flex">
       {data.map((request) => (
