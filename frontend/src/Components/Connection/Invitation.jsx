@@ -34,7 +34,7 @@ const Invitation = () => {
       </div>
       <div className="content">
         {data.map((request) => (
-          <div key={request.id} className="invitation-item flex items-center justify-between mb-4 p-2 border-b">
+          <div key={request.id} className="invitation-item flex items-center justify-between mb-4 p-2 border-t">
             <Link to={`/${request.sender.id}/profile`} className="flex items-center">
               <img
                 src={request.sender.imageProfile || defaultImage}
