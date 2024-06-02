@@ -13,14 +13,23 @@ export class FriendsService {
   ) {}
   async getFriends(userId: number) {
     const user = await this.userService.findOne(userId);
-    return this.friend.find({
+    const friends = await this.friend.find({
       where: [
         { sender: user },
-        {
-          receiver: user,
-        },
+        { receiver: user },
       ],
+      relations: ['sender', 'receiver'],
     });
+
+    const friendList = friends.map(friend => {
+      if (friend.sender.id === userId) {
+        return friend.receiver;
+      } else {
+        return friend.sender;
+      }
+    });
+
+    return friendList;
   }
   async getFriend({ userId, friendId }) {
     return this.friend.findOne({

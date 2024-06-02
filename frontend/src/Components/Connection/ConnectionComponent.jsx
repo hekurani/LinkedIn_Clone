@@ -1,32 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { getFriends } from "../../utilities/friends/getFriends";
-import getMe from "../../utilities/user/getMe";
 import defaultImage from "../../assets/default.png";
 import { io } from "socket.io-client";
 
-const getOtherUser = (loggedUserId, friend) => {
-  return friend.sender.id === loggedUserId ? friend.receiver : friend.sender;
-};
+
 const socket = io("http://localhost:8003");
 const ConnectionComponent = () => {
   const [friends, setFriends] = useState([]);
-  const [id, setID] = useState();
+
+  const getAllFriends = async () => {
+    const data = await getFriends();
+    setFriends(data);
+  };
 
   useEffect(() => {
-    const getAllFriends = async () => {
-      const data = await getFriends();
-      setFriends(data);
-    };
-
-    const getLoggedUser = async () => {
-      const data = await getMe();
-      setID(data.id);
-    };
-
-    getLoggedUser();
     getAllFriends();
+    
     socket.on("newestFriend", (newRequest) => {
-      setFriends((prevData) => [...prevData, newRequest]);
+      getAllFriends();
     });
 
     return () => {
@@ -70,20 +61,19 @@ const ConnectionComponent = () => {
       )}
 
       {friends.map((friend) => {
-        const otherUser = getOtherUser(id, friend);
 
         return (
           <div key={friend.id} className="connections flex mb-3">
             <div className="ml-3">
               <img
                 className="w-16 h-16 rounded-full"
-                src={otherUser.imageProfile || defaultImage}
+                src={friend.imageProfile || defaultImage}
                 alt=""
               />
             </div>
             <div className="m-2">
               <p className="font-semibold text-xl">
-                {otherUser.name} {otherUser.lastname}
+                {friend.name} {friend.lastname}
               </p>
               <p className="description font-lg">Student at UBT-University</p>
             </div>
