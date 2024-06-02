@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { requestAddFriend } from "../../../utilities/friends/getFriends";
 import ShowAlert from "../../../utilities/alert/showAlert";
 const ProfileInfo = ({ user }) => {
-  const [status, setStatus] = useState('ConnectZ');
+  const [status, setStatus] = useState('Connect');
   const handleHover = (e) => {
     e.target.style.color = "blue";
   };

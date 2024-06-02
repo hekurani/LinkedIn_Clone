@@ -9,7 +9,8 @@ import { Not, Repository } from 'typeorm';
 import { Friend } from 'src/friends/friends.entity';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
-
+import { FriendRequestGateway } from './gateway-sockets/friend-request.gateway';
+import { FriendsGateway } from './gateway-sockets/friends.gateway';
 @Injectable()
 export class FriendRequestService {
   constructor(
@@ -18,6 +19,9 @@ export class FriendRequestService {
     @InjectRepository(Friend)
     private readonly friendRepository: Repository<Friend>,
     private readonly usersService: UsersService,
+    private readonly friendRequestGateway: FriendRequestGateway,
+    private readonly friendsGateway: FriendsGateway,
+
   ) {}
   async createFriendRequest(userId: number, id: number) {
     const user = await this.usersService.findOne(userId);
@@ -60,6 +64,7 @@ export class FriendRequestService {
       status: 'pending',
     });
     const friendRquest = await this.friendRequestRepository.save(friend);
+    this.friendRequestGateway.server.emit('newFriendRequest', friendRquest);
     return {
       status: 'success',
       data: {
@@ -156,6 +161,7 @@ export class FriendRequestService {
       receiver: { id: friendRequest.receiver.id },
     });
     const savedFriend = await this.friendRepository.save(friend);
+    this.friendsGateway.server.emit('newestFriend', savedFriend);
     return {
       friend: savedFriend,
       friendRequest,

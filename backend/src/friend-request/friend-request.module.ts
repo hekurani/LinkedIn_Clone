@@ -8,6 +8,8 @@ import { FriendRequest } from './friend-request.entity';
 import { Friend } from 'src/friends/friends.entity';
 import { UsersService } from 'src/users/users.service';
 import { UsersModule } from 'src/users/users.module';
+import { FriendRequestGateway } from './gateway-sockets/friend-request.gateway';
+import { FriendsGateway } from './gateway-sockets/friends.gateway';
 
 @Module({
     imports: [
@@ -16,6 +18,6 @@ import { UsersModule } from 'src/users/users.module';
       ],
       controllers: [FriendRequestController],
       exports:[FriendRequestService],
-      providers: [FriendRequestService],
+      providers: [FriendRequestService,FriendRequestGateway,FriendsGateway],
 })
 export class FriendRequestModule {}
