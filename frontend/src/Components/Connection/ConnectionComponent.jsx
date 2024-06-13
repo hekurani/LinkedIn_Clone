@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getFriends } from "../../utilities/friends/getFriends";
 import defaultImage from "../../assets/default.png";
 import { io } from "socket.io-client";
-
+import getMe from "../../utilities/user/getMe";
+import axiosInstance from "../../axios/axios.tsx";
 
 const socket = io("http://localhost:8003");
 const ConnectionComponent = () => {
@@ -10,7 +11,9 @@ const ConnectionComponent = () => {
 
   const getAllFriends = async () => {
     const data = await getFriends();
+    const user = await getMe();
     setFriends(data);
+    await axiosInstance.patch(`users/users/${user.id}`,{countUnseenConnections:0} )
   };
 
   useEffect(() => {

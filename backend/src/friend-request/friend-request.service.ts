@@ -16,6 +16,8 @@ export class FriendRequestService {
   constructor(
     @InjectRepository(FriendRequest)
     private readonly friendRequestRepository: Repository<FriendRequest>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<FriendRequest>,
     @InjectRepository(Friend)
     private readonly friendRepository: Repository<Friend>,
     private readonly usersService: UsersService,
@@ -63,6 +65,8 @@ export class FriendRequestService {
       receiver,
       status: 'pending',
     });
+    receiver.countUnseenConnections = user.countUnseenConnections + 1;
+    await this.userRepository.save(receiver);
     const friendRquest = await this.friendRequestRepository.save(friend);
     this.friendRequestGateway.server.emit('newFriendRequest', friendRquest);
     return {

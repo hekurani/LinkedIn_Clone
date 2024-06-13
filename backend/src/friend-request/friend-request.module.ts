@@ -10,10 +10,11 @@ import { UsersService } from 'src/users/users.service';
 import { UsersModule } from 'src/users/users.module';
 import { FriendRequestGateway } from './gateway-sockets/friend-request.gateway';
 import { FriendsGateway } from './gateway-sockets/friends.gateway';
+import { User } from 'src/users/user.entity';
 
 @Module({
     imports: [
-      TypeOrmModule.forFeature([FriendRequest,Friend]),
+      TypeOrmModule.forFeature([FriendRequest,Friend,User]),
       UsersModule,
       ],
       controllers: [FriendRequestController],

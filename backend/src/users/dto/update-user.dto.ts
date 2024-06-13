@@ -1,4 +1,4 @@
-import {IsEmail,IsOptional,IsString} from 'class-validator'
+import {IsEmail,IsNumber,IsOptional,IsString} from 'class-validator'
 export class UpdateUserDto{
     @IsEmail()
     @IsOptional()
@@ -7,7 +7,9 @@ export class UpdateUserDto{
     @IsString()
     @IsOptional()
     password:string;
-
+    @IsNumber()
+    @IsOptional()
+    countUnseenConnections:number;
     @IsString()
     @IsOptional()
     imageProfile:string;

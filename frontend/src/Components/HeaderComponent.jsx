@@ -1,5 +1,5 @@
-import React from "react";
-import './Header.css'; // Import the custom CSS file
+import React, { useEffect, useState } from "react";
+import "./Header.css";
 import logo from "../assets/logoHeader.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,13 +11,42 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import profile from "../assets/profile.png";
+import { io } from "socket.io-client";
+import getMe from "../utilities/user/getMe";
 
+const socket = io("http://localhost:8003");
 const HeaderComponent = () => {
+  
+  const [countConnections, setCountConnections] = useState(0);
+  const connectionBadge = async () => {
+    const  data  = await getMe();
+    setCountConnections(data?.countUnseenConnections);
+  };
+  useEffect(() => {
+    connectionBadge();
+
+    socket.on("newFriendRequest", (userId, newCount) => {
+      connectionBadge(); 
+    });
+
+    return () => {
+      socket.off("newFriendRequest");
+    };
+  }, []);
   return (
-    <div className="header h-16 grid grid-cols-12 items-center" style={{ border: "1px solid blue" }}>
+    <div
+      className="header h-16 grid grid-cols-12 items-center"
+      style={{ border: "1px solid blue" }}
+    >
       <div className="logo-search col-span-4 lg:col-span-5 flex justify-center items-center">
         <div className="logo flex justify-end items-center pr-2">
-          <img src={logo} width={30} height={20} alt="nul" className="hidden lg:block" />
+          <img
+            src={logo}
+            width={30}
+            height={20}
+            alt="nul"
+            className="hidden lg:block"
+          />
         </div>
         <div className="search flex justify-start items-center">
           <input
@@ -33,8 +62,9 @@ const HeaderComponent = () => {
           <FontAwesomeIcon icon={faHouse} className="icon" />
           <span className="text-sm block hidden lg:block">Home</span>
         </Link>
-        <Link to="/connections" className="text-center mx-2">
+        <Link to="/connections" className="text-center mx-2 relative">
           <FontAwesomeIcon icon={faUserPlus} className="icon" />
+          {countConnections > 0 && <p className="notification-badge">{countConnections}</p>}
           <span className="text-sm block hidden lg:block">My Network</span>
         </Link>
         <Link to="/jobs" className="text-center mx-2">
@@ -50,7 +80,13 @@ const HeaderComponent = () => {
           <span className="text-sm block hidden lg:block">Notifications</span>
         </Link>
         <Link to="/profile" className="text-center mx-2 flex items-center">
-          <img src={profile} width={20} height={18} alt="profile" className="mr-1 hidden lg:block" />
+          <img
+            src={profile}
+            width={20}
+            height={18}
+            alt="profile"
+            className="mr-1 hidden lg:block"
+          />
           <span className="text-sm hidden lg:block">Me</span>
         </Link>
       </div>

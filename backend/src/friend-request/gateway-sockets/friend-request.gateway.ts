@@ -28,12 +28,9 @@ import {
     }
   
     @SubscribeMessage('friendRequest')
-    handleFriendRequest(client: Socket, payload: any) {
-      this.server.emit('newFriendRequest', payload);
+    async handleFriendRequest(client: Socket, payload: { userId: number; friendId: number }) {
+      this.server.to(payload.friendId.toString()).emit('newFriendRequest', payload);
     }
-    @SubscribeMessage('newestFriend')
-    handleGetFriends(client: Socket, payload: any) {
-      this.server.emit('newestFriend', payload);
-    }
+
   }
   
