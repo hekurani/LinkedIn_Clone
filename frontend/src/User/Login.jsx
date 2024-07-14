@@ -118,42 +118,40 @@ const Login = () => {
   };
   return (
     <>
-      <div className="page  m-0 p-0  " style={{ height: "800px" }}>
-        {" "}
-        {/* div kryesor */}
+      <div
+        className="page flex justify-center items-center relative"
+        style={{ height: "900px" }}
+      >
         {/* Header Section */}
-        <div className="image ml-14 pt-2">
+        <div className="absolute top-0 left-5 m-4">
           <img
             className="logo"
             width={120}
             height={120}
             src={logo}
-            alt={"clone"}
+            alt="LinkedIn"
           />
         </div>
-        <div className="form w-96 h-96 mt-6 mx-auto">
-          {" "}
-          {/* div per krejt formen */}
+        <div className="form h-auto mt-6 mx-auto">
+          {/* Form Container */}
           <div className="credentials m-5">
-            {" "}
-            {/* div per email passsword div */}
+            {/* Credentials Section */}
             <form
               className="bg-white w-96 h-200 rounded-lg p-5 pl-7"
               style={{ boxShadow: "0 7px 30px -12px rgb(0 0 0 / 0.25)" }}
               onSubmit={signIn}
             >
-              {" "}
-              {/* forma */}
+              {/* Form */}
               <span style={{ fontSize: "2.2rem" }} className="font-semibold">
                 Sign in
-              </span>{" "}
-              <br></br>
+              </span>
+              <br />
               <p className="text-sm pt-2 pb-3">
                 Stay updated on your professional world
               </p>
               <input
                 style={{ border: "1px solid black" }}
-                className=" p-2 pl-3  mt-2 w-80 rounded h-12"
+                className="p-2 pl-3 mt-2 w-80 rounded h-12"
                 placeholder="Email or Phone"
                 type="email"
                 name="email"
@@ -162,11 +160,11 @@ const Login = () => {
               />
               <span className="text-red-500 text-xs italic">
                 {errors.email}
-              </span>{" "}
-              <br></br>
+              </span>
+              <br />
               <input
                 style={{ border: "1px solid black" }}
-                className=" p-2  pl-3 mt-6 w-80 h-12 rounded"
+                className="p-2 pl-3 mt-6 w-80 h-12 rounded"
                 placeholder="Password"
                 type="password"
                 name="password"
@@ -194,8 +192,8 @@ const Login = () => {
                 <span style={{ color: "#0a66c2" }}>Privacy Policy</span>, and{" "}
                 <span style={{ color: "#0a66c2" }}>Cookie Policy</span>.{" "}
               </p>
+              <div className="flex justify-center items-center">
               <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
-                {" "}
                 <GoogleLogin onSuccess={responseGoogle}>
                   <button
                     type="submit"
@@ -204,12 +202,13 @@ const Login = () => {
                       color: "black",
                       border: "1px solid black",
                     }}
-                    className="w-80 h-12 font-semibold text-white rounded-full mt-3 mb-3"
+                    className="w-80 h-12 font-semibold rounded-full mt-3 mb-3"
                   >
                     Sign In with Google
                   </button>
                 </GoogleLogin>
-              </GoogleOAuthProvider>{" "}
+              </GoogleOAuthProvider>
+              </div>
             </form>
             <p className="text-center mt-5">
               New to LinkedIn?{" "}
