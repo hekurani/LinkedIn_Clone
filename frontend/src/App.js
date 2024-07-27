@@ -22,11 +22,13 @@ import Connections from './User/Connections';
 import ProtectedRoutes from './Components/ProtectedRoutes.js';
 // utilities
 import { getToken } from './utilities/getToken';
+import AdminDashboard from './admin/components/AdminDashboard.jsx';
+import AdminHeader from './admin/components/AdminHeader.jsx';
 
 function App() {
   return (
     <BrowserRouter>
-      {getToken() && <HeaderComponent />}
+{/*       {getToken() && <HeaderComponent />} */}
       <EmailProvider>
         <Routes>
           <Route path="/Register" element={<FormProvider><Register /></FormProvider>} />
@@ -34,6 +36,7 @@ function App() {
           <Route path="/reset-password-request-email" element={<EmailInput />} />
           <Route path="/verification-code-forgotpass" element={<EnterCodeForgotPassword />} />
           <Route path="/success-reset-change-password" element={<ResetPassword />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           
           <Route element={<ProtectedRoutes />}>
             <Route path="/" element={<Feed />} />
