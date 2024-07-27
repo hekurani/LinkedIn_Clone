@@ -59,7 +59,7 @@ export class MessageService {
     if (!message) {
       throw new NotFoundException('Message not found');
     }
- attrs.editedAt=new Date();
+/*  attrs.editedAt=new Date(); */
 
     Object.assign(message, attrs);
     return this.repo.save(message);

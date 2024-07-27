@@ -17,8 +17,7 @@ export class Message {
     user: User;
   
 
-    @Column()
-    editedAt:Date;
+
 
     @ManyToOne(() => ChatRoom)
     chat: ChatRoom;
