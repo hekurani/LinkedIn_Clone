@@ -1,34 +1,39 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from "react";
+import success from './icons/success.png'
+import danger from './icons/danger.png'
+const ShowAlert = ({ text, variant }) => {
+  const [isVisible, setIsVisible] = useState(true);
 
-const ShowAlert = ({ text, color, onClose }) => {
   useEffect(() => {
-    const timer = setTimeout(onClose, 3000);
+    const timer = setTimeout(() => setIsVisible(false), 3000);
     return () => clearTimeout(timer);
-  }, [onClose]);
+  }, []);
+
+  if (!isVisible) return null;
 
   const getBackgroundColor = () => {
-    switch (color) {
+    switch (variant) {
       case "danger":
         return "bg-red-500";
-      case "blue":
+      case "success":
         return "bg-blue-500";
       default:
-        return "bg-gray-500";
+        return "bg-blue-500";
     }
   };
 
   return (
-    <div className={`fixed top-5 right-5 p-4 rounded text-white text-lg shadow-lg z-50 ${getBackgroundColor()}`}>
-      {text}
+    <div className={`fixed top-5 right-5 p-4 rounded flex text-white text-lg w-96 shadow-lg z-50 ${getBackgroundColor()}`}>
+      {variant === "success" && (
+        <img style={{borderRadius:'100%',width:'30px' , height:'30px'}} src={success} alt="" />
+)}
+      {variant === "danger" && (
+        <img style={{borderRadius:'100%',width:'30px' , height:'30px'}} src={danger} alt="" />
+)}
+
+      <p className="ml-3 font-semibold text-white">{text}</p>
     </div>
   );
-};
-
-ShowAlert.propTypes = {
-  text: PropTypes.string.isRequired,
-  color: PropTypes.oneOf(["danger", "blue"]).isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default ShowAlert;
