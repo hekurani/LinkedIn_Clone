@@ -7,6 +7,7 @@ import {
 import defaultImage from "../../assets/default.png";
 import { Link } from "react-router-dom";
 import { io } from "socket.io-client";
+import { createChat } from "../../utilities/chat/getChat";
 
 const socket = io("http://localhost:8002");
 const Invitation = () => {
@@ -33,8 +34,9 @@ const Invitation = () => {
     setData(updatedData);
   };
 
-  const acceptFriendRequest = async (id) => {
+  const acceptFriendRequest = async (id,senderId,receiverId) => {
     await acceptRequest(id);
+    await createChat(receiverId,senderId);
     const updatedData = await getRequestSendedToMe();
     setData(updatedData);
   };
@@ -85,7 +87,7 @@ const Invitation = () => {
                 Ignore
               </button>
               <button
-                onClick={() => acceptFriendRequest(request.id)}
+                onClick={() => acceptFriendRequest(request.id, request.sender.id,request.receiver.id)}
                 style={{
                   color: "#0a66c2",
                   border: "1px solid #0a66c2",
