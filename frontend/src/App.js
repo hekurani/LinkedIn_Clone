@@ -28,7 +28,7 @@ import AdminHeader from './admin/components/AdminHeader.jsx';
 function App() {
   return (
     <BrowserRouter>
-{/*       {getToken() && <HeaderComponent />} */}
+      {getToken() && <HeaderComponent />}
       <EmailProvider>
         <Routes>
           <Route path="/Register" element={<FormProvider><Register /></FormProvider>} />
