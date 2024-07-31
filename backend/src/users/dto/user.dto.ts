@@ -10,6 +10,8 @@ export class UserDto {
     @Expose()
     lastname:string;
     @Expose()
+    countUnseenConnections:number;
+    @Expose()
     imageProfile:string;
       
 }

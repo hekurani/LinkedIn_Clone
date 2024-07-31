@@ -50,7 +50,6 @@ const ChatListingComponent = ({ user, onChatRowClick }) => {
   };
 
   const handleChatRowClick = (chatRoomId) => {
-    console.log("Chat Room ID:", chatRoomId);
     onChatRowClick(chatRoomId);
   };
 
@@ -83,10 +82,10 @@ const ChatListingComponent = ({ user, onChatRowClick }) => {
               const lastMessageUserName = lastMessageUser?.id == loggedInUser.id ? 'You' : lastMessageUser?.name;
               return (
                 <div key={chatroom.id}  onClick={() => handleChatRowClick(chatroom.id)} className='p-2 oneProfile h-16 flex justify-items-center items-center ' style={{ border: '1px solid grey', borderBottom: '0px', borderLeft: '0px' }}>
-                  <img className='h-10 w-10 rounded-full object-cover' src={otherUserImage} alt="profili" />
+                  <img className='h-10 w-10 rounded-full object-cover' src={otherUserImage} alt="" />
                   <div className=''>
                     <p className='name ml-1'>{chatroom.user1.id === user.id ? chatroom.user2.name : chatroom.user1.name} {chatroom.user1.id === user.id ? chatroom.user2.lastname : chatroom.user1.lastname}</p>
-                    <p className='description ml-1 text-xs'>{`${lastMessageUserName}: ${lastMessage ? lastMessage.description : 'ol'}`}</p>
+                   {lastMessageUser && <p className='description ml-1 text-xs'>{`${lastMessageUserName}: ${lastMessage ? lastMessage.description : 'ol'}`}</p> }
                   </div>
                 
                   <div className='date mx-auto'>

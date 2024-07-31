@@ -5,8 +5,10 @@ import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { requestAddFriend } from "../../../utilities/friends/getFriends";
 import ShowAlert from "../../../utilities/alert/showAlert";
+import getMe from "../../../utilities/user/getMe";
+import { createChat } from "../../../utilities/chat/getChat";
 const ProfileInfo = ({ user }) => {
-  const [status, setStatus] = useState('ConnectZ');
+  const [status, setStatus] = useState("Connect");
   const handleHover = (e) => {
     e.target.style.color = "blue";
   };
@@ -15,15 +17,22 @@ const ProfileInfo = ({ user }) => {
     e.target.style.color = "#0a66c2";
   };
   const addFriend = async () => {
-    try{
+    try {
       await requestAddFriend(user.id);
-      setStatus('Pending');
-      ShowAlert({text: "Friend request sent", color: "blue"})
-    }
-    catch(err){
+      setStatus("Pending");
+      ShowAlert({ text: "Friend request sent", color: "blue" });
+    } catch (err) {
       console.log(err);
     }
-    }  
+  };
+  const createChatRoom = async() => {
+    try {
+      const me = await getMe();
+      await createChat(me.id, user.id);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div
@@ -76,7 +85,9 @@ const ProfileInfo = ({ user }) => {
       </div>
       <div className="profileInfo flex mt-16 mb-5 ">
         <div className="personalInfo text-left ml-7">
-          <p className="font-semibold text-2xl">{user.name}{' '}{user.lastname}</p>
+          <p className="font-semibold text-2xl">
+            {user.name} {user.lastname}
+          </p>
           <p>Software Developer</p>
           <p className="location mt-1 text-sm " style={{ color: "grey" }}>
             {" "}
@@ -133,6 +144,7 @@ const ProfileInfo = ({ user }) => {
               Message
             </button>
             <button
+              onClick={() => createChatRoom()}
               className="rounded-full ml-2
                          pb-1 pt-1 pl-3 pr-3 font-semibold"
               style={{

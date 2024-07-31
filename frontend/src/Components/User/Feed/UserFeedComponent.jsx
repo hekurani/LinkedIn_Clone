@@ -33,7 +33,7 @@ const UserFeedComponent = ({ user }) => {
           )}
         </div>
         <div className="flex flex-col items-center">
-          <Link to={"/profile"}>
+          <Link to={`${user.id}/profile`}>
             <p className="text-center mt-7 font-semibold">
               Welcome,{user.name}!
             </p>

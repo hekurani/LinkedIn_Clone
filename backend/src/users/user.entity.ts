@@ -25,6 +25,8 @@ export class User {
     @Column({unique:true})
     email:string;
 
+    @Column({default:0})
+    countUnseenConnections:number;
 
     @OneToMany(()=>postreaction,postreaction=>postreaction.user)
     likes:postreaction[]

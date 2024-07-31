@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import { faEllipsis, faImage, faLink, faVideo, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import sendMessage from '../../../utilities/messages/sendMessage';
 
 let socket;
 
@@ -57,12 +58,7 @@ function ChatPage({user,onCloseChat,chatRoomId }) {
       };
   
       socket.emit('message', messageData);
-  
-      await axios.post('http://localhost:4000/message/sendMessage', {
-        userId: `${user.id}`, 
-        chatId: 1, 
-        message: input,
-      });
+   await sendMessage(user.id, chatRoomId, input);
       setInput('');
       scrollToBottom();
     }

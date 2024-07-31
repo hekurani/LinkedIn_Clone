@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { acceptRequest, cancelRequest, getRequestSendedToMe } from "../../utilities/friends/getFriends";
+import {
+  acceptRequest,
+  cancelRequest,
+  getRequestSendedToMe,
+} from "../../utilities/friends/getFriends";
 import defaultImage from "../../assets/default.png";
 import { Link } from "react-router-dom";
+import { io } from "socket.io-client";
+import { createChat } from "../../utilities/chat/getChat";
+
+const socket = io("http://localhost:8002");
 const Invitation = () => {
   const [data, setData] = useState([]);
 
@@ -11,55 +19,86 @@ const Invitation = () => {
       setData(data);
     };
     fetchData();
+    socket.on("newFriendRequest", (newRequest) => {
+      setData((prevData) => [...prevData, newRequest]);
+    });
+
+    return () => {
+      socket.off("newFriendRequest");
+    };
   }, []);
 
   const cancelFriendRequest = async (id) => {
-      await cancelRequest(id);
-      const data = await getRequestSendedToMe();
-      setData(data); //to improve
-  }
-  const acceptFriendRequest = async (id) => {
+    await cancelRequest(id);
+    const updatedData = await getRequestSendedToMe();
+    setData(updatedData);
+  };
+
+  const acceptFriendRequest = async (id,senderId,receiverId) => {
     await acceptRequest(id);
-    const data = await getRequestSendedToMe();
-    setData(data); //to improve
-}
+    await createChat(receiverId,senderId);
+    const updatedData = await getRequestSendedToMe();
+    setData(updatedData);
+  };
 
   return (
     <div
-      style={{ border: "1px solid #d3d3d3 ", width: "880px",borderRadius:'7px' }}
+      style={{
+        border: "1px solid #d3d3d3 ",
+        maxWidth: "880px",
+        borderRadius: "7px",
+      }}
       className="mx-auto p-5 mt-3"
     >
-      <div className="header flex items-center mb-3">
-        <p className="mr-auto m-1">Invitations</p>
-        <p className="m-3 font-semibold">See all {!!data && data.length}</p>
-      </div>
-      <div className="content flex">
-      {data.map((request) => (
-          <>
-          <Link to={`/${request.sender.id}/profile`}>
-         
-            <div key={request.id} className="invitation-item grid grid-cols-3 ml-2">
+      {!!data && data.length > 0 ? (
+        <div className="header flex items-center mb-3">
+          <p className="mr-auto m-1">Invitations</p>
+          <p className="m-3 font-semibold"> {`See all ${data.length}`}</p>
+        </div>
+      ) : (
+        <div className="header flex items-center mb-3">
+          <p className="mr-auto m-1">No pending invitations</p>
+        </div>
+      )}
+      <div className="content">
+        {data.map((request) => (
+          <div
+            key={request.id}
+            className="invitation-item flex items-center justify-between mb-4 p-2 border-t"
+          >
+            <Link
+              to={`/${request.sender.id}/profile`}
+              className="flex items-center"
+            >
               <img
                 src={request.sender.imageProfile || defaultImage}
                 alt={`${request.sender.name}`}
-                className="w-12 h-12 rounded-full"
+                className="w-12 h-12 rounded-full mr-3"
               />
-              <p className="font-semibold mt-2">
+              <p className="font-semibold">
                 {request.sender.name} {request.sender.lastname}
               </p>
-            </div>
             </Link>
-            <div className="flex  ml-auto mr-3">
-              <button onClick={(() => cancelFriendRequest(request.id))} className="mr-3">Ignore</button>
+            <div className="flex items-center">
               <button
-              onClick={(() => acceptFriendRequest(request.id))}
-                style={{ color:'#0a66c2',border:'1px solid #0a66c2',borderRadius:'10px' }}
-                className="h-12 w-20 font-semibold"
+                onClick={() => cancelFriendRequest(request.id)}
+                className="mr-3"
+              >
+                Ignore
+              </button>
+              <button
+                onClick={() => acceptFriendRequest(request.id, request.sender.id,request.receiver.id)}
+                style={{
+                  color: "#0a66c2",
+                  border: "1px solid #0a66c2",
+                  borderRadius: "10px",
+                }}
+                className="h-10 w-20 font-semibold"
               >
                 Accept
-                </button>
+              </button>
             </div>
-          </>
+          </div>
         ))}
       </div>
     </div>
