@@ -9,6 +9,7 @@ import { ArrayNotEmpty } from "class-validator";
 import { postreaction } from "src/PostReaction/postreaction.entity";
 import { commentreaction } from "src/comment-reaction/comment-reaction.entity";
 import { Reposts } from "src/reposts/reposts.entity";
+import { company } from "src/company/company.entity";
 
 @Entity()
 export class User {
@@ -31,10 +32,10 @@ export class User {
     @OneToMany(()=>commentreaction,commentreaction=>commentreaction.user)
     commentReaction:commentreaction[]
 
-@ManyToMany(()=>Role)
-@ArrayNotEmpty()
-@JoinTable()
-roles:Role[]
+    @ManyToMany(()=>Role)
+    @ArrayNotEmpty()
+    @JoinTable()
+    roles:Role[]
     
     @Exclude()
     @Column({nullable:true,select:false})
@@ -60,6 +61,9 @@ roles:Role[]
     @Column({nullable:true})
     gender:String;
 
+    @OneToMany(()=>company,(company)=>company.owner)
+    companies:company[]
+    
 @OneToMany(()=>Reposts,reposts=>reposts.user)
 reposts:Reposts[]
 

@@ -124,15 +124,16 @@ export class FriendRequestService {
     friend: Friend;
     friendRequest: FriendRequest;
   }> {
-    const user = await this.usersService.findOne(userId);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
     if (!id) {
       throw new NotFoundException(
         'The request that you want to accept is not defined',
       );
     }
+    const user = await this.usersService.findOne(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
     const friendRequest = await this.friendRequestRepository.findOne({
       where: {
         id: id,
