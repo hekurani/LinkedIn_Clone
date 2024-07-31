@@ -32,11 +32,8 @@ export class CompanyService {
         company={...company,...updateCompany,cityId:city};
     }
         
-        const savedCompany=await this.companyRepository.save(company)
-        // const city=await this.cityRepository.findOne({ where: { id: parseInt(updateCompany.cityId) } })
-        
+        const savedCompany=await this.companyRepository.save(company)        
    return savedCompany       
-// return {status:'success',company}
     }
 
     constructor(private readonly userService:UsersService,@InjectRepository(User) private userRepository: Repository<User>,@InjectRepository(city) private cityRepository: Repository<city>,@InjectRepository(company) private readonly companyRepository: Repository<company>){}

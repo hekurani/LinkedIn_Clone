@@ -1,5 +1,5 @@
 import { User } from "src/users/user.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
 import { IndustryType } from "./enum/industry_type.enum";
 import { IsNotEmpty } from "class-validator";
 import { WorkPlace } from "./enum/workplace.enum";
@@ -27,7 +27,7 @@ export class company {
 
     @Column({nullable:true})
     tagLine:String// add additional information about services of company
-    @OneToOne(()=>city,{cascade:true})
+    @ManyToOne(()=>city,{cascade:true})
     @JoinColumn()
     cityId:city;
 

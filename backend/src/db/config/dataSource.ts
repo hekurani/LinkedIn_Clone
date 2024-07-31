@@ -16,6 +16,7 @@ import { Reposts } from 'src/reposts/reposts.entity';
 import { company } from 'src/company/company.entity';
 import { city } from 'src/location/entity/city.entity';
 import { country } from 'src/location/entity/country.entity';
+import { Follower } from 'src/follower/follower.entity';
 
 
  const createDataSourceOptions = (configService: ConfigService): DataSourceOptions & SeederOptions => {
@@ -26,7 +27,7 @@ import { country } from 'src/location/entity/country.entity';
         username:'postgres',
         port:configService.get('PORT'),
         password:'1234',
-        entities: [User,Posts,Skill,Message,ChatRoom,Comment,Friend,FriendRequest,Role,postreaction,commentreaction,Reposts,country,city,company],
+        entities: [User,Posts,Skill,Message,ChatRoom,Comment,Friend,FriendRequest,Role,postreaction,commentreaction,Reposts,country,city,company,Follower],
         migrations: [__dirname + '/../migrations/*{.ts,.js}'],
         seeds: ['dist/db/seeds/**/*.js'],
         synchronize: false,
