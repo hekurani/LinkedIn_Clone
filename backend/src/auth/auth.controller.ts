@@ -9,23 +9,10 @@ import { AuthGuard } from '@nestjs/passport';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { MailService } from '../mailer-forgot-password/mail.service';
 import { extname } from 'path';
-import { diskStorage } from 'multer';
+import multer, { diskStorage } from 'multer';
 import { AuthUser } from './decorators/AuthUser-decorator';
-const imageFileFilter = (req, file, callback) => {
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-    return callback(new Error('Only image files are allowed!'), false);
-  }
-  callback(null, true);
-};
-const storage = diskStorage({
-  destination: '../../images',
-  filename: (req, file, cb) => {
-    const name = file.originalname.split('.')[0];
-    const extension = extname(file.originalname);
-    const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
-    cb(null, `${name}-${randomName}${extension}`);
-  },
-});
+import { multerOptions } from 'src/utils/multer/multerOptions.multer';
+
 @Controller('auth')
 export class AuthController {
     constructor(private authService:AuthService,private readonly mailService: MailService){}
@@ -43,7 +30,7 @@ return this.authService.googleLogIn(logInDto?.token);
     
     @Post('/signUp')
     @Public()
-    @UseInterceptors(FileInterceptor('image', { storage,fileFilter:imageFileFilter }))
+    @UseInterceptors(FileInterceptor('image',{...multerOptions,storage:multerOptions.storage([{filename:'image',destination:"../Images/user"}])}))
    async signUp(@Body() signUpDto:SignUpDto,@UploadedFile( 
   ) file:Express.Multer.File, @Res({passthrough: true}) response: Response){
     

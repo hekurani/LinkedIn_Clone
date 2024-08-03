@@ -27,7 +27,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         signOptions: { expiresIn: '600s' },
       }),
     }),MulterModule.register({
-      dest: './images',
+      dest: "./",
     })
   ],
   controllers: [AuthController],

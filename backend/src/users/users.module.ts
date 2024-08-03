@@ -12,9 +12,10 @@ import { Comment } from 'src/comments/Entity/comment.entity';
 import { Skill } from 'src/skills/skills.entity';
 import { RolesService } from 'src/roles/roles.service';
 import { Role } from 'src/roles/Roles.entity';
+import { company } from 'src/company/company.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([User,Posts,Comment,Skill,Role]),JwtModule],
+  imports:[TypeOrmModule.forFeature([User,company,Posts,Comment,Skill,Role]),JwtModule],
   exports:[UsersService],
   controllers: [UsersController],
   providers: [UsersService,AuthService,RolesService,{provide:APP_INTERCEPTOR,useClass:CurrentUserInterceptor}]

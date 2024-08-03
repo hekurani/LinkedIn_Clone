@@ -15,7 +15,6 @@ export class CommentsController {
     constructor(private readonly commentsService: CommentsService) {}
     @Post()
     create(@Body() createCommentDto: CreateCommentDto,@AuthUser() user: {userId:number}) {
-        console.log(user.userId)
         return this.commentsService.create(createCommentDto.text,user.userId,createCommentDto.postId);
     }
     
