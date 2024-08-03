@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import logo from "../assets/LinkedIn-logo.png";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import axiosInstance from "../axios/axios.tsx";
+import { useAlert } from "../utilities/alert/AlertContext.js";
 const Login = () => {
-  let message, isSuccess;
-  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const [response, setResponse] = useState({
-    status: null,
-    message: null,
-  });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const showAlert = useAlert();
   async function responseGoogle(response) {
     const token = response.credential;
     try {
@@ -26,36 +21,15 @@ const Login = () => {
         "refresh_token",
         responseGoogle?.data?.refresh_token
       );
-      setResponse((prevResp) => {
-        return {
-          status: true,
-          message: "user loged in successfuly!",
-        };
-      });
-      setIsOpen(true);
 
-      setTimeout(() => {
-        setIsOpen(false);
-        navigate("/");
-      }, 2000);
       localStorage.setItem("access_token", response?.data?.access_token);
       localStorage.setItem("refresh_token", response?.data?.refresh_token);
     } catch (err) {
       console.log("err: ", err);
-      message = err?.response?.data?.message
-        ? err?.response?.data?.message
-        : "Something went wrong!";
-      isSuccess = false;
-      setResponse((prevResp) => {
-        return {
-          status: isSuccess,
-          message: message,
-        };
+      showAlert({
+        text: err?.response?.data?.message || "Something went wrong",
+        variant: "danger",
       });
-      setIsOpen(true);
-      setTimeout(() => {
-        setIsOpen(false);
-      }, 2000);
     }
   }
   const signIn = async (e) => {
@@ -87,40 +61,24 @@ const Login = () => {
     };
     try {
       const response = await axiosInstance.post("auth/login", loginInfo);
-      const token = response.data.access_token;
-      localStorage.setItem("access_token", token);
-
-      setTimeout(() => {
-        setIsOpen(false);
-        navigate("/");
-      }, 2000);
+      const token = response?.data?.access_token;
+      if (token) {
+        localStorage.setItem("access_token", token);
+        navigate('/');
+      }
     } catch (err) {
       console.log(err);
-      message = err?.response?.data?.message
-        ? err?.response?.data?.message
-        : "Something went wrong!";
-      isSuccess = false;
-      setIsOpen(true);
-      setTimeout(() => {
-        setIsOpen(false);
-      }, 2000);
-
-      setResponse((prevResp) => {
-        return {
-          status: isSuccess,
-          message: message,
-        };
+      showAlert({
+        text: err?.response?.data?.message || "Something went wrong",
+        variant: "danger",
       });
     }
-
-    // nese gjithcka eshte ne rregull na dergon tek Register ne kete pjese vetem per testim
-    //pasi te shtojm pjesen e home dhe feed e dergojm userin aty
   };
   return (
     <>
       <div
         className="page flex justify-center items-center relative"
-        style={{ height: "900px" }}
+        style={{ height: "660px" }}
       >
         {/* Header Section */}
         <div className="absolute top-0 left-5 m-4">
@@ -132,12 +90,12 @@ const Login = () => {
             alt="LinkedIn"
           />
         </div>
-        <div className="form h-auto mt-6 mx-auto">
+        <div className="form mx-auto">
           {/* Form Container */}
           <div className="credentials m-5">
             {/* Credentials Section */}
             <form
-              className="bg-white w-96 h-200 rounded-lg p-5 pl-7"
+              className="bg-white w-96  rounded-lg py-3 pb-4 pl-7"
               style={{ boxShadow: "0 7px 30px -12px rgb(0 0 0 / 0.25)" }}
               onSubmit={signIn}
             >
@@ -193,21 +151,21 @@ const Login = () => {
                 <span style={{ color: "#0a66c2" }}>Cookie Policy</span>.{" "}
               </p>
               <div className="flex justify-center items-center">
-              <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
-                <GoogleLogin onSuccess={responseGoogle}>
-                  <button
-                    type="submit"
-                    style={{
-                      backgroundColor: "transparent",
-                      color: "black",
-                      border: "1px solid black",
-                    }}
-                    className="w-80 h-12 font-semibold rounded-full mt-3 mb-3"
-                  >
-                    Sign In with Google
-                  </button>
-                </GoogleLogin>
-              </GoogleOAuthProvider>
+                <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
+                  <GoogleLogin onSuccess={responseGoogle}>
+                    <button
+                      type="submit"
+                      style={{
+                        backgroundColor: "transparent",
+                        color: "black",
+                        border: "1px solid black",
+                      }}
+                      className="w-80 h-12 font-semibold rounded-full mt-3 mb-3"
+                    >
+                      Sign In with Google
+                    </button>
+                  </GoogleLogin>
+                </GoogleOAuthProvider>
               </div>
             </form>
             <p className="text-center mt-5">
