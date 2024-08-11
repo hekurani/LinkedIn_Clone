@@ -1,12 +1,12 @@
 // src/components/ProtectedRoutes.js
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { getToken } from '../utilities/getToken';
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { getToken } from "../utilities/getToken";
 
-const ProtectedRoutes =  () => {
-  const token = getToken();
+const ProtectedRoutes = ({ role }) => {
+  const payload = getToken();
 
-  if (!token) {
+  if (!payload || role !== payload?.user?.role) {
     return <Navigate to="/Login" />;
   }
 
