@@ -117,9 +117,8 @@ user.skills=skills;
     if (refreshToken) {
       user.RefreshToken = refreshToken;
     }
-  
-    Object.assign(user, attrs);
-    return this.repo.save(user);
+    const updatedUser = this.repo.merge(user, attrs);
+    return this.repo.save(updatedUser);;
   }
   
   async getUserPosts(user_id: number): Promise<Posts[]> {

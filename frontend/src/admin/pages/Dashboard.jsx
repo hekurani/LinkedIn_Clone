@@ -5,7 +5,7 @@ const Dashboard = () => {
     <div className='bg-blue-900 flex-1 p-5'>
       <p className='text-white text-2xl font-bold'>Dashboard</p>
 
-      <table className='min-w-full leading-normal'>
+      <table className='min-w-full mt-3 leading-normal'>
         <thead>
           <tr className='bg-gray-800 text-white'>
             <th className='px-3 py-2 border-b-2 border-gray-700 text-left text-sm uppercase font-semibold'>
