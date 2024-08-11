@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Modal = ({ isOpen, variant, onClose, onSave, title, children }) => {
+  if (!isOpen) return null;
   const backgroundClass = variant === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black';
   return (
       <div className="fixed inset-0 flex items-center justify-end z-[9999]">
