@@ -10,6 +10,7 @@ import { promisify } from 'util';
 import { Skill } from 'src/skills/skills.entity';
 import { UserRole } from 'src/roles/types/role.type';
 import { Role } from 'src/roles/Roles.entity';
+import { PaginationDto } from 'src/pagination/pagination.dto';
 const scrypt=promisify(_scrypt);
 @Injectable()
 export class UsersService {
@@ -135,7 +136,25 @@ user.skills=skills;
   
     return this.postRepository.find(options);
   }
-  getUsers(userId:number){
-    return this.repo.find({ where: { id: Not(userId) } ,relations:['roles']});
+  async getUsers(
+    userId: number,
+    pagination: PaginationDto
+
+  ) {
+    const { page, limit } = pagination;
+  
+    const options: FindManyOptions<User> = {
+      where: { id: Not(userId) },
+      relations: ['roles'],
+      skip: (page - 1) * limit,
+      take: limit,
+    };
+  const users = await this.repo.find(options);
+
+  const totalCount = await this.repo.count({
+    where: { id: Not(userId) },
+  });
+
+  return { users, totalCount };
   }
 }
