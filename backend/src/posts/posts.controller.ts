@@ -1,41 +1,35 @@
-import { Body, Controller, Get, Post, UseGuards,Request, Injectable, Param, Delete, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards,Request, Injectable, Param, Delete, UseInterceptors, UploadedFiles, Patch } from '@nestjs/common';
 import { PostDTO } from './dto/post.dto'; 
 import { AuthentGuard } from '../auth/guards/auth.guard';
 import { PostsService } from './posts.service';
 import { Public } from '../auth/decorators/Public-Api.decorator';
 import { User } from 'src/users/user.entity';
 import { NotFoundException } from '@nestjs/common';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { CreatePostDto } from './dto/create-post-dto';
 import { AuthUser } from 'src/auth/decorators/AuthUser-decorator';
-const imageFileFilter = (req, file, callback) => {
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-    return callback(new Error('Only image files are allowed!'), false);
-  }
-  callback(null, true);
-};
-const storage = diskStorage({
-  destination: '../',
-  filename: (req, file, cb) => {
-    const name = file.originalname.split('.')[0];
-    const extension = extname(file.originalname);
-    const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
-    cb(null, `/Images/${name}-${randomName}${extension}`);
-  },
-});
+import { multerOptions } from 'src/utils/multer/multerOptions.multer';
+import { UpdateJobPostDto } from 'src/job-post/dto/updateJobPost.dto';
+import { updatePostDto } from './dto/updatePost.dto'; 
 @Controller('posts')
 export class PostsController {
     constructor(private postService:PostsService){}
     
     @Post()
-    @UseInterceptors(
-      FilesInterceptor('image', 20, {
-        storage: storage,
-        fileFilter: imageFileFilter,
-      }),
-    )
+    @UseInterceptors(FileFieldsInterceptor(
+      [
+        { name: 'images', maxCount: 5 },
+       
+      ],
+      multerOptions(
+        ['.jpg', '.jpeg', '.png', '.gif'], // Permissible file formats
+        [
+          { filename: 'images', destination: "../Images/postImages/" }, // Destination for 'logo'
+        ]
+      )
+    ))
     createPost(@AuthUser() user: {userId:number},@Body() postDTO:CreatePostDto,@UploadedFiles() files){
       const response = [];
       if(files) {
@@ -56,9 +50,6 @@ export class PostsController {
   
     @Get('/:id')
     findPost(@Param('id') id:string){
-        if(!id){
-            return null;
-        }
         return this.postService.findOne(parseInt(id));
     }
     @Delete('/:id')
@@ -74,5 +65,27 @@ getPosts(@AuthUser() user: {userId:number}){
   return this.postService.getPosts(user.userId);
 }
   
-
+@Patch('/:id')
+@UseInterceptors(FileFieldsInterceptor(
+  [
+    { name: 'images', maxCount: 5 },
+   
+  ],
+  multerOptions(
+    ['.jpg', '.jpeg', '.png', '.gif'], // Permissible file formats
+    [
+      { filename: 'images', destination: "../Images/postImages/" }, // Destination for 'logo'
+    ]
+  )
+))
+updatePost(@Param('id') id:string,@Body() updatePostDto:updatePostDto,@AuthUser() user: {userId:number},@UploadedFiles() files:{images?: Express.Multer.File[]}){
+  const response = [];
+  if(files) {
+    files?.images.forEach(file => {
+      response.push(file.filename);
+    });
+  }
+  console.log(response);
+return this.postService.update(+id,updatePostDto,user?.userId,response);
+}
 }

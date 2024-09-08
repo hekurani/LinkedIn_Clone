@@ -39,7 +39,7 @@ export class company {
     @Column({default:'imageCover.png'})
     imageCover:string;
 
-    @ManyToOne(()=>User,(user)=>user.companies,{cascade:true})
+    @ManyToOne(()=>User,(user)=>user.companies,{eager:true,cascade:true})
     owner:User;
 
     @Column({nullable:true})

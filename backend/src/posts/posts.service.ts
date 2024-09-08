@@ -7,6 +7,7 @@ import { Comment } from 'src/comments/Entity/comment.entity';
 import { CreatePostDto } from './dto/create-post-dto';
 import { UsersService } from 'src/users/users.service';
 import { FriendsService } from 'src/friends/friends.service';
+import { updatePostDto } from './dto/updatePost.dto';
 @Injectable()
 export class PostsService {
   constructor(private friendService:FriendsService,private usersService:UsersService,@InjectRepository(Posts) private repo: Repository<Posts>,@InjectRepository(User) private userRepository: Repository<User>) {}
@@ -55,12 +56,17 @@ async getPostComments(id:number){
 return await this.repo.find({where:{id:id},relations:['comments','comments.childComments','comments.parentComment']});
 }
 
-async update(id: number, attrs: Partial<Posts>) {
+async update(id: number, updatePost:updatePostDto,userId:number,files) {
+  const user=await this.usersService.findOne(userId);
+  if(!user) throw new NotFoundException("There's no user logged in, please log in!");
+  
     const post = await this.findOne(id);
-    if (!post) {
+    console.log(post);
+    if (!post || post.user.id!==userId) {
       throw new NotFoundException('User not found');
     }
-    Object.assign(post, attrs);
+    files.length>0?Object.assign(post, {...updatePost,postImages:files}):Object.assign(post, {...updatePost});
+    
     return this.repo.save(post);
   }
   isFriendInComment(comment:Comment,userId:number){

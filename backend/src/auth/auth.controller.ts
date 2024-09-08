@@ -30,7 +30,10 @@ return this.authService.googleLogIn(logInDto?.token);
     
     @Post('/signUp')
     @Public()
-    @UseInterceptors(FileInterceptor('image',{...multerOptions,storage:multerOptions.storage([{filename:'image',destination:"../Images/user"}])}))
+    @UseInterceptors(FileInterceptor('image', multerOptions(
+      ['.jpg', '.jpeg', '.png', '.gif'], // Permissible file formats
+      [{ filename:'image',destination:"../Images/user" }] // Destination options
+    )))
    async signUp(@Body() signUpDto:SignUpDto,@UploadedFile( 
   ) file:Express.Multer.File, @Res({passthrough: true}) response: Response){
     

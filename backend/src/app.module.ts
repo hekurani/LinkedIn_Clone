@@ -36,7 +36,9 @@ import { FollowerModule } from './follower/follower.module';
 import { JobPostModule } from './job-post/job-post.module';
 // import { JobPsotController } from './job-psot/job-psot.controller';
 import { LocationModule } from './location/location.module';
-
+import { WorkExperienceModule } from './work-experience/work-experience.module';
+import { JobApplication } from './job-application/job-application.entity';
+import { JobApplicationModule } from './job-application/job-application.module';
 const cookieSession=require('cookie-session')
 @Module({
   imports: [
@@ -58,7 +60,7 @@ const cookieSession=require('cookie-session')
       rootPath: join(__dirname, '..', '..', 'Images'),
     }),
 TypeOrmModule.forRoot(dataSourceOptions)
-  ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule, FriendsModule,CommentsModule,FriendRequestModule, RolesModule, PostReactionModule, CommentReactionModule, RepostsModule, CompanyModule, FollowerModule, JobPostModule, LocationModule],
+  ,UsersModule, AuthModule, PostsModule, SkillsModule, ChatRoomModule, MessageModule, FriendsModule,CommentsModule,FriendRequestModule, RolesModule, PostReactionModule, CommentReactionModule, RepostsModule, CompanyModule, FollowerModule, JobPostModule, LocationModule, WorkExperienceModule,JobApplicationModule],
   controllers: [AppController],
   providers: [AppService,ChatGateway,
   {

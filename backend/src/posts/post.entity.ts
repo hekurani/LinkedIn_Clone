@@ -18,7 +18,7 @@ export class Posts {
     @Column({ nullable: true })
     description: string;
 
-    @ManyToOne(() => User, user => user.posts)
+    @ManyToOne(() => User, user => user.posts,{eager:true})
     @JoinColumn()
     user: User;
 
