@@ -48,14 +48,10 @@ const Users = () => {
     setShowModal(false);
   };
 
-  const handlePaginationChange = (newPage) => {
-    setPage(newPage);
-  };
 
-  const totalPages = Math.ceil(totalUsers / limit);
 
   return (
-    <div className="bg-blue-900 flex-1 p-5">
+    <div className=" flex-1 p-5">
       <p className="text-white text-2xl font-bold">Users</p>
       <div className="table w-full">
         <table className="min-w-full mt-3 leading-normal">
@@ -138,23 +134,16 @@ const Users = () => {
             page={page}
           /> */}
         <div className="flex justify-between mt-4">
-          <button
-            disabled={page === 1}
-            onClick={() => handlePaginationChange(page - 1)}
-            className="bg-blue-600 text-white px-4 py-2 rounded"
-          >
-            Previous
-          </button>
           <p className="text-white">
             {totalUsers > 0 && (
-              <p className="font-light text-primary-900">
-                Showing {(page - 1) * limit} -{" "}
+              <p className="font-light text-white">
+                Showing {((page - 1) * limit) > 0 ?  (page - 1) * limit : 1} -{" "}
                 {totalUsers > page * limit ? page * limit : totalUsers} out of{" "}
                 {totalUsers}
               </p>
             )}
           </p>
-          <div style={{ border: "1px solid white" , width:"300px", backgroundColor:'white' }}>
+          <div className="flex justify-center items-center">
             <Pagination
               containerClassName="flex"
               onPageChange={({ selected }) => setPage(selected + 1)}
@@ -163,13 +152,6 @@ const Users = () => {
               page={page}
             />
           </div>
-          <button
-            disabled={page === users?.length}
-            onClick={() => handlePaginationChange(page + 1)}
-            className="bg-blue-600 text-white px-4 py-2 rounded"
-          >
-            Next
-          </button>
         </div>
       </div>
 

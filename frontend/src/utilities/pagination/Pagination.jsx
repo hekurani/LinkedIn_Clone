@@ -3,7 +3,6 @@ import ReactPaginate from 'react-paginate';
 
 const Pagination = ({ onPageChange, totalItems, page, perPage = 10, ...props }) => {
   const pageCount = Math.ceil(totalItems / perPage);
-  console.log(pageCount,"pg")
 
   return (
     pageCount > 1 && (
@@ -12,6 +11,8 @@ const Pagination = ({ onPageChange, totalItems, page, perPage = 10, ...props }) 
         forcePage={Number(page) - 1}
         containerClassName="flex !m-3"
         pageCount={pageCount}
+        nextLabel=">"
+        previousLabel="<"
         pageClassName="min-w-[24px] min-h-[24px] flex justify-center mx-0.5 rounded-[3px] hover:bg-neutral-100 hover:!text-white cursor-pointer leading-[24px] select-none"
         pageLinkClassName="w-full px-1 !text-[#8BA8BE] text-center"
         activeClassName="bg-primary-500 hover:bg-primary-500 rounded-[3px] !cursor-default"
