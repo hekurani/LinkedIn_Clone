@@ -20,7 +20,6 @@ export class AuthentGuard implements CanActivate {
       context.getClass(),
     ]);
     if(isPublic){
-      console.log("isPublic")
       return true;
     } 
      const request = context.switchToHttp().getRequest();

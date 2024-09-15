@@ -86,6 +86,7 @@ const Register = () => {
 
       localStorage.setItem("access_token", response?.data?.access_token);
       localStorage.setItem("refresh_token", response?.data?.refresh_token);
+      navigate('/');
     } catch (err) {
       console.error("Error signing up:", err);
       showAlert({
@@ -103,7 +104,7 @@ const Register = () => {
         {/* Header Section */}
         <div className="header">
           {" "}
-          {/* pjesa e header perfshin pjesen e logos edhe pjesen e h1-shit */}
+          {/* pjesa e header perfshin pjesen e logos edhe pjesen e h1 */}
           <div className="image ml-24 mt-0">
             <img
               className="logo pt-2"

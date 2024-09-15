@@ -30,7 +30,8 @@ export class AuthService {
             if(storedHash!==hash.toString('hex')){
                 return new BadRequestException('Wrong password!')
             }
-            const payload_access = {userId:user?.id} as JWTpayload;
+            console.log(user);
+            const payload_access = {userId:user?.id,roles:user.roles,email:user?.email} as JWTpayload;
             const payload_refresh={userId:user?.id} as JWTpayloadRt;
             const access_token=await this.jwtService.signAsync(payload_access);
             const refresh_token=await this.jwtService.signAsync(payload_refresh);
@@ -67,7 +68,7 @@ return user;
                 throw new InternalServerErrorException("Somethig went wrong");
             }
             const user=await this.usersService.create(payLoad?.given_name,payLoad.family_name,payLoad?.email,null,null,role);
-            const payload_access = {userId:user?.id} as JWTpayload;
+            const payload_access = {userId:user?.id,roles:user.roles,email:user?.email} as JWTpayload;
             const payload_refresh={userId:user?.id,email:user.email} as JWTpayloadRt;
             const access_token=await this.jwtService.signAsync(payload_access);
             const refresh_token=await this.jwtService.signAsync(payload_refresh);
@@ -89,7 +90,7 @@ return user;
              if(!user){
                 throw new NotFoundException("User not found!");
              }
-             const payload_access = {userId:user?.id} as JWTpayload;
+             const payload_access = {userId:user?.id,roles:user.roles,email:user?.email} as JWTpayload;
              const payload_refresh={userId:user?.id} as JWTpayloadRt;
              const access_token=await this.jwtService.signAsync(payload_access);
              const refresh_token=await this.jwtService.signAsync(payload_refresh);
@@ -122,7 +123,7 @@ return user;
                 }
                 //Create the user
                 const user=await this.usersService.create(name,lastname,email,result,image,role);
-                const payload_access = {userId:user?.id} as JWTpayload;
+                const payload_access = {userId:user?.id,roles:user.roles,email:user?.email} as JWTpayload;
                 const payload_refresh={userId:user?.id} as JWTpayloadRt;
                 const access_token=await this.jwtService.signAsync(payload_access);
                 const refresh_token=await this.jwtService.signAsync(payload_refresh);

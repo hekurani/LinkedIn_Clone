@@ -56,7 +56,7 @@ function App() {
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
           </Route>
 
-          <Route element={<ProtectedRoutes role="user" />}>
+          <Route element={<ProtectedRoutes role="jobseeker" />}>
             <Route path="/" element={<Feed />} />
             <Route path="/:userId/profile" element={<Profile />} />
             <Route path="/job" element={<Job />} />

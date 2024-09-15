@@ -5,12 +5,13 @@ import { getToken } from "../utilities/getToken";
 
 const ProtectedRoutes = ({ role }) => {
   const payload = getToken();
-
-  if (!payload || role !== payload?.user?.role) {
+  console.log(payload);
+  if (!payload || !payload?.roles.find((el)=>el.role===role)) {
     return <Navigate to="/Login" />;
-  }
 
+  }
   return <Outlet />;
+  
 };
 
 export default ProtectedRoutes;
