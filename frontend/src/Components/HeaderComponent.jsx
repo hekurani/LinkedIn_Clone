@@ -16,6 +16,7 @@ import getMe from "../utilities/user/getMe";
 
 const socket = io("http://localhost:8003");
 const HeaderComponent = () => {
+  const [isVisibleBussinesPart, setVisibleBussinesPart] = useState(false);
   
   const [countConnections, setCountConnections] = useState(0);
   const connectionBadge = async () => {
@@ -33,10 +34,25 @@ const HeaderComponent = () => {
       socket.off("newFriendRequest");
     };
   }, []);
+  const handleResize = () => {
+    if (window.innerWidth <= 1272) {
+      setVisibleBussinesPart(false);
+    } else {
+      setVisibleBussinesPart(true);
+    }
+};
+
+useEffect(() => {
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+        window.removeEventListener("resize", handleResize);
+    };
+}, []);
   return (
     <div
-      className="header h-16 grid grid-cols-12 items-center"
-      style={{ border: "1px solid blue" }}
+      className="h-16 grid grid-cols-12 items-center lg:pr-3 md:pr-40 sm:pr-[440px] xmd:pr-[400px]"
+      style={{ boxShadow: "0 2px 4px 0 rgba(0,0,0,0.1)" }}
     >
       <div className="logo-search col-span-4 lg:col-span-5 flex justify-center items-center">
         <div className="logo flex justify-end items-center pr-2">
@@ -57,29 +73,29 @@ const HeaderComponent = () => {
           />
         </div>
       </div>
-      <div className="navigation col-span-8 lg:col-span-5 flex justify-start items-center space-x-10 border-r border-black">
-        <Link to="/" className="text-center mx-2">
+      <div className="navigation col-span-8 lg:col-span-5 flex justify-start items-center ml-5">
+        <Link to="/" className="text-center mx-5">
           <FontAwesomeIcon icon={faHouse} className="icon" />
           <span className="text-sm block hidden lg:block">Home</span>
         </Link>
-        <Link to="/connections" className="text-center mx-2 relative">
+        <Link to="/connections" className="text-center mx-5">
           <FontAwesomeIcon icon={faUserPlus} className="icon" />
           {countConnections > 0 && <p className="notification-badge">{countConnections}</p>}
           <span className="text-sm block hidden lg:block">My Network</span>
         </Link>
-        <Link to="/jobs" className="text-center mx-2">
+        <Link to="/jobs" className="text-center mx-5">
           <FontAwesomeIcon icon={faBriefcase} className="icon" />
           <span className="text-sm block hidden lg:block">Jobs</span>
         </Link>
-        <Link to="/messages" className="text-center mx-2">
+        <Link to="/messages" className="text-center mx-5">
           <FontAwesomeIcon icon={faCommentDots} className="icon" />
           <span className="text-sm block hidden lg:block">Messaging</span>
         </Link>
-        <Link to="/notifications" className="text-center mx-2">
+        <Link to="/notifications" className="text-center mx-5">
           <FontAwesomeIcon icon={faBell} className="icon" />
           <span className="text-sm block hidden lg:block">Notifications</span>
         </Link>
-        <Link to="/profile" className="text-center mx-2 flex items-center">
+        <Link to="/profile" className="text-center mx-5">
           <img
             src={profile}
             width={20}
@@ -87,13 +103,16 @@ const HeaderComponent = () => {
             alt="profile"
             className="mr-1 hidden lg:block"
           />
-          <span className="text-sm hidden lg:block">Me</span>
+          <span className="text-sm block hidden lg:block">Me</span>
         </Link>
       </div>
-      <div className="business col-span-4 lg:col-span-2 flex justify-center items-center hidden lg:flex">
-        <p className="mx-4">For Business</p>
-        <p className="mx-4">Try Premium for free</p>
-      </div>
+      {isVisibleBussinesPart && (
+          <div className="business col-span-4 lg:col-span-2 flex justify-center items-center hidden lg:flex">
+          <p className="mx-4">For Business</p>
+          <p className="mx-4">Try Premium for free</p>
+        </div>
+        )
+      }
     </div>
   );
 };
