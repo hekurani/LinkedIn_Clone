@@ -37,7 +37,7 @@ const AddPostModal = ({ user ,closeModal}) => {
   };
 
   return (
-    <div className='main fixed inset-0 flex items-center justify-center' style={{ zIndex: 50 }}>
+    <div className='fixed inset-0 flex items-center justify-center' style={{ zIndex: 50 }}>
       <div className='w-96 h-96 rounded shadow-2xl' style={{ backgroundColor: 'white', width: '700px', height: '90vh' }}>
         <div className='header m-7 flex'>
           <img className='ml-1 w-14 h-14 mb-2' style={{ borderRadius: '50%', objectFit: 'cover' }} src={user.imageProfile?user.imageProfile:defaultProfile} alt={'p'} />
