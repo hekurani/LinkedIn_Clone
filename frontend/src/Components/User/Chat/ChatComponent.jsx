@@ -12,11 +12,13 @@ function ChatPage({user,onCloseChat,chatRoomId }) {
   const [input, setInput] = useState('');
   const [isChatOpen, setIsChatOpen] = useState(true);//me handle chat open/close
   const messagesEndRef = useRef(null);//mesazhi i fundit
+  const [otherUser, setOtherUser] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(`http://localhost:4000/chatroom/allMessages/${chatRoomId}`);
       const apiMessages = response.data;
+      setOtherUser(response.data[0].user);
       setMessages(apiMessages);
     };
   
@@ -90,9 +92,9 @@ function ChatPage({user,onCloseChat,chatRoomId }) {
   return (
     <div className={`h-96 w-80  rounded-t-md fixed bottom-0 right-40 mr-40 ${isChatOpen ? '' : 'hidden'}`} style={{ borderTop: '1px solid grey', borderLeft: '1px solid grey',backgroundColor:'white', borderRight: '1px solid grey' }}>
       <div className='header flex justify-items-center items-center' style={{ borderBottom: '1px solid black' }}>
-        <img src={user.imageProfile} className='ml-2 h-8 w-8' alt='profili' style={{borderRadius:'50%',objectFit:'cover'}}/>
+        <img src={otherUser?.imageProfile} className='ml-2 h-8 w-8' alt='profili' style={{borderRadius:'50%',objectFit:'cover'}}/>
         <div className='ml-4 mr-3'>
-          <p className='font-semibold'>Ferat Gashi</p>
+          <p className='font-semibold'>{otherUser?.name} {otherUser?.lastname} </p>
           <p className='text-xs'>Available on mobile</p>
         </div>
         <span className='ml-auto'>
