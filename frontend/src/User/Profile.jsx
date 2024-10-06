@@ -11,6 +11,8 @@ import getUser from "../utilities/user/getUser";
 const Profile = () => {
   const [loggedUser, setLoggedUser] = useState({});
   const [foreignUser, setForeignUser] = useState({});
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatRoomId, setChatRoomId] = useState(null);
   const { userId } = useParams();
 
   useEffect(() => {
@@ -28,6 +30,16 @@ const Profile = () => {
     fetchForeignUser();
   }, [userId]);
 
+  const handleOpenChatPage = (chatRoomId) => {
+    setIsChatOpen(true);
+    setChatRoomId(chatRoomId);
+  };
+
+  const handleCloseChatPage = () => {
+    setIsChatOpen(false);
+    setChatRoomId(null);
+  };
+
   return (
     <div>
       {userId == loggedUser.id ? (
@@ -36,8 +48,16 @@ const Profile = () => {
         <FriendsProfile user={foreignUser} />
       )}
       <ProfileSection user={loggedUser} />
-      <ChatPage user={loggedUser} />
-      <ChatListingComponent user={loggedUser} />
+      
+      <ChatListingComponent user={loggedUser} onChatRowClick={handleOpenChatPage} />
+
+      {isChatOpen && (
+        <ChatPage
+          user={loggedUser}
+          onCloseChat={handleCloseChatPage}
+          chatRoomId={chatRoomId}
+        />
+      )}
     </div>
   );
 };

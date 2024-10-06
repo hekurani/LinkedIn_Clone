@@ -7,7 +7,7 @@ import sendMessage from '../../../utilities/messages/sendMessage';
 
 let socket;
 
-function ChatPage({user,onCloseChat,chatRoomId }) {
+function ChatPage({user = null,onCloseChat = () => {},chatRoomId = null }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isChatOpen, setIsChatOpen] = useState(true);//me handle chat open/close

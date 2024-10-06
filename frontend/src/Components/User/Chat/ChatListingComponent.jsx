@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const ChatListingComponent = ({ user, onChatRowClick }) => {
+const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
   const [chatRooms, setChatRooms] = useState([]);
   const [messages, setAllMessages] = useState([]);
   const [loggedInUser, setLoggedInUser] = useState({})
