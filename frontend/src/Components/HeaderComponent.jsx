@@ -13,8 +13,9 @@ import { Link } from "react-router-dom";
 import profile from "../assets/profile.png";
 import { io } from "socket.io-client";
 import getMe from "../utilities/user/getMe";
-
+import { getToken } from "../utilities/getToken";
 const socket = io("http://localhost:8003");
+
 const HeaderComponent = () => {
   const [isVisibleBussinesPart, setVisibleBussinesPart] = useState(false);
   
@@ -23,6 +24,11 @@ const HeaderComponent = () => {
     const  data  = await getMe();
     setCountConnections(data?.countUnseenConnections);
   };
+  const token = getToken();
+  useEffect(() => {
+    if (!token) return;
+  }, [token]);
+
   useEffect(() => {
     connectionBadge();
 
@@ -41,8 +47,7 @@ const HeaderComponent = () => {
       setVisibleBussinesPart(true);
     }
 };
-
-useEffect(() => {
+  useEffect(() => {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => {
@@ -68,12 +73,12 @@ useEffect(() => {
           <input
             type="text"
             style={{ backgroundColor: "#e6f2ff" }}
-            className="bg-current w-60 mt-1 border pl-2 h-8 rounded-sm hidden lg:block"
+            className="bg-current w-52 mt-1 border pl-2 h-8 rounded-sm hidden lg:block"
             placeholder="Search"
           />
         </div>
       </div>
-      <div className="navigation col-span-8 lg:col-span-5 flex justify-start items-center ml-5">
+      <div className="navigation col-span-8 lg:col-span-5 flex justify-start items-center ">
         <Link to="/" className="text-center mx-5">
           <FontAwesomeIcon icon={faHouse} className="icon" />
           <span className="text-sm block hidden lg:block">Home</span>
@@ -81,7 +86,7 @@ useEffect(() => {
         <Link to="/connections" className="text-center mx-5">
           <FontAwesomeIcon icon={faUserPlus} className="icon" />
           {countConnections > 0 && <p className="notification-badge">{countConnections}</p>}
-          <span className="text-sm block hidden lg:block">My Network</span>
+          <span className="text-sm  hidden w-full lg:block">My Network</span>
         </Link>
         <Link to="/jobs" className="text-center mx-5">
           <FontAwesomeIcon icon={faBriefcase} className="icon" />

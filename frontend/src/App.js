@@ -27,7 +27,7 @@ import AdminDashboard from "./admin/components/AdminDashboard.jsx";
 function App() {
   return (
     <BrowserRouter>
-      {getToken() && <HeaderComponent />}
+      <HeaderComponent />
       <EmailProvider>
         <Routes>
           <Route
@@ -59,7 +59,7 @@ function App() {
           <Route element={<ProtectedRoutes role="jobseeker" />}>
             <Route path="/" element={<Feed />} />
             <Route path="/:userId/profile" element={<Profile />} />
-            <Route path="/job" element={<Job />} />
+            <Route path="/jobs" element={<Job />} />
             <Route path="/job-listing" element={<JobListing />} />
             <Route path="/connections" element={<Connections />} />
           </Route>
