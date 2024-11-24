@@ -9,11 +9,12 @@ import {
   faCommentDots,
   faBell,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import profile from "../assets/profile.png";
 import { io } from "socket.io-client";
 import getMe from "../utilities/user/getMe";
 import { getToken } from "../utilities/getToken";
+import {exludedPaths} from "./lib/helpers";
 const socket = io("http://localhost:8003");
 
 const HeaderComponent = () => {
@@ -24,6 +25,7 @@ const HeaderComponent = () => {
     const  data  = await getMe();
     setCountConnections(data?.countUnseenConnections);
   };
+  const location = useLocation();
   const token = getToken();
   useEffect(() => {
     if (!token) return;
@@ -54,6 +56,7 @@ const HeaderComponent = () => {
         window.removeEventListener("resize", handleResize);
     };
 }, []);
+if (exludedPaths.some(path => location.pathname.includes(path))) return null;
   return (
     <div
       className="h-16 grid grid-cols-12 items-center lg:pr-3 md:pr-40 sm:pr-[440px] xmd:pr-[400px]"

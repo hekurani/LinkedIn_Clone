@@ -5,10 +5,10 @@ import JobListing from '../Components/Jobs/JobListing'
 import JobBar from '../Components/Jobs/JobBar'
 const Job = () => {
   return (
-    <div>
+    <div style={{backgroundColor:"#f4f2ee"}}>
       <JobHeader />
       <JobBar />
-      <div className="flex">
+      <div className="grid gap-0 grid-cols-2">
       <JobListing />
       <JobDescription />
       </div>

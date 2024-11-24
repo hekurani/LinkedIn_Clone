@@ -1,6 +1,6 @@
 .main{
     width: 500px;
-    height: auto;
+    height: 100vh;
     border:1px solid blue;
 
 }
@@ -9,15 +9,6 @@
     color: white;
 }
 
-.tittleLocation{
-    font-weight: 550;
-}
-
-.contents {
-    max-height: 1300px;
-    overflow-y: auto !important;
-    white-space: nowrap;
-  }
   
   .contents::-webkit-scrollbar {
     width: 5px; 
