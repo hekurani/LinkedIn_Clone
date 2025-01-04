@@ -15,8 +15,8 @@ import HeaderComponent from "./Components/HeaderComponent";
 import Feed from "./User/Feed";
 import Profile from "./User/Profile";
 import { FormProvider } from "./User/context/FormContext";
-import Job from "./Jobs/Job";
-import JobListing from "./Components/Jobs/JobListing";
+import Job from "./Components/Jobs/Job.jsx";
+import JobListing from "./Components/Jobs/components/JobListing.jsx";
 import Connections from "./User/Connections";
 // protected routes component
 import ProtectedRoutes from "./Components/ProtectedRoutes.js";

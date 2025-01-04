@@ -9,6 +9,9 @@ const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
   useEffect(() => {
     const getAllChats = async () => {
       try {
+        if (!user.id){
+          return;
+        }
         const response = await axios.get(`/chatroom/chatByUser/${user.id}`);
         setChatRooms(response.data);
       } catch (error) {
