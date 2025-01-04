@@ -10,10 +10,11 @@ import { company } from 'src/company/company.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([country,city,company]),JwtModule,
+    TypeOrmModule.forFeature([country, city, company]),
+    JwtModule,
     ConfigModule,
     JwtModule.registerAsync({
-      imports: [ConfigModule], 
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         global: true,
@@ -23,6 +24,6 @@ import { company } from 'src/company/company.entity';
     }),
   ],
   controllers: [LocationController],
-  providers: [LocationService]
+  providers: [LocationService],
 })
 export class LocationModule {}

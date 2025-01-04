@@ -1,4 +1,13 @@
-import { Controller, Post, Body,Get,Delete,Param,Put, Patch } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Delete,
+  Param,
+  Put,
+  Patch,
+} from '@nestjs/common';
 import { MessageService } from './message.service';
 import { UpdateMessageDTO } from './dto/update.message.dto';
 import { Public } from 'src/auth/decorators/Public-Api.decorator';
@@ -6,14 +15,14 @@ import { Public } from 'src/auth/decorators/Public-Api.decorator';
 @Controller('message')
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}
- @Public()
+  @Public()
   @Get('/messages')
-  findAllMessages(){
-      return this.messageService.findAllMessages();
+  findAllMessages() {
+    return this.messageService.findAllMessages();
   }
-  
-////per testim duhet te largohet me pas ne implementim front-back
-@Public()
+
+  ////per testim duhet te largohet me pas ne implementim front-back
+  @Public()
   @Post('/sendMessage')
   async sendMessage(
     @Body('userId') userId: number,
@@ -24,22 +33,19 @@ export class MessageController {
   }
 
   @Get('/:id')
-  findMessage(@Param('id') id:string){
-      return this.messageService.findOne(parseInt(id));
+  findMessage(@Param('id') id: string) {
+    return this.messageService.findOne(parseInt(id));
   }
- 
 
-  
   @Delete('/:id')
-  remove(@Param('id') id:string){
-      return this.messageService.remove(parseInt(id));
+  remove(@Param('id') id: string) {
+    return this.messageService.remove(parseInt(id));
   }
   @Patch('/:id')
-  async update(@Param('id') id: string, @Body() updateMessageDto: UpdateMessageDTO) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateMessageDto: UpdateMessageDTO,
+  ) {
     return this.messageService.update(parseInt(id), updateMessageDto);
   }
-
-  
-
-
 }

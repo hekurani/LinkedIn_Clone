@@ -1,15 +1,32 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, SetMetadata } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  UnauthorizedException,
+  SetMetadata,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector, private jwtService: JwtService,private configService:ConfigService) {}
+  constructor(
+    private reflector: Reflector,
+    private jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredRoles = this.reflector.get<string[]>('roles', context.getHandler());
-    if (!requiredRoles || !Array.isArray(requiredRoles) || requiredRoles.length === 0) {
+    const requiredRoles = this.reflector.get<string[]>(
+      'roles',
+      context.getHandler(),
+    );
+    if (
+      !requiredRoles ||
+      !Array.isArray(requiredRoles) ||
+      requiredRoles.length === 0
+    ) {
       return true;
     }
 
@@ -20,16 +37,15 @@ export class RolesGuard implements CanActivate {
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync(
-        token,
-        {
-          secret: this.configService.get<string>("JWT_SECRET")
-        }
-      );
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+      });
       const userRoles = payload?.role || []; //rolin e marrum na dekodimi i tokenit
 
       // me check nese e ka rolin qe po e kerkojme
-      const hasRequiredRole = requiredRoles.some(role => userRoles.includes(role));
+      const hasRequiredRole = requiredRoles.some((role) =>
+        userRoles.includes(role),
+      );
       if (!hasRequiredRole) {
         throw new UnauthorizedException();
       }
@@ -44,5 +60,4 @@ export class RolesGuard implements CanActivate {
     const [type, token] = request.headers.authorization?.split(' ') || [];
     return type === 'Bearer' ? token : undefined;
   }
-
 }

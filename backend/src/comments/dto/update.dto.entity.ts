@@ -1,10 +1,7 @@
-import {   IsOptional, IsString } from "class-validator";
+import { IsOptional, IsString } from 'class-validator';
 
-export class UpdateCommentDto{
-
-    @IsString()
-    @IsOptional()
-    text?:string
-
-
+export class UpdateCommentDto {
+  @IsString()
+  @IsOptional()
+  text?: string;
 }

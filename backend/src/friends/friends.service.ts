@@ -14,14 +14,11 @@ export class FriendsService {
   async getFriends(userId: number) {
     const user = await this.userService.findOne(userId);
     const friends = await this.friend.find({
-      where: [
-        { sender: user },
-        { receiver: user },
-      ],
+      where: [{ sender: user }, { receiver: user }],
       relations: ['sender', 'receiver'],
     });
 
-    const friendList = friends.map(friend => {
+    const friendList = friends.map((friend) => {
       if (friend.sender.id === userId) {
         return friend.receiver;
       } else {

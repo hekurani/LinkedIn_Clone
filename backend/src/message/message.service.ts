@@ -1,4 +1,10 @@
-import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Message } from './message.entity';
@@ -6,7 +12,11 @@ import { User } from '../users/user.entity';
 import { ChatRoom } from '../chatroom/chat.entity';
 @Injectable()
 export class MessageService {
-  constructor(@InjectRepository(Message) private repo: Repository<Message>, @InjectRepository(User) private userRepository: Repository<User>, @InjectRepository(ChatRoom) private chatRepository: Repository<ChatRoom>) { }
+  constructor(
+    @InjectRepository(Message) private repo: Repository<Message>,
+    @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(ChatRoom) private chatRepository: Repository<ChatRoom>,
+  ) {}
 
   async sendMessage(messageText: string, userId: number, chatId: number) {
     const user = await this.userRepository.findOne({ where: { id: userId } });
@@ -17,12 +27,10 @@ export class MessageService {
     }
     const message = this.repo.create({ description: messageText, user, chat });
     const savedMessage = await this.repo.save(message);
-    chat.messages.push((savedMessage.id));
+    chat.messages.push(savedMessage.id);
     await this.chatRepository.save(chat);
 
-
     return this.repo.save(message);
-
   }
 
   async findAllMessages() {
@@ -30,13 +38,12 @@ export class MessageService {
   }
 
   async findOne(id: number) {
-
     if (!id) {
       return null;
     }
     let message = await this.repo.find({
       where: { id: id },
-      relations: ['user']
+      relations: ['user'],
     });
     return message;
   }
@@ -52,19 +59,17 @@ export class MessageService {
     return this.repo.remove(message);
   }
 
-
-
   async update(id: number, attrs: Partial<Message>) {
     const message = await this.repo.findOne({ where: { id: id } });
     if (!message) {
       throw new NotFoundException('Message not found');
     }
-/*  attrs.editedAt=new Date(); */
+    /*  attrs.editedAt=new Date(); */
 
     Object.assign(message, attrs);
     return this.repo.save(message);
   }
-/*   async sendMessage1(senderId: string, receiverId: string, messageText: string) {//metod per me send message e krijon nje chat nese nuk ekziston
+  /*   async sendMessage1(senderId: string, receiverId: string, messageText: string) {//metod per me send message e krijon nje chat nese nuk ekziston
     // id i qesim ne number preseim number
     const senderIdNumber = parseInt(senderId);
     const receiverIdNumber = parseInt(receiverId);
@@ -108,10 +113,4 @@ export class MessageService {
   
     return savedMessage;
   } */
-  
-  
-  
-
-
 }
-

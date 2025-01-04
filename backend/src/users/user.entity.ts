@@ -1,86 +1,94 @@
-import { BeforeInsert,BeforeRemove,BeforeUpdate, JoinColumn, JoinTable, ManyToMany, Unique } from "typeorm";
-import { Entity,Column,PrimaryGeneratedColumn,OneToMany } from "typeorm";
-import { Exclude } from "class-transformer";
-import { Posts } from "../posts/post.entity";
-import { Comment } from "../comments/Entity/comment.entity";
-import { Skill } from "src/skills/skills.entity";
-import { Role } from "src/roles/Roles.entity";
-import { ArrayNotEmpty } from "class-validator";
-import { postreaction } from "src/PostReaction/postreaction.entity";
-import { commentreaction } from "src/comment-reaction/comment-reaction.entity";
-import { Reposts } from "src/reposts/reposts.entity";
-import { company } from "src/company/company.entity";
+import {
+  BeforeInsert,
+  BeforeRemove,
+  BeforeUpdate,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  Unique,
+} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { Posts } from '../posts/post.entity';
+import { Comment } from '../comments/Entity/comment.entity';
+import { Skill } from 'src/skills/skills.entity';
+import { Role } from 'src/roles/Roles.entity';
+import { ArrayNotEmpty } from 'class-validator';
+import { postreaction } from 'src/PostReaction/postreaction.entity';
+import { commentreaction } from 'src/comment-reaction/comment-reaction.entity';
+import { Reposts } from 'src/reposts/reposts.entity';
+import { company } from 'src/company/company.entity';
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
-    id:number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    name:string;
+  @Column()
+  name: string;
 
-    @Column()
-    lastname:string;
+  @Column()
+  lastname: string;
 
-    @Column({unique:true})
-    email:string;
+  @Column({ unique: true })
+  email: string;
 
-    @Column({default:0})
-    countUnseenConnections:number;
+  @Column({ default: 0 })
+  countUnseenConnections: number;
 
-    @OneToMany(()=>postreaction,postreaction=>postreaction.user)
-    likes:postreaction[]
+  @OneToMany(() => postreaction, (postreaction) => postreaction.user)
+  likes: postreaction[];
 
-    @OneToMany(()=>commentreaction,commentreaction=>commentreaction.user)
-    commentReaction:commentreaction[]
+  @OneToMany(() => commentreaction, (commentreaction) => commentreaction.user)
+  commentReaction: commentreaction[];
 
-    @ManyToMany(()=>Role)
-    @ArrayNotEmpty()
-    @JoinTable()
-    roles:Role[]
-    
-    @Exclude()
-    @Column({nullable:true,select:false})
-    password:string;
+  @ManyToMany(() => Role)
+  @ArrayNotEmpty()
+  @JoinTable()
+  roles: Role[];
 
-    @ManyToMany(()=>Skill,{eager:true})
-    @JoinTable()
-    skills: Skill[]; 
+  @Exclude()
+  @Column({ nullable: true, select: false })
+  password: string;
 
-    @Exclude()
-    @Column({nullable:true,select:false})
-    RefreshToken:string;
+  @ManyToMany(() => Skill, { eager: true })
+  @JoinTable()
+  skills: Skill[];
 
-    @OneToMany(() => Posts, post => post.user)
-    posts: Posts[];
-    
-    @OneToMany(() => Comment, comment => comment.user) 
-    comments: Comment[]; 
+  @Exclude()
+  @Column({ nullable: true, select: false })
+  RefreshToken: string;
 
-    @Column({nullable:true,default:'profile.png'})
-    imageProfile:string;
+  @OneToMany(() => Posts, (post) => post.user)
+  posts: Posts[];
 
-    @Column({nullable:true})
-    gender:String;
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments: Comment[];
 
-    @OneToMany(()=>company,(company)=>company.owner)
-    companies:company[]
-    
-@OneToMany(()=>Reposts,reposts=>reposts.user)
-reposts:Reposts[]
+  @Column({ nullable: true, default: 'profile.png' })
+  imageProfile: string;
 
-@BeforeRemove()
-beforeRemove(){
+  @Column({ nullable: true })
+  gender: String;
+
+  @OneToMany(() => company, (company) => company.owner)
+  companies: company[];
+
+  @OneToMany(() => Reposts, (reposts) => reposts.user)
+  reposts: Reposts[];
+
+  @BeforeRemove()
+  beforeRemove() {
     console.log(`The removed user id is ${this.id}`);
-}
+  }
 
-@BeforeUpdate()
-beforeUpdate(){
-    console.log(`The updated user id is ${this.id}` );
-}
-    
-@BeforeInsert()
-beforeInsert(){
+  @BeforeUpdate()
+  beforeUpdate() {
+    console.log(`The updated user id is ${this.id}`);
+  }
+
+  @BeforeInsert()
+  beforeInsert() {
     console.log(`The new user id is ${this.id}`);
-}
+  }
 }

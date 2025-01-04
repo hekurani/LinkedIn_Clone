@@ -11,10 +11,13 @@ import { PostsModule } from 'src/posts/posts.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Reposts]),JwtModule,
-    ConfigModule,UsersModule,PostsModule,
+    TypeOrmModule.forFeature([Reposts]),
+    JwtModule,
+    ConfigModule,
+    UsersModule,
+    PostsModule,
     JwtModule.registerAsync({
-      imports: [ConfigModule], 
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         global: true,
@@ -24,6 +27,6 @@ import { PostsModule } from 'src/posts/posts.module';
     }),
   ],
   providers: [RepostsService],
-  controllers: [RepostsController]
+  controllers: [RepostsController],
 })
 export class RepostsModule {}

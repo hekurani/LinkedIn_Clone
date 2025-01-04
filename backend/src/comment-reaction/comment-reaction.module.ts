@@ -10,10 +10,13 @@ import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([commentreaction]),JwtModule,
-    ConfigModule,UsersModule,CommentsModule,
+    TypeOrmModule.forFeature([commentreaction]),
+    JwtModule,
+    ConfigModule,
+    UsersModule,
+    CommentsModule,
     JwtModule.registerAsync({
-      imports: [ConfigModule], 
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         global: true,
@@ -23,6 +26,6 @@ import { UsersModule } from 'src/users/users.module';
     }),
   ],
   controllers: [CommentReactionController],
-  providers: [CommentReactionService]
+  providers: [CommentReactionService],
 })
 export class CommentReactionModule {}

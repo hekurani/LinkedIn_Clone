@@ -10,10 +10,13 @@ import { PostsModule } from 'src/posts/posts.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([postreaction]),JwtModule,
-    ConfigModule,UsersModule,PostsModule,
+    TypeOrmModule.forFeature([postreaction]),
+    JwtModule,
+    ConfigModule,
+    UsersModule,
+    PostsModule,
     JwtModule.registerAsync({
-      imports: [ConfigModule], 
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         global: true,
@@ -24,6 +27,6 @@ import { PostsModule } from 'src/posts/posts.module';
   ],
   controllers: [ReactionController],
   providers: [ReactionService],
-  exports:[ReactionService]
+  exports: [ReactionService],
 })
 export class PostReactionModule {}

@@ -12,7 +12,6 @@ import { RolesService } from 'src/roles/roles.service';
 import { Role } from 'src/roles/Roles.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-
 @Module({
   imports: [
     TypeOrmModule.forFeature([Role]),
@@ -26,14 +25,20 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: '600s' },
       }),
-    }),MulterModule.register({
-      dest: "./",
-    })
+    }),
+    MulterModule.register({
+      dest: './',
+    }),
   ],
   controllers: [AuthController],
-  providers: [AuthService,MailService,RolesService, {
-    provide: APP_GUARD,
-    useClass: AuthentGuard
-  }],
+  providers: [
+    AuthService,
+    MailService,
+    RolesService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthentGuard,
+    },
+  ],
 })
 export class AuthModule {}

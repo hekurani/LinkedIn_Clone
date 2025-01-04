@@ -5,10 +5,13 @@ import { Skill } from './skills.entity';
 import { User } from '../users/user.entity';
 @Injectable()
 export class SkillsService {
-  constructor(@InjectRepository(Skill) private repo: Repository<Skill>,@InjectRepository(User) private userRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(Skill) private repo: Repository<Skill>,
+    @InjectRepository(User) private userRepository: Repository<User>,
+  ) {}
 
-   create(name:string) {
-    const skill =  this.repo.create({ name });
+  create(name: string) {
+    const skill = this.repo.create({ name });
     return this.repo.save(skill);
   }
 
@@ -21,7 +24,7 @@ export class SkillsService {
   }
 
   async remove(id: number) {
-    const skill = await this.repo.findOne({where:{id}});//kushit gabim ka 
+    const skill = await this.repo.findOne({ where: { id } }); //kushit gabim ka
     if (!skill) {
       throw new NotFoundException(
         'The skill that you wanted to delete doesnt exist at all!',
@@ -33,7 +36,6 @@ export class SkillsService {
   async findAll() {
     return this.repo.find();
   }
-
 
   async update(id: number, attrs: Partial<Skill>) {
     const skill = await this.findOne(id);

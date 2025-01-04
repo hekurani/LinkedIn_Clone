@@ -3,33 +3,33 @@ import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-
 @Injectable()
 export class MailService {
   private transporter;
-  private otp ;
+  private otp;
 
   constructor(private readonly configService: ConfigService) {
-  
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user:  configService.get<string>('GMAIL_USER'),
-        pass:  configService.get<string>('GMAIL_PASSWORD'),
+        user: configService.get<string>('GMAIL_USER'),
+        pass: configService.get<string>('GMAIL_PASSWORD'),
       },
     });
   }
 
-   generateOTP (){
+  generateOTP() {
     return Math.floor(100000 + Math.random() * 900000);
-  };
-
-   verifyOTP (incomingOTP:string):boolean { // metod per verifikim te otp coding qe vjen nga fronti dhe otp te gjeneruar
-      return incomingOTP == this.otp;
   }
 
-  async sendMail(recipientEmail: string /* otp: string */): Promise<string> { //meotda per me dergu email
-     this.otp = this.generateOTP();//gjenerojm otp te requesit per dergim te email
+  verifyOTP(incomingOTP: string): boolean {
+    // metod per verifikim te otp coding qe vjen nga fronti dhe otp te gjeneruar
+    return incomingOTP == this.otp;
+  }
+
+  async sendMail(recipientEmail: string /* otp: string */): Promise<string> {
+    //meotda per me dergu email
+    this.otp = this.generateOTP(); //gjenerojm otp te requesit per dergim te email
     const mailConfig = {
       from: this.configService.get<string>('GMAIL_USER'),
       to: recipientEmail,

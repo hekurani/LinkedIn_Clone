@@ -12,7 +12,7 @@ import { city } from 'src/location/entity/city.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User,city,company]),
+    TypeOrmModule.forFeature([User, city, company]),
     UsersModule,
     ConfigModule, // Make sure ConfigModule is imported to provide access to ConfigService
     JwtModule.registerAsync({
@@ -23,11 +23,12 @@ import { city } from 'src/location/entity/city.entity';
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: '600s' },
       }),
-    }),MulterModule.register({
+    }),
+    MulterModule.register({
       dest: './images',
-    })
+    }),
   ],
   providers: [CompanyService],
-  controllers: [CompanyController]
+  controllers: [CompanyController],
 })
 export class CompanyModule {}

@@ -6,37 +6,47 @@ import { Message } from '../message/message.entity';
 import { User } from 'src/users/user.entity';
 @Injectable()
 export class ChatRoomService {
-  constructor(@InjectRepository(ChatRoom) private repo: Repository<ChatRoom> ,@InjectRepository(User) private userRepository:Repository<User>,@InjectRepository(Message) private messageRepository: Repository<Message>) {}
+  constructor(
+    @InjectRepository(ChatRoom) private repo: Repository<ChatRoom>,
+    @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Message) private messageRepository: Repository<Message>,
+  ) {}
 
-    async createChatRoom(userOneId:number,userTwoId:number){
-      const userOne = await this.userRepository.findOne({where:{id:userOneId}});
-      const userTwo = await this.userRepository.findOne({where:{id:userTwoId}});
-       const chat =  this.repo.create({user1:userOne,user2:userTwo});
-        await this.repo.save(chat);
-        return chat;
-    }
+  async createChatRoom(userOneId: number, userTwoId: number) {
+    const userOne = await this.userRepository.findOne({
+      where: { id: userOneId },
+    });
+    const userTwo = await this.userRepository.findOne({
+      where: { id: userTwoId },
+    });
+    const chat = this.repo.create({ user1: userOne, user2: userTwo });
+    await this.repo.save(chat);
+    return chat;
+  }
 
-    async getChatRoomByUser(id: number) {
-      return this.repo.createQueryBuilder('chatroom')
-        .leftJoinAndSelect('chatroom.user1', 'user1')
-        .leftJoinAndSelect('chatroom.user2', 'user2')
-        .where('chatroom.user1 = :id', { id })
-        .orWhere('chatroom.user2 = :id', { id })
-        .getMany();
-    }
+  async getChatRoomByUser(id: number) {
+    return this.repo
+      .createQueryBuilder('chatroom')
+      .leftJoinAndSelect('chatroom.user1', 'user1')
+      .leftJoinAndSelect('chatroom.user2', 'user2')
+      .where('chatroom.user1 = :id', { id })
+      .orWhere('chatroom.user2 = :id', { id })
+      .getMany();
+  }
 
   async findOne(id: number) {
     if (!id) {
       return null;
     }
-    let chatroom = await this.repo.find({ where: { id: id } ,relations:['user1','user2']});
+    let chatroom = await this.repo.find({
+      where: { id: id },
+      relations: ['user1', 'user2'],
+    });
     return chatroom;
   }
 
-  
-
   async remove(id: number) {
-    const chat = await this.repo.findOne({where:{id}});
+    const chat = await this.repo.findOne({ where: { id } });
     if (!chat) {
       throw new NotFoundException(
         'The chat that you wanted to delete doesnt exist at all!',
@@ -45,12 +55,13 @@ export class ChatRoomService {
     return this.repo.remove(chat);
   }
 
-
-  async findAllMessages(chatId: number) :Promise<Message[]>{//metod qe gjen gjitha mesazhet ne baz te chatId
-    return this.messageRepository.find({ where: { chat: { id: chatId } },
-    relations: ['user']});
+  async findAllMessages(chatId: number): Promise<Message[]> {
+    //metod qe gjen gjitha mesazhet ne baz te chatId
+    return this.messageRepository.find({
+      where: { chat: { id: chatId } },
+      relations: ['user'],
+    });
   }
-
 
   async update(id: number, attrs: Partial<ChatRoom>) {
     const chat = await this.findOne(id);
@@ -60,12 +71,13 @@ export class ChatRoomService {
     Object.assign(chat, attrs);
     return this.repo.save(chat);
   }
-  async getAllChatRooms() :Promise<ChatRoom[]>{//metod qe gjen gjitha chatrooms{
+  async getAllChatRooms(): Promise<ChatRoom[]> {
+    //metod qe gjen gjitha chatrooms{
     //also user object to return
-    return this.repo.find({relations:['user1','user2']}) ;
+    return this.repo.find({ relations: ['user1', 'user2'] });
   }
 
-/*   async sendMessage1(senderId: string, receiverId: string, messageText: string) {//metod per me send message e krijon nje chat nese nuk ekziston
+  /*   async sendMessage1(senderId: string, receiverId: string, messageText: string) {//metod per me send message e krijon nje chat nese nuk ekziston
     // id i qesim ne number preseim number
     const senderIdNumber = parseInt(senderId);
     const receiverIdNumber = parseInt(receiverId);
@@ -109,10 +121,4 @@ export class ChatRoomService {
   
     return savedMessage;
   } */
-  
-  
-  
-
-
 }
-

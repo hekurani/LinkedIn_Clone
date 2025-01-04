@@ -4,18 +4,15 @@ import { Server } from 'http';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-      cors: {
+    cors: {
       origin: '*',
       credentials: true,
     },
-  }
-  );
-  
-const httpServer = app.getHttpServer();
-const io = new Server(httpServer);
-app.useWebSocketAdapter(new IoAdapter(io));
+  });
 
-
+  const httpServer = app.getHttpServer();
+  const io = new Server(httpServer);
+  app.useWebSocketAdapter(new IoAdapter(io));
 
   await app.listen(4000);
 }

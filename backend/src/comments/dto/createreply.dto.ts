@@ -1,6 +1,6 @@
-import {   IsString } from "class-validator";
+import { IsString } from 'class-validator';
 
-export class CreateReplyDto{
-    @IsString()
-    reply?:string
+export class CreateReplyDto {
+  @IsString()
+  reply?: string;
 }

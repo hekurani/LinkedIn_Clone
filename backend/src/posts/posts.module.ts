@@ -3,7 +3,7 @@ import { PostsController } from './posts.controller';
 import { PostsService } from './posts.service';
 import { JwtModule } from '@nestjs/jwt/dist';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AuthentGuard } from '../auth/guards/auth.guard'; 
+import { AuthentGuard } from '../auth/guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Posts } from './post.entity';
@@ -13,13 +13,13 @@ import { Skill } from 'src/skills/skills.entity';
 import { FriendsService } from 'src/friends/friends.service';
 import { Friend } from 'src/friends/friends.entity';
 
-
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User,Posts,Skill,Friend]),JwtModule,
+    TypeOrmModule.forFeature([User, Posts, Skill, Friend]),
+    JwtModule,
     ConfigModule,
     JwtModule.registerAsync({
-      imports: [ConfigModule], 
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         global: true,
@@ -29,7 +29,7 @@ import { Friend } from 'src/friends/friends.entity';
     }),
   ],
   controllers: [PostsController],
-  exports:[PostsService],
-  providers: [PostsService,UsersService,FriendsService],
+  exports: [PostsService],
+  providers: [PostsService, UsersService, FriendsService],
 })
 export class PostsModule {}

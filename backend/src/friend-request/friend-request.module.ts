@@ -13,12 +13,12 @@ import { FriendsGateway } from './gateway-sockets/friends.gateway';
 import { User } from 'src/users/user.entity';
 
 @Module({
-    imports: [
-      TypeOrmModule.forFeature([FriendRequest,Friend,User]),
-      UsersModule,
-      ],
-      controllers: [FriendRequestController],
-      exports:[FriendRequestService],
-      providers: [FriendRequestService,FriendRequestGateway,FriendsGateway],
+  imports: [
+    TypeOrmModule.forFeature([FriendRequest, Friend, User]),
+    UsersModule,
+  ],
+  controllers: [FriendRequestController],
+  exports: [FriendRequestService],
+  providers: [FriendRequestService, FriendRequestGateway, FriendsGateway],
 })
 export class FriendRequestModule {}

@@ -15,9 +15,17 @@ import { Role } from 'src/roles/Roles.entity';
 import { company } from 'src/company/company.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([User,company,Posts,Comment,Skill,Role]),JwtModule],
-  exports:[UsersService],
+  imports: [
+    TypeOrmModule.forFeature([User, company, Posts, Comment, Skill, Role]),
+    JwtModule,
+  ],
+  exports: [UsersService],
   controllers: [UsersController],
-  providers: [UsersService,AuthService,RolesService,{provide:APP_INTERCEPTOR,useClass:CurrentUserInterceptor}]
+  providers: [
+    UsersService,
+    AuthService,
+    RolesService,
+    { provide: APP_INTERCEPTOR, useClass: CurrentUserInterceptor },
+  ],
 })
 export class UsersModule {}

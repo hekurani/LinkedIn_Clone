@@ -1,9 +1,13 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Posts } from '../posts/post.entity';
-import {randomBytes,scrypt as _scrypt} from 'crypto'
+import { randomBytes, scrypt as _scrypt } from 'crypto';
 
 import { FindManyOptions } from 'typeorm';
 import { promisify } from 'util';
@@ -11,15 +15,32 @@ import { Skill } from 'src/skills/skills.entity';
 import { UserRole } from 'src/roles/types/role.type';
 import { Role } from 'src/roles/Roles.entity';
 import { PaginationDto } from 'src/pagination/pagination.dto';
-const scrypt=promisify(_scrypt);
+const scrypt = promisify(_scrypt);
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private repo: Repository<User>,@InjectRepository(Posts) private postRepository: Repository<Posts>,@InjectRepository(Skill) private skillRepository: Repository<Skill>) {}
+  constructor(
+    @InjectRepository(User) private repo: Repository<User>,
+    @InjectRepository(Posts) private postRepository: Repository<Posts>,
+    @InjectRepository(Skill) private skillRepository: Repository<Skill>,
+  ) {}
 
-  async create(name:string,lastname:string,email: string, password: string,imageProfile:string,role:Role) {
-    const user = this.repo.create({ name,lastname,email, password,imageProfile });
-    if(!user.roles){
-      user.roles=[]
+  async create(
+    name: string,
+    lastname: string,
+    email: string,
+    password: string,
+    imageProfile: string,
+    role: Role,
+  ) {
+    const user = this.repo.create({
+      name,
+      lastname,
+      email,
+      password,
+      imageProfile,
+    });
+    if (!user.roles) {
+      user.roles = [];
     }
     user.roles.push(role);
     return this.repo.save(user);
@@ -29,12 +50,20 @@ export class UsersService {
     if (!id) {
       return null;
     }
-  
+
     const user = await this.repo.findOne({
       where: { id },
-      select: ['id', 'email', 'imageProfile','name','lastname','RefreshToken','countUnseenConnections'],
+      select: [
+        'id',
+        'email',
+        'imageProfile',
+        'name',
+        'lastname',
+        'RefreshToken',
+        'countUnseenConnections',
+      ],
     });
-  
+
     return user ?? null;
   }
 
@@ -51,50 +80,82 @@ export class UsersService {
   findAll() {
     return this.repo.find();
   }
-  findByPassword(email: string,isPasswordNull:Boolean) {
-    if(isPasswordNull){
-    return this.repo.find({ where: { email ,password:null},select:['id','name','lastname','email','gender','imageProfile','password'],relations:['roles'] });
+  findByPassword(email: string, isPasswordNull: Boolean) {
+    if (isPasswordNull) {
+      return this.repo.find({
+        where: { email, password: null },
+        select: [
+          'id',
+          'name',
+          'lastname',
+          'email',
+          'gender',
+          'imageProfile',
+          'password',
+        ],
+        relations: ['roles'],
+      });
     }
-    return  this.repo.find({ where: { email},select:['id','name','lastname','email','gender','imageProfile','password'],relations:['roles']});
+    return this.repo.find({
+      where: { email },
+      select: [
+        'id',
+        'name',
+        'lastname',
+        'email',
+        'gender',
+        'imageProfile',
+        'password',
+      ],
+      relations: ['roles'],
+    });
   }
   find(email: string) {
-    
-    return  this.repo.find({ where: { email }});
+    return this.repo.find({ where: { email } });
   }
-  async addSkillToUser(userId: number, skillsId: number[]) { //,metod qe na mudeson te shtojm nje skil per nje user
+  async addSkillToUser(userId: number, skillsId: number[]) {
+    //,metod qe na mudeson te shtojm nje skil per nje user
     const user = await this.repo.findOne({
       where: { id: userId },
-      relations: ['skills']
-    });; //gjejm userin
-    
-    if (!user) { //nese nuk vjen 
-      throw new NotFoundException('User not found');//vendosim not found exception
+      relations: ['skills'],
+    }); //gjejm userin
+
+    if (!user) {
+      //nese nuk vjen
+      throw new NotFoundException('User not found'); //vendosim not found exception
     }
-   
-   const skills = await Promise.all(skillsId.map(async (id) => {
-    const skill = await this.skillRepository.findOne({ where: { id } });
-    
-    if (!skill) {
-        throw new NotFoundException("Skill with given id doesn't exist!");
-    }
-    if ((await this.repo.find({ where: { id: user.id, skills: { id } } })).length) {
-        throw new ForbiddenException("Skill already exists for this user!");
-    }
-    return skill;
-}));
-user.skills=skills;
-// return this.repo.save(user);
-  
+
+    const skills = await Promise.all(
+      skillsId.map(async (id) => {
+        const skill = await this.skillRepository.findOne({ where: { id } });
+
+        if (!skill) {
+          throw new NotFoundException("Skill with given id doesn't exist!");
+        }
+        if (
+          (await this.repo.find({ where: { id: user.id, skills: { id } } }))
+            .length
+        ) {
+          throw new ForbiddenException('Skill already exists for this user!');
+        }
+        return skill;
+      }),
+    );
+    user.skills = skills;
+    // return this.repo.save(user);
+
     return {
-      status:"success",
-    user
-    }
+      status: 'success',
+      user,
+    };
   }
 
-  async getUserSkills(userId: number): Promise<Skill[]> { //metod per mi marr krejt skills te userit
-    const user = await this.findOne(userId);//e gjem
-    if (!user) { //nese nuk e gjejm
-      throw new NotFoundException('User not found');//not found excp
+  async getUserSkills(userId: number): Promise<Skill[]> {
+    //metod per mi marr krejt skills te userit
+    const user = await this.findOne(userId); //e gjem
+    if (!user) {
+      //nese nuk e gjejm
+      throw new NotFoundException('User not found'); //not found excp
     }
 
     return user.skills; // Return the user's skills ose null
@@ -111,50 +172,44 @@ user.skills=skills;
       const hash = (await scrypt(attrs.password, salt, 32)) as Buffer;
       attrs.password = salt + '.' + hash.toString('hex');
     }
-  
- 
-  
-    // Handle RefreshToken 
+
+    // Handle RefreshToken
     if (refreshToken) {
       user.RefreshToken = refreshToken;
     }
     const updatedUser = this.repo.merge(user, attrs);
-    return this.repo.save(updatedUser);;
+    return this.repo.save(updatedUser);
   }
-  
+
   async getUserPosts(user_id: number): Promise<Posts[]> {
     const user = await this.repo.findOne({ where: { id: user_id } });
     if (!user) {
       return [];
     }
-  
+
     const options: FindManyOptions<Posts> = {
       where: {
-        user: { id: user.id }, 
+        user: { id: user.id },
       },
     };
-  
+
     return this.postRepository.find(options);
   }
-  async getUsers(
-    userId: number,
-    pagination: PaginationDto
-
-  ) {
+  async getUsers(userId: number, pagination: PaginationDto) {
     const { page, limit } = pagination;
-  
+
     const options: FindManyOptions<User> = {
       where: { id: Not(userId) },
       relations: ['roles'],
       skip: (page - 1) * limit,
       take: limit,
     };
-  const users = await this.repo.find(options);
+    const users = await this.repo.find(options);
 
-  const totalCount = await this.repo.count({
-    where: { id: Not(userId) },
-  });
+    const totalCount = await this.repo.count({
+      where: { id: Not(userId) },
+    });
 
-  return { users, totalCount };
+    return { users, totalCount };
   }
 }

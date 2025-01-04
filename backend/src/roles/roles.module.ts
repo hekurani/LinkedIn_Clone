@@ -26,10 +26,11 @@ import { JwtModule } from '@nestjs/jwt';
 })*/
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Role]),JwtModule,
+    TypeOrmModule.forFeature([Role]),
+    JwtModule,
     ConfigModule,
     JwtModule.registerAsync({
-      imports: [ConfigModule], 
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         global: true,
@@ -40,6 +41,6 @@ import { JwtModule } from '@nestjs/jwt';
   ],
   controllers: [RolesController],
   providers: [RolesService],
-  exports:[RolesService]
+  exports: [RolesService],
 })
 export class RolesModule {}

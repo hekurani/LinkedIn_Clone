@@ -1,7 +1,6 @@
-import { IsArray, IsNumber, IsString } from "class-validator";
+import { IsArray, IsNumber, IsString } from 'class-validator';
 
 export class CreateJobApplicationDto {
-@IsNumber()
-jobPostId:number
-
+  @IsNumber()
+  jobPostId: number;
 }

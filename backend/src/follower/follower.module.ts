@@ -11,7 +11,7 @@ import { Follower } from './follower.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User,company,Follower]),
+    TypeOrmModule.forFeature([User, company, Follower]),
     UsersModule,
     ConfigModule, // Make sure ConfigModule is imported to provide access to ConfigService
     JwtModule.registerAsync({
@@ -22,8 +22,9 @@ import { Follower } from './follower.entity';
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: '600s' },
       }),
-    })],
+    }),
+  ],
   controllers: [FollowerController],
-  providers: [FollowerService]
+  providers: [FollowerService],
 })
 export class FollowerModule {}

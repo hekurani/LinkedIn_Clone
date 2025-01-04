@@ -11,20 +11,22 @@ import { WorkExperience } from 'src/work-experience/work-experience.entity';
 import { Skill } from 'src/skills/skills.entity';
 import { city } from 'src/location/entity/city.entity';
 
-@Module({ imports: [
-  TypeOrmModule.forFeature([company,Skill,city,jobPost,WorkExperience]),
-  UsersModule,
-  ConfigModule,
-  JwtModule.registerAsync({
-    imports: [ConfigModule], 
-    inject: [ConfigService],
-    useFactory: (configService: ConfigService) => ({
-      global: true,
-      secret: configService.get<string>('JWT_SECRET'),
-      signOptions: { expiresIn: '600s' },
+@Module({
+  imports: [
+    TypeOrmModule.forFeature([company, Skill, city, jobPost, WorkExperience]),
+    UsersModule,
+    ConfigModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        global: true,
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '600s' },
+      }),
     }),
-  })],
+  ],
   providers: [JobPostService],
-  controllers: [JobPostController]
+  controllers: [JobPostController],
 })
 export class JobPostModule {}

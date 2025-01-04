@@ -7,20 +7,40 @@ import { UpdateReactionDto } from './dto/UpdateReactionDto.dto';
 
 @Controller('comment-reaction')
 export class CommentReactionController {
+  constructor(
+    private readonly commentReactionservice: CommentReactionService,
+  ) {}
+  @Post()
+  createCommentReaction(
+    @AuthUser() user: { userId: number },
+    @Body() createReactionDto: CreateReactionDto,
+  ) {
+    return this.commentReactionservice.createCommentReaction(
+      user?.userId,
+      createReactionDto.commentId,
+      createReactionDto.status,
+    );
+  }
+  @Delete()
+  deleteCommentReaction(
+    @AuthUser() user: { userId: number },
+    @Body() deleteReactionDto: DeleteReactionDto,
+  ) {
+    return this.commentReactionservice.deleteCommentReaction(
+      user?.userId,
+      deleteReactionDto.commentId,
+    );
+  }
 
-constructor(private readonly commentReactionservice: CommentReactionService){}
-@Post()
-createCommentReaction(@AuthUser() user: {userId:number},@Body() createReactionDto:CreateReactionDto){
-return this.commentReactionservice.createCommentReaction(user?.userId,createReactionDto.commentId,createReactionDto.status);
-}
-@Delete()
-deleteCommentReaction(@AuthUser() user: {userId:number},@Body() deleteReactionDto:DeleteReactionDto){
-    return this.commentReactionservice.deleteCommentReaction(user?.userId,deleteReactionDto.commentId);
-}
-
-@Patch()
-updateCommentReaction(@AuthUser() user: {userId:number},@Body() updateReactionDto:UpdateReactionDto){
-    return this.commentReactionservice.updateCommentReaction(user?.userId,updateReactionDto.commentId,updateReactionDto.status);
-}
-    
+  @Patch()
+  updateCommentReaction(
+    @AuthUser() user: { userId: number },
+    @Body() updateReactionDto: UpdateReactionDto,
+  ) {
+    return this.commentReactionservice.updateCommentReaction(
+      user?.userId,
+      updateReactionDto.commentId,
+      updateReactionDto.status,
+    );
+  }
 }

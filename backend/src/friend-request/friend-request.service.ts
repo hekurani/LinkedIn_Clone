@@ -23,7 +23,6 @@ export class FriendRequestService {
     private readonly usersService: UsersService,
     private readonly friendRequestGateway: FriendRequestGateway,
     private readonly friendsGateway: FriendsGateway,
-
   ) {}
   async createFriendRequest(userId: number, id: number) {
     const user = await this.usersService.findOne(userId);
@@ -158,7 +157,7 @@ export class FriendRequestService {
       throw new ForbiddenException('You cant accept request of yourself');
     }
     friendRequest.status = 'accepted';
-   await this.friendRequestRepository.save(friendRequest)
+    await this.friendRequestRepository.save(friendRequest);
     const friend = this.friendRepository.create({
       sender: {
         id: friendRequest.sender.id,
@@ -314,7 +313,7 @@ export class FriendRequestService {
     friendRequest.status = 'blocked';
     await this.friendRequestRepository.save(friendRequest);
     return {
-      status:'success'
+      status: 'success',
     };
   }
   async unBlockFriendRequest(id: number, userId: number) {
@@ -348,7 +347,7 @@ export class FriendRequestService {
     }
     await this.friendRequestRepository.delete(friendRequest);
     return {
-      status:'success'
+      status: 'success',
     };
   }
 }
