@@ -1,3 +1,1 @@
-export const exludedPaths = [
-    "/jobs"
-]
+export const exludedPaths = ["/jobs"];

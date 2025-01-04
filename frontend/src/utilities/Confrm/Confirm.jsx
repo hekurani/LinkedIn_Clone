@@ -3,7 +3,10 @@ import React from "react";
 const Confirm = ({ isOpen, title, variant, message, onSave, onCancel }) => {
   if (!isOpen) return null;
 
-  const buttonVariant = variant === "danger" ? "bg-red-500 hover:bg-red-600" : "bg-blue-500 hover:bg-blue-600";
+  const buttonVariant =
+    variant === "danger"
+      ? "bg-red-500 hover:bg-red-600"
+      : "bg-blue-500 hover:bg-blue-600";
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">

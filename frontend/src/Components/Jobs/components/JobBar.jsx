@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const JobBar = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  return <div></div>;
+};
 
-export default JobBar
+export default JobBar;

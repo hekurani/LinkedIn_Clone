@@ -25,7 +25,7 @@ const ProfileInfo = ({ user }) => {
       console.log(err);
     }
   };
-  const createChatRoom = async() => {
+  const createChatRoom = async () => {
     try {
       const me = await getMe();
       await createChat(me.id, user.id);

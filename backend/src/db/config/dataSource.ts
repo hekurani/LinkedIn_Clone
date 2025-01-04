@@ -29,7 +29,7 @@ import { JobApplication } from 'src/job-application/job-application.entity';
         host:configService.get('HOST'),
         username:'postgres',
         port:configService.get('PORT'),
-        password:'1234',
+        password:'password',
         entities: [User,Posts,Skill,Message,ChatRoom,Comment,Friend,FriendRequest,Role,postreaction,commentreaction,Reposts,country,city,company,Follower,WorkExperience,jobPost,JobApplication],
         migrations: [__dirname + '/../migrations/*{.ts,.js}'],
         seeds: ['dist/db/seeds/**/*.js'],

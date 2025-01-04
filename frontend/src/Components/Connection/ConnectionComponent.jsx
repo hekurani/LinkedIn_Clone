@@ -13,12 +13,14 @@ const ConnectionComponent = () => {
     const data = await getFriends();
     const user = await getMe();
     setFriends(data);
-    await axiosInstance.patch(`users/users/${user.id}`,{countUnseenConnections:0} )
+    await axiosInstance.patch(`users/users/${user.id}`, {
+      countUnseenConnections: 0,
+    });
   };
 
   useEffect(() => {
     getAllFriends();
-    
+
     socket.on("newestFriend", (newRequest) => {
       getAllFriends();
     });
@@ -30,11 +32,11 @@ const ConnectionComponent = () => {
 
   return (
     <div
-    style={{
-      border: "1px solid #d3d3d3 ",
-      maxWidth: "880px",
-      borderRadius: "7px",
-    }}
+      style={{
+        border: "1px solid #d3d3d3 ",
+        maxWidth: "880px",
+        borderRadius: "7px",
+      }}
       className="mt-12 mx-auto h-auto"
     >
       <div className="header nr-connections">
@@ -64,7 +66,6 @@ const ConnectionComponent = () => {
       )}
 
       {friends.map((friend) => {
-
         return (
           <div key={friend.id} className="connections flex mb-3">
             <div className="ml-3">

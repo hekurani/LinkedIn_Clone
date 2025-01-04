@@ -48,8 +48,11 @@ const Profile = () => {
         <FriendsProfile user={foreignUser} />
       )}
       <ProfileSection user={loggedUser} />
-      
-      <ChatListingComponent user={loggedUser} onChatRowClick={handleOpenChatPage} />
+
+      <ChatListingComponent
+        user={loggedUser}
+        onChatRowClick={handleOpenChatPage}
+      />
 
       {isChatOpen && (
         <ChatPage

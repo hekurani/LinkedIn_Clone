@@ -1,15 +1,15 @@
 import { faHourglass1 } from "@fortawesome/free-solid-svg-icons";
 import {
-    Button,
-    Dialog,
-    DialogHeader,
-    DialogBody,
-    DialogFooter,
-  } from "@material-tailwind/react";
-export function AlertModal({status,message}){
-    const borderColor = status ? 'green' : 'red';
-    return(
-      <>
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
+export function AlertModal({ status, message }) {
+  const borderColor = status ? "green" : "red";
+  return (
+    <>
       <Dialog
         open={true}
         animate={{
@@ -18,11 +18,13 @@ export function AlertModal({status,message}){
         }}
         style={{ color: borderColor }}
       >
-        <DialogHeader  >{status?"Request was successful !":"Request failed!"}</DialogHeader>
+        <DialogHeader>
+          {status ? "Request was successful !" : "Request failed!"}
+        </DialogHeader>
         <DialogBody>
-         {message?message:!status?'Something went wrong!':null}
+          {message ? message : !status ? "Something went wrong!" : null}
         </DialogBody>
       </Dialog>
     </>
-)
+  );
 }

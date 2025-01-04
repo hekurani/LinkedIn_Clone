@@ -62,7 +62,10 @@ const CameraModal = ({ user, isOpen, onRequestClose }) => {
       formData.append("image", blob, "captured-image.png");
       stopCamera();
       try {
-        await axios.patch(`http://localhost:4000/users/users/${user.id}`, formData);
+        await axios.patch(
+          `http://localhost:4000/users/users/${user.id}`,
+          formData
+        );
 
         onRequestClose();
         setTimeout(() => {

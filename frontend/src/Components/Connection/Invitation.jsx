@@ -34,9 +34,9 @@ const Invitation = () => {
     setData(updatedData);
   };
 
-  const acceptFriendRequest = async (id,senderId,receiverId) => {
+  const acceptFriendRequest = async (id, senderId, receiverId) => {
     await acceptRequest(id);
-    await createChat(receiverId,senderId);
+    await createChat(receiverId, senderId);
     const updatedData = await getRequestSendedToMe();
     setData(updatedData);
   };
@@ -87,7 +87,13 @@ const Invitation = () => {
                 Ignore
               </button>
               <button
-                onClick={() => acceptFriendRequest(request.id, request.sender.id,request.receiver.id)}
+                onClick={() =>
+                  acceptFriendRequest(
+                    request.id,
+                    request.sender.id,
+                    request.receiver.id
+                  )
+                }
                 style={{
                   color: "#0a66c2",
                   border: "1px solid #0a66c2",

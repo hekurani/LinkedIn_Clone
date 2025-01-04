@@ -48,8 +48,6 @@ const Users = () => {
     setShowModal(false);
   };
 
-
-
   return (
     <div className=" flex-1 p-5">
       <p className="text-white text-2xl font-bold">Users</p>
@@ -137,7 +135,7 @@ const Users = () => {
           <p className="text-white">
             {totalUsers > 0 && (
               <p className="font-light text-white">
-                Showing {((page - 1) * limit) > 0 ?  (page - 1) * limit : 1} -{" "}
+                Showing {(page - 1) * limit > 0 ? (page - 1) * limit : 1} -{" "}
                 {totalUsers > page * limit ? page * limit : totalUsers} out of{" "}
                 {totalUsers}
               </p>

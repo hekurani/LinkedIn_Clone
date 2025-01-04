@@ -1,7 +1,7 @@
 import React from "react";
 import cover from "../../../assets/cover.jpg";
 import profile from "../../../assets/profile.png";
-import defaultProfile from "../../../assets/default.png"
+import defaultProfile from "../../../assets/default.png";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const ProfileInfo = ({ user }) => {
@@ -28,21 +28,21 @@ const ProfileInfo = ({ user }) => {
           style={{ position: "absolute" }}
           alt={"coveri"}
         />
-       <img
-                  src={user.imageProfile ? user.imageProfile : defaultProfile}
-                  style={{
-                    width: "152px",
-                    height: "152px",
-                    objectFit: "cover",
-                    position: "absolute",
-                    borderRadius: "50%",
-                    border: "4px solid white",
-                    padding: "0px",
-                    boxSizing: "border-box",
-                  }}
-                  className="mt-28 ml-6"
-                  alt={"profile"}
-                />
+        <img
+          src={user.imageProfile ? user.imageProfile : defaultProfile}
+          style={{
+            width: "152px",
+            height: "152px",
+            objectFit: "cover",
+            position: "absolute",
+            borderRadius: "50%",
+            border: "4px solid white",
+            padding: "0px",
+            boxSizing: "border-box",
+          }}
+          className="mt-28 ml-6"
+          alt={"profile"}
+        />
         <div>
           <FontAwesomeIcon
             className="m-5 p-2"
@@ -64,7 +64,9 @@ const ProfileInfo = ({ user }) => {
       </div>
       <div className="profileInfo flex mt-16 mb-5 ">
         <div className="personalInfo text-left ml-7">
-          <p className="font-semibold text-2xl">{user.name}{' '}{user.lastname}</p>
+          <p className="font-semibold text-2xl">
+            {user.name} {user.lastname}
+          </p>
           <p>Software Developer</p>
           <p className="location mt-1 text-sm " style={{ color: "grey" }}>
             {" "}

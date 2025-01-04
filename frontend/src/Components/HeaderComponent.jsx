@@ -14,15 +14,15 @@ import profile from "../assets/profile.png";
 import { io } from "socket.io-client";
 import getMe from "../utilities/user/getMe";
 import { getToken } from "../utilities/getToken";
-import {exludedPaths} from "./lib/helpers";
+import { exludedPaths } from "./lib/helpers";
 const socket = io("http://localhost:8003");
 
 const HeaderComponent = () => {
   const [isVisibleBussinesPart, setVisibleBussinesPart] = useState(false);
-  
+
   const [countConnections, setCountConnections] = useState(0);
   const connectionBadge = async () => {
-    const  data  = await getMe();
+    const data = await getMe();
     setCountConnections(data?.countUnseenConnections);
   };
   const location = useLocation();
@@ -35,7 +35,7 @@ const HeaderComponent = () => {
     connectionBadge();
 
     socket.on("newFriendRequest", (userId, newCount) => {
-      connectionBadge(); 
+      connectionBadge();
     });
 
     return () => {
@@ -48,15 +48,16 @@ const HeaderComponent = () => {
     } else {
       setVisibleBussinesPart(true);
     }
-};
+  };
   useEffect(() => {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => {
-        window.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", handleResize);
     };
-}, []);
-if (exludedPaths.some(path => location.pathname.includes(path))) return null;
+  }, []);
+  if (exludedPaths.some((path) => location.pathname.includes(path)))
+    return null;
   return (
     <div
       className="h-16 grid grid-cols-12 items-center lg:pr-3 md:pr-40 sm:pr-[440px] xmd:pr-[400px]"
@@ -88,7 +89,9 @@ if (exludedPaths.some(path => location.pathname.includes(path))) return null;
         </Link>
         <Link to="/connections" className="text-center mx-5">
           <FontAwesomeIcon icon={faUserPlus} className="icon" />
-          {countConnections > 0 && <p className="notification-badge">{countConnections}</p>}
+          {countConnections > 0 && (
+            <p className="notification-badge">{countConnections}</p>
+          )}
           <span className="text-sm  hidden w-full lg:block">My Network</span>
         </Link>
         <Link to="/jobs" className="text-center mx-5">
@@ -115,12 +118,11 @@ if (exludedPaths.some(path => location.pathname.includes(path))) return null;
         </Link>
       </div>
       {isVisibleBussinesPart && (
-          <div className="business col-span-4 lg:col-span-2 flex justify-center items-center hidden lg:flex">
+        <div className="business col-span-4 lg:col-span-2 flex justify-center items-center hidden lg:flex">
           <p className="mx-4">For Business</p>
           <p className="mx-4">Try Premium for free</p>
         </div>
-        )
-      }
+      )}
     </div>
   );
 };

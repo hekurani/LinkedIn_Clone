@@ -1,43 +1,52 @@
-import { createContext, useState, useContext } from "react"
+import { createContext, useState, useContext } from "react";
 
-const FormContext = createContext({})
+const FormContext = createContext({});
 export const FormProvider = ({ children }) => {
+  const title = {
+    0: "CreditialsForm",
+    1: "PersonalDataForm",
+  };
+  const handleChange = (e) => {
+    const type = e.target.type;
 
-    const title = {
-        0: 'CreditialsForm',
-        1: 'PersonalDataForm'
-    }
-    const handleChange = e => {
-        const type = e.target.type
+    const name = e.target.name;
 
-        const name = e.target.name
+    const value = type === "checkbox" ? e.target.checked : e.target.value;
 
-        const value = type === "checkbox"
-            ? e.target.checked
-            : e.target.value
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  const [page, setPage] = useState(0);
 
-        setData(prevData => ({
-            ...prevData,
-            [name]: value
-        }))
-    }
-    const [page, setPage] = useState(0)
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+  });
+  const canSubmit = page === Object.keys(title).length - 1;
+  const [error, setError] = useState({});
+  return (
+    <FormContext.Provider
+      value={{
+        handleChange,
+        page,
+        setPage,
+        data,
+        setData,
+        title,
+        canSubmit,
+        error,
+        setError,
+      }}
+    >
+      {children}
+    </FormContext.Provider>
+  );
+};
 
-    const [data, setData] = useState({
-        email:"",
-        password:"",
-        firstName:"",
-        lastName:""
-    })
-     const canSubmit=  page === Object.keys(title).length-1;
-     const[error,setError]=useState({});
-    return (
-        <FormContext.Provider value={{ handleChange,page,setPage,data,setData,title ,canSubmit,error,setError }}>
-            {children}
-        </FormContext.Provider>
-    )
-}
-
-export default function useFormContext () {
-    return useContext(FormContext)
+export default function useFormContext() {
+  return useContext(FormContext);
 }

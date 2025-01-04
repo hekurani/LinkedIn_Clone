@@ -64,7 +64,7 @@ const Login = () => {
       const token = response?.data?.access_token;
       if (token) {
         localStorage.setItem("access_token", token);
-        navigate('/');
+        navigate("/");
       }
     } catch (err) {
       console.log(err);

@@ -7,10 +7,10 @@ const UserFeedComponent = ({ user }) => {
   const [capturedImage, setCapturedImage] = useState(null);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  
+
   return (
     <div
-    className={`w-56 rounded-md ml-16 mt-6 relative transition-all duration-500 `}
+      className={`w-56 rounded-md ml-16 mt-6 relative transition-all duration-500 `}
       style={{ height: "310px", border: "1px solid grey" }}
     >
       <div className="h-36" style={{ borderBottom: "1px solid grey" }}>
