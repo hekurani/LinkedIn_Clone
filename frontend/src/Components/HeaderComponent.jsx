@@ -21,6 +21,8 @@ const HeaderComponent = () => {
   const [isVisibleBussinesPart, setVisibleBussinesPart] = useState(false);
 
   const [countConnections, setCountConnections] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  console.log({searchTerm})
   const connectionBadge = async () => {
     const data = await getMe();
     setCountConnections(data?.countUnseenConnections);
@@ -74,9 +76,11 @@ const HeaderComponent = () => {
           />
         </div>
         <div className="search flex justify-start items-center">
-          <input
+          <select
             type="text"
             style={{ backgroundColor: "#e6f2ff" }}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target?.value || "")}
             className="bg-current w-52 mt-1 border pl-2 h-8 rounded-sm hidden lg:block"
             placeholder="Search"
           />
