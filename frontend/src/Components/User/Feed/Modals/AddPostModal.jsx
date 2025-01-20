@@ -7,6 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import axiosInstance from "../../../../axios/axios.tsx";
 import defaultProfile from "../../../../assets/profile.png";
 
 const AddPostModal = ({ user, closeModal }) => {
@@ -27,15 +28,12 @@ const AddPostModal = ({ user, closeModal }) => {
     const formData = new FormData();
     formData.append("description", description);
 
-    images.forEach((image, index) => {
-      formData.append("image", image);
-    });
+     images.forEach((image, index) => {
+        formData.append("images", image);
+      });
 
     try {
-      await axios.post(
-        `http://localhost:4000/posts/create/${user.id}`,
-        formData
-      );
+      await axiosInstance.post("/posts", formData);
       window.location.reload();
     } catch (error) {
       console.error("Error posting:", error);

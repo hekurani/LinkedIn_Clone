@@ -117,7 +117,9 @@ export class JobPostService {
     };
   }
   async getJobPosts() {
-    const jobPosts = await this.jobPost.find();
+    const jobPosts = await this.jobPost.find({
+      relations: ['company', 'location']
+    });
     return {
       status: 'success',
       jobPosts,

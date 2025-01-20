@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../style/JobListing.css";
 import cover from "../../../assets/cover.jpg";
+import getAllJobs from "../../../utilities/jobs/getAllJobs";
 
-const JobListing = () => {
-  const testArray = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
+const JobListing = ({ setSelectedJob = () => {} }) => {
+  const [allJobs, setAllJobs] = useState([]);
+  const fetchAllJobs = async () => {
+    const allJobs = await getAllJobs();
+    setAllJobs(allJobs?.jobPosts);
+    setSelectedJob(allJobs?.jobPosts[0]);
+  };
+  useEffect(() => {
+    fetchAllJobs();
+  }, []);
 
   return (
     <div className="main ml-auto bg-white">
@@ -20,15 +29,15 @@ const JobListing = () => {
       </div>
 
       <div className="max-h-[calc(100vh-5rem)] overflow-y-auto">
-        {testArray.map((item, index) => (
-          <div className="content flex" key={index}>
+        {allJobs.map((item, index) => (
+          <div className="content flex" key={index} onClick={() => setSelectedJob(item)}>
             <div className="img">
-              <img src={cover} alt="" className="w-14 h-14 m-2" />
+              <img src={item?.company?.logo} alt="" className="w-14 h-14 m-2" />
             </div>
             <div className="jobTitleCompany">
-              <p className="tittle">Software Engineer</p>
-              <p>Company</p>
-              <p>Location</p>
+              <p className="tittle">{item?.role}</p>
+              <p>{item?.company?.name}</p>
+              <p>{item?.location?.city}</p>
             </div>
           </div>
         ))}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import defaultProfile from "../../../assets/profile.png";
+import axiosInstance from "../../../axios/axios.tsx";
 
 const PostComponent = ({ user }) => {
   const [allPosts, setAllPosts] = useState([]);
@@ -9,12 +10,11 @@ const PostComponent = ({ user }) => {
 
   useEffect(() => {
     const getAllPosts = async () => {
-      const response = await axios.get("http://localhost:4000/posts/allPosts");
-      setAllPosts(response.data);
+      const { data } = await axiosInstance.get("/posts");
+      setAllPosts(data?.posts);
     };
     getAllPosts();
   }, []);
-
   const LoveImageUrl =
     "https://static.licdn.com/aero-v1/sc/h/cpho5fghnpme8epox8rdcds22";
   const LikeImageUrl =
@@ -35,19 +35,20 @@ const PostComponent = ({ user }) => {
         postId: postId,
       };
 
-      await axios.post(`http://localhost:4000/comments`, info);
+      await axiosInstance.post(`/comments`, info);
       setAllPosts((prevPosts) =>
         prevPosts.map((post) =>
-          post.post.id === postId
+          post.id === postId
             ? {
                 ...post,
-                post: {
-                  ...post.post,
-                  comments: [
-                    { text: info.text, user: user },
-                    ...(post.post.comments || []),
-                  ],
-                },
+                comments: [
+                  ...(post.comments || []),
+                  {
+                    user: user,
+                    text: comments[postId],
+                    publishDate: new Date().toISOString(),
+                  },
+                ],
               }
             : post
         )
@@ -131,7 +132,7 @@ const PostComponent = ({ user }) => {
                 </p>
                 <p className="position text-xs">Software Developer</p>
                 <p className="time text-xs">
-                  {getTimePassed(postItem.post.publishDate)} •
+                  {getTimePassed(postItem.publishDate)} •
                 </p>
               </div>
               <div className="ml-auto flex">
@@ -141,10 +142,10 @@ const PostComponent = ({ user }) => {
             </div>
 
             <div className="description m-4 text-sm max-h-96">
-              <p>{postItem.post.description}</p>
+              <p>{postItem.description}</p>
             </div>
-
-            {postItem.post.postImages.length > 0 && (
+                {console.log({postItem})}
+            {postItem?.postImages.length > 0 && (
               <div
                 className="media flex flex-wrap"
                 style={{
@@ -155,26 +156,26 @@ const PostComponent = ({ user }) => {
                   overflow: "hidden",
                 }}
               >
-                {postItem.post.postImages.map((image, imageIndex) => (
+                {postItem?.postImages.map((image, imageIndex) => (
                   <img
                     key={imageIndex}
-                    src={image}
+                    src={`Images/postImages/${image}`}
                     alt={`media-${index}-${imageIndex}`}
                     style={{
                       width:
-                        postItem.post.postImages.length === 1
+                        postItem?.postImages.length === 1
                           ? "100%"
-                          : postItem.post.postImages.length === 3 &&
+                          : postItem?.postImages.length === 3 &&
                             imageIndex === 2
                           ? "100%"
                           : "50%",
                       height:
-                        postItem.post.postImages.length === 3 &&
+                        postItem?.postImages.length === 3 &&
                         imageIndex === 2
                           ? "100%"
                           : "auto",
                       marginBottom:
-                        postItem.post.postImages.length === 2 ? "5px" : "0",
+                        postItem?.postImages.length === 2 ? "5px" : "0",
                     }}
                   />
                 ))}
@@ -241,12 +242,12 @@ const PostComponent = ({ user }) => {
                   <input
                     type="text"
                     placeholder="Add a comment..."
-                    value={comments[postItem.post.id] || ""}
-                    onClick={() => setPostButtonForPost(postItem.post.id)}
+                    value={comments[postItem?.id] || ""}
+                    onClick={() => setPostButtonForPost(postItem?.id)}
                     onChange={(e) =>
                       setComments({
                         ...comments,
-                        [postItem.post.id]: e.target.value,
+                        [postItem?.id]: e.target.value,
                       })
                     }
                     style={{
@@ -262,11 +263,11 @@ const PostComponent = ({ user }) => {
                   />
                 </div>
               </div>
-              {postButtonForPost === postItem.post.id && (
+              {postButtonForPost === postItem?.id && (
                 <div className="comment-input-container">
                   <button
                     className="ml-14 rounded-full"
-                    onClick={() => handleCommentSubmit(postItem.post.id)}
+                    onClick={() => handleCommentSubmit(postItem?.id)}
                     style={{
                       backgroundColor: "#0a66c2",
                       color: "white",
@@ -279,8 +280,8 @@ const PostComponent = ({ user }) => {
                 </div>
               )}
               <div className="AllCommnets mt-2 mb-10">
-                {postItem.post.comments &&
-                  postItem.post.comments
+                {postItem?.comments &&
+                  postItem?.comments
                     .slice()
                     .sort(
                       (a, b) =>
@@ -299,7 +300,7 @@ const PostComponent = ({ user }) => {
                         <img
                           className="ml-3 mt-3 w-10 h-10 mb-2"
                           style={{ borderRadius: "50%", objectFit: "cover" }}
-                          src={comment.user.imageProfile}
+                          src={comment?.user?.imageProfile}
                           alt={"p"}
                         />
                         <div
@@ -311,14 +312,14 @@ const PostComponent = ({ user }) => {
                         >
                           <div className="flex">
                             <p className="font-semibold">
-                              {comment.user.name} {comment.user.lastname}
+                              {comment?.user?.name} {comment?.user?.lastname}
                             </p>
                             <p className="text-xs mt-2 ml-auto">
-                              {getTimePassed(comment.publishDate)}
+                              {getTimePassed(comment?.publishDate)}
                             </p>
                           </div>
 
-                          <p className="mt-3">{comment.text}</p>
+                          <p className="mt-3">{comment?.text}</p>
                         </div>
                       </div>
                     ))}

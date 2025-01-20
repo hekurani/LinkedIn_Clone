@@ -52,11 +52,10 @@ export class PostsController {
   ) {
     const response = [];
     if (files) {
-      files.forEach((file) => {
+      files?.images.forEach((file) => {
         response.push(file.filename);
       });
     }
-
     return this.postService.create(user?.userId, postDTO, response);
   }
 
