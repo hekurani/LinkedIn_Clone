@@ -120,9 +120,11 @@ export class UsersController {
   getUSers(
     @AuthUser() user: { userId: number },
     @Query() paginationDto: PaginationDto,
+    @Query('search') search?: string
   ) {
+    console.log({search})
     const { page = 1, limit = 10 } = paginationDto;
     const pagination = { page, limit };
-    return this.usersService.getUsers(user.userId, pagination);
+    return this.usersService.getUsers(user.userId, pagination,search);
   }
 }

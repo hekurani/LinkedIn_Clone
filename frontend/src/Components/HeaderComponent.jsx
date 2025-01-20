@@ -9,12 +9,14 @@ import {
   faCommentDots,
   faBell,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import profile from "../assets/profile.png";
 import { io } from "socket.io-client";
 import getMe from "../utilities/user/getMe";
 import { getToken } from "../utilities/getToken";
 import { exludedPaths } from "./lib/helpers";
+import getAllUsers from "../utilities/user/getAllUsers";
+import AsyncSelect from "react-select/async";
 const socket = io("http://localhost:8003");
 
 const HeaderComponent = () => {
@@ -22,7 +24,7 @@ const HeaderComponent = () => {
 
   const [countConnections, setCountConnections] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-  console.log({searchTerm})
+  const navigate = useNavigate();
   const connectionBadge = async () => {
     const data = await getMe();
     setCountConnections(data?.countUnseenConnections);
@@ -60,6 +62,48 @@ const HeaderComponent = () => {
   }, []);
   if (exludedPaths.some((path) => location.pathname.includes(path)))
     return null;
+  const loadOptions = async (inputValue) => {
+    try {
+      const res = await getAllUsers({ search: inputValue });
+      return res?.users.map((item) => ({
+        label: `${item?.name} ${" "} ${item?.lastname}`,
+        value: item?.id,
+        image: item?.imageProfile,
+      }));
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+      return [];
+    }
+  };
+
+  const customOption = (props) => {
+    const { data, innerRef, innerProps } = props;
+    return (
+      <div
+        ref={innerRef}
+        {...innerProps}
+        style={{ display: "flex", alignItems: "center", padding: 10 }}
+        onClick={() => {
+          setSearchTerm("");
+          navigate(`${data?.value}/profile`);
+        }}
+      >
+        {data.image && (
+          <img
+            src={data.image}
+            alt="profile"
+            style={{
+              width: 30,
+              height: 30,
+              borderRadius: "50%",
+              marginRight: 10,
+            }}
+          />
+        )}
+        {data.label}
+      </div>
+    );
+  };
   return (
     <div
       className="h-16 grid grid-cols-12 items-center lg:pr-3 md:pr-40 sm:pr-[440px] xmd:pr-[400px]"
@@ -76,13 +120,23 @@ const HeaderComponent = () => {
           />
         </div>
         <div className="search flex justify-start items-center">
-          <select
-            type="text"
-            style={{ backgroundColor: "#e6f2ff" }}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target?.value || "")}
-            className="bg-current w-52 mt-1 border pl-2 h-8 rounded-sm hidden lg:block"
+          <AsyncSelect
+            cacheOptions
+            loadOptions={loadOptions}
+            // onChange={(selectedOption) =>
+            //   setSearchTerm(selectedOption?.value || "")
+            // }
             placeholder="Search"
+            styles={{
+              control: (base) => ({
+                ...base,
+                backgroundColor: "#e6f2ff",
+                height: "2rem",
+              }),
+            }}
+            className="w-52 hidden lg:block"
+            components={{ Option: customOption }}
+            onMenuClose={() => setSearchTerm("")}
           />
         </div>
       </div>

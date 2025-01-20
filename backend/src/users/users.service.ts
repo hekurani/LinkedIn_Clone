@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Not, Repository } from 'typeorm';
+import { Brackets, ILike, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Posts } from '../posts/post.entity';
@@ -195,11 +195,24 @@ export class UsersService {
 
     return this.postRepository.find(options);
   }
-  async getUsers(userId: number, pagination: PaginationDto) {
+  async getUsers(userId: number, pagination: PaginationDto, search?: string) {
     const { page, limit } = pagination;
-
+   
     const options: FindManyOptions<User> = {
-      where: { id: Not(userId) },
+      where: [
+        {
+          id: Not(userId),
+          ...(search && {
+            name: ILike(`%${search}%`),
+          }),
+        },
+        {
+          id: Not(userId),
+          ...(search && {
+            lastname: ILike(`%${search}%`),
+          }),
+        },
+      ],
       relations: ['roles'],
       skip: (page - 1) * limit,
       take: limit,
@@ -207,7 +220,20 @@ export class UsersService {
     const users = await this.repo.find(options);
 
     const totalCount = await this.repo.count({
-      where: { id: Not(userId) },
+      where: [
+        {
+          id: Not(userId),
+          ...(search && {
+            name: ILike(`%${search}%`),
+          }),
+        },
+        {
+          id: Not(userId),
+          ...(search && {
+            lastname: ILike(`%${search}%`),
+          }),
+        },
+      ],
     });
 
     return { users, totalCount };

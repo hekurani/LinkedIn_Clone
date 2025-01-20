@@ -144,7 +144,6 @@ const PostComponent = ({ user }) => {
             <div className="description m-4 text-sm max-h-96">
               <p>{postItem.description}</p>
             </div>
-                {console.log({postItem})}
             {postItem?.postImages.length > 0 && (
               <div
                 className="media flex flex-wrap"
