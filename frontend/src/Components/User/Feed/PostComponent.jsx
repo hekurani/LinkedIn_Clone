@@ -2,11 +2,25 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import defaultProfile from "../../../assets/profile.png";
 import axiosInstance from "../../../axios/axios.tsx";
+import PreviewPostImage from "./Modals/PreviewPostImage.jsx";
 
 const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
-
   const [comments, setComments] = useState({});
   const [postButtonForPost, setPostButtonForPost] = useState(null);
+
+  const [imageToPreview, setImageToPreview] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = (image) => {
+    console.log("image", image);
+    setImageToPreview(image);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setModalVisible(false);
+  };
 
   const LoveImageUrl =
     "https://static.licdn.com/aero-v1/sc/h/cpho5fghnpme8epox8rdcds22";
@@ -53,7 +67,6 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
       console.error("Error posting:", error);
     }
   };
-
   const getTimePassed = (publishDate) => {
     const currentDate = new Date();
     const postDate = publishDate ? new Date(publishDate) : currentDate;
@@ -148,12 +161,13 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
                   overflow: "hidden",
                 }}
               >
-                {Array.isArray(postItem?.postImages)  ? (
+                {Array.isArray(postItem?.postImages) ? (
                   postItem?.postImages.map((image, imageIndex) => (
                     <img
                       key={imageIndex}
                       src={`Images/postImages/${image}`}
                       alt={`media-${index}-${imageIndex}`}
+                      onClick={() => openModal(image)}            
                       style={{
                         width:
                           postItem?.postImages.length === 1
@@ -328,6 +342,9 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
           </div>
         </div>
       ))}
+      {modalVisible && imageToPreview &&  (
+        <PreviewPostImage image={imageToPreview} isOpen={modalVisible} closeModal={closeModal} />
+      )}
     </>
   );
 };
