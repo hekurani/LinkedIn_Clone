@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddPostModal from "./Modals/AddPostModal";
 import defaultProfile from "../../../assets/profile.png";
 
-const AddPostComponent = ({ user, isUserFeedVisible }) => {
+const AddPostComponent = ({ user, isUserFeedVisible, setAllPosts = () => {} }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -91,7 +91,7 @@ const AddPostComponent = ({ user, isUserFeedVisible }) => {
             Article
           </button>
         </div>
-        {isModalOpen && <AddPostModal user={user} closeModal={closeModal} />}
+        {isModalOpen && <AddPostModal user={user} closeModal={closeModal} setAllPosts={setAllPosts} />}
       </div>
     </div>
   );

@@ -5,19 +5,25 @@ import PostComponent from "../Components/User/Feed/PostComponent";
 import ChatPage from "../Components/User/Chat/ChatComponent";
 import ChatListingComponent from "../Components/User/Chat/ChatListingComponent";
 import getMe from "../utilities/user/getMe";
+import axiosInstance from "../axios/axios.tsx";
 
 const Feed = () => {
   const [user, setUser] = useState({});
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatRoomId, setChatRoomId] = useState(null);
   const [isUserFeedVisible, setIsUserFeedVisible] = useState(true);
+  const [allPosts, setAllPosts] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const user = await getMe();
       setUser(user);
     };
-
+    const getAllPosts = async () => {
+      const { data } = await axiosInstance.get("/posts");
+      setAllPosts(data?.posts);
+    };
+    getAllPosts();
     fetchData();
   }, []);
 
@@ -50,10 +56,10 @@ const Feed = () => {
     <div
       className={`flex w-full ${isUserFeedVisible ? "flex-row" : "flex-col"}`}
     >
-      {isUserFeedVisible && <UserFeedComponent user={user} />}
+      {isUserFeedVisible && <UserFeedComponent user={user} setUser={setUser} setAllPosts={setAllPosts} />}
       <div style={{ marginLeft: "calc(50vw - 520px)" }}>
-        <AddPostComponent user={user} isUserFeedVisible={isUserFeedVisible} />
-        <PostComponent user={user} />
+        <AddPostComponent user={user} setAllPosts={setAllPosts} isUserFeedVisible={isUserFeedVisible} />
+        <PostComponent user={user} allPosts={allPosts} setAllPosts={setAllPosts}/>
         <ChatListingComponent user={user} onChatRowClick={handleOpenChatPage} />
         {isChatOpen && (
           <ChatPage

@@ -87,7 +87,6 @@ export class PostsService {
     return this.repo.save(post);
   }
   isFriendInComment(comment: Comment, userId: number) {
-    console.log('userId comment: ', comment.user.id, 'authUserId: ', userId);
     if (this.friendService.getFriend({ userId, friendId: comment.user.id })) {
       return comment;
     }
@@ -113,14 +112,17 @@ export class PostsService {
         'comments.parentComment',
         'comments.user',
       ],
+      order: {
+        publishDate: 'DESC',
+      },
     })) as any;
 
-    posts.forEach((post) => {
-      post.numberComments = post.comments.length;
-      let comments = post.comments.filter(async (comment) => {
+    posts?.forEach((post) => {
+      post.numberComments = post?.comments?.length;
+      let comments = post?.comments?.filter(async (comment) => {
         return (await comment?.parentComment) === null;
       });
-      comments = comments.filter((comment) => {
+      comments = comments?.filter((comment) => {
         return this.isFriendInComment(comment, userId) !== null;
       });
       post.comments = comments;

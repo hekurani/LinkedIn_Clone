@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import UploadImageModal from "../Profile/Modals/UploadImageModal";
 import defaultProfile from "../../../assets/profile.png";
-const UserFeedComponent = ({ user }) => {
+const UserFeedComponent = ({
+  user,
+  setUser = () => {},
+  setAllPosts = () => {},
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
   const openModal = () => setIsModalOpen(true);
@@ -92,6 +96,8 @@ const UserFeedComponent = ({ user }) => {
           onRequestClose={closeModal}
           capturedImage={capturedImage}
           setCapturedImage={setCapturedImage}
+          setUser={setUser}
+          setAllPosts={setAllPosts}
         />
       )}
     </div>

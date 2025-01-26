@@ -3,18 +3,11 @@ import axios from "axios";
 import defaultProfile from "../../../assets/profile.png";
 import axiosInstance from "../../../axios/axios.tsx";
 
-const PostComponent = ({ user }) => {
-  const [allPosts, setAllPosts] = useState([]);
+const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
+
   const [comments, setComments] = useState({});
   const [postButtonForPost, setPostButtonForPost] = useState(null);
 
-  useEffect(() => {
-    const getAllPosts = async () => {
-      const { data } = await axiosInstance.get("/posts");
-      setAllPosts(data?.posts);
-    };
-    getAllPosts();
-  }, []);
   const LoveImageUrl =
     "https://static.licdn.com/aero-v1/sc/h/cpho5fghnpme8epox8rdcds22";
   const LikeImageUrl =
@@ -155,29 +148,37 @@ const PostComponent = ({ user }) => {
                   overflow: "hidden",
                 }}
               >
-                {postItem?.postImages.map((image, imageIndex) => (
-                  <img
-                    key={imageIndex}
-                    src={`Images/postImages/${image}`}
-                    alt={`media-${index}-${imageIndex}`}
-                    style={{
-                      width:
-                        postItem?.postImages.length === 1
-                          ? "100%"
-                          : postItem?.postImages.length === 3 &&
-                            imageIndex === 2
-                          ? "100%"
-                          : "50%",
-                      height:
-                        postItem?.postImages.length === 3 &&
-                        imageIndex === 2
-                          ? "100%"
-                          : "auto",
-                      marginBottom:
-                        postItem?.postImages.length === 2 ? "5px" : "0",
-                    }}
-                  />
-                ))}
+                {Array.isArray(postItem?.postImages)  ? (
+                  postItem?.postImages.map((image, imageIndex) => (
+                    <img
+                      key={imageIndex}
+                      src={`Images/postImages/${image}`}
+                      alt={`media-${index}-${imageIndex}`}
+                      style={{
+                        width:
+                          postItem?.postImages.length === 1
+                            ? "100%"
+                            : postItem?.postImages.length === 3 &&
+                              imageIndex === 2
+                            ? "100%"
+                            : "50%",
+                        height:
+                          postItem?.postImages.length === 3 && imageIndex === 2
+                            ? "100%"
+                            : "auto",
+                        marginBottom:
+                          postItem?.postImages.length === 2 ? "5px" : "0",
+                      }}
+                    />
+                  ))
+                ) : (
+                  <div className="flex justify-center items-center w-full h-full">
+                    <p>
+                      Sorry, we couldn't fetch some images. Please try again
+                      later.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 

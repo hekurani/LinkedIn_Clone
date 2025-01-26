@@ -4,10 +4,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import CameraModal from "./CameraModal";
+import getMe from "../../../../utilities/user/getMe";
+import axiosInstance from "../../../../axios/axios.tsx";
 
 Modal.setAppElement("#root");
 
-const UploadImageModal = ({ isOpen, user, onRequestClose }) => {
+const UploadImageModal = ({
+  isOpen,
+  user,
+  onRequestClose = () => {},
+  setUser = () => {},
+  setAllPosts = () => {},
+}) => {
   const [isCameraModalOpen, setCameraModalOpen] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
 
@@ -15,8 +23,16 @@ const UploadImageModal = ({ isOpen, user, onRequestClose }) => {
     setCameraModalOpen(true);
   };
 
+  const fetchData = async () => {
+    const user = await getMe();
+    setUser(user);
+  };
   const closeCameraModal = () => {
     setCameraModalOpen(false);
+  };
+  const getAllPosts = async () => {
+    const { data } = await axiosInstance.get("/posts");
+    setAllPosts(data?.posts);
   };
 
   const handleFileUpload = async (file) => {
@@ -31,8 +47,10 @@ const UploadImageModal = ({ isOpen, user, onRequestClose }) => {
       );
 
       onRequestClose();
+      fetchData();
+      getAllPosts();
       setTimeout(() => {
-        window.location.reload();
+        onRequestClose();
       }, 1000);
 
       setCapturedImage(null); // fshijm  captured image

@@ -51,7 +51,7 @@ export class PostsController {
     @UploadedFiles() files,
   ) {
     const response = [];
-    if (files) {
+    if (Array.isArray(files?.images) && files?.images.length) {
       files?.images.forEach((file) => {
         response.push(file.filename);
       });

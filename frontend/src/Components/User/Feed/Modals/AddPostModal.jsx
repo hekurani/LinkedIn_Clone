@@ -10,9 +10,14 @@ import axios from "axios";
 import axiosInstance from "../../../../axios/axios.tsx";
 import defaultProfile from "../../../../assets/profile.png";
 
-const AddPostModal = ({ user, closeModal }) => {
+const AddPostModal = ({ user, closeModal, setAllPosts = () => {} }) => {
   const [description, setDescription] = useState("");
   const [images, setImages] = useState([]);
+
+  const getAllPosts = async () => {
+    const { data } = await axiosInstance.get("/posts");
+    setAllPosts(data?.posts);
+  };
 
   const handleRemoveImage = (position) => {
     setImages((prevImages) =>
@@ -27,14 +32,16 @@ const AddPostModal = ({ user, closeModal }) => {
   const handlePost = async () => {
     const formData = new FormData();
     formData.append("description", description);
-
+    console.log(images);
+    if (Array.isArray(images) && images.length) {
      images.forEach((image, index) => {
         formData.append("images", image);
       });
-
+    }
     try {
       await axiosInstance.post("/posts", formData);
-      window.location.reload();
+      closeModal();
+      getAllPosts();
     } catch (error) {
       console.error("Error posting:", error);
     }
