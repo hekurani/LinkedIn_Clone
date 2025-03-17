@@ -23,6 +23,7 @@ import ProtectedRoutes from "./Components/ProtectedRoutes.js";
 // utilities
 import { getToken } from "./utilities/getToken";
 import AdminDashboard from "./admin/components/AdminDashboard.jsx";
+import LeftCompanyMenu from "./company/components/LeftCompanyMenu.jsx";
 
 function App() {
   return (
@@ -62,6 +63,7 @@ function App() {
             <Route path="/jobs" element={<Job />} />
             <Route path="/job-listing" element={<JobListing />} />
             <Route path="/connections" element={<Connections />} />
+            <Route path="/company-dashboard" element={<LeftCompanyMenu />} />
           </Route>
         </Routes>
       </EmailProvider>

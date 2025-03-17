@@ -28,10 +28,11 @@ const PreviewPostImage = ({
       >
         <div
           className="bg-white p-4 rounded shadow-2xl"
-          style={{ width: "700px", height: "70vh" }}
+          style={{ width: "700px", height: "70vh" , backgroundColor:"black"}}
         >
           <div className="flex m-7">
             <FontAwesomeIcon
+              color="white"
               className="ml-auto text-2xl"
               icon={faXmark}
               onClick={closeModal}
@@ -41,7 +42,7 @@ const PreviewPostImage = ({
           <div className="text-center">
 
             <img
-              className="mx-auto mt-5 mb-5 max-h-32"
+              className="mx-auto mt-5 mb-5 max-h-56"
               src={`Images/postImages/${image}`}
               alt="social"
             />

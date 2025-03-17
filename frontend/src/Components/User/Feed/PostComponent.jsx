@@ -12,7 +12,6 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = (image) => {
-    console.log("image", image);
     setImageToPreview(image);
     setModalVisible(true);
   };
@@ -29,10 +28,9 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
 
   const handleCommentSubmit = async (postId) => {
     try {
-      const commentText = comments[postId].trim(); //trim per mi largu hapsirat e panevojshme
+      const commentText = comments[postId].trim();
 
       if (!commentText) {
-        //nese commenti eshte i zbrazet
         console.error("Comment cannot be empty");
         return;
       }

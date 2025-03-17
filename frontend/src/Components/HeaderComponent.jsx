@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Header.css";
 import logo from "../assets/logoHeader.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,6 +25,7 @@ const HeaderComponent = () => {
   const [countConnections, setCountConnections] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+  const selectRef = useRef(null);
   const connectionBadge = async () => {
     const data = await getMe();
     setCountConnections(data?.countUnseenConnections);
@@ -84,6 +85,9 @@ const HeaderComponent = () => {
         {...innerProps}
         style={{ display: "flex", alignItems: "center", padding: 10 }}
         onClick={() => {
+          if (selectRef.current) {
+            selectRef.current.blur();
+          }
           setSearchTerm("");
           navigate(`${data?.value}/profile`);
         }}
@@ -121,6 +125,7 @@ const HeaderComponent = () => {
         </div>
         <div className="search flex justify-start items-center">
           <AsyncSelect
+            ref={selectRef}
             cacheOptions
             loadOptions={loadOptions}
             // onChange={(selectedOption) =>
