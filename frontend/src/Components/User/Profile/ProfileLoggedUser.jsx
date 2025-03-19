@@ -15,16 +15,16 @@ const ProfileInfo = ({ user }) => {
 
   return (
     <div
-      className="main mx-auto mt-7  left-3 rounded-md"
-      style={{ width: "804px" }}
+      className="mx-auto mt-7  left-3 rounded-md"
+      style={{ width: "804px", border:"1px solid #D3D3D3" }}
     >
       <div
-        className="header  rounded-md"
-        style={{ width: "804px", height: "201px", position: "relative" }}
+        className="header rounded-md"
+        style={{ width: "803px", height: "201px", position: "relative" }}
       >
         <img
           src={cover}
-          className="rounded-md"
+          className="rounded-t-md"
           style={{ position: "absolute" }}
           alt={"coveri"}
         />
@@ -79,16 +79,6 @@ const ProfileInfo = ({ user }) => {
             {" "}
             500+ connections{" "}
           </p>
-          {/*                    <div className='mutal-connections flex relative mt-1'>
-
-                            !!!!!!!!! QIJKO E KOMENTUME NA VYN PER OTHERS PROFILE JASHTA USER PROFILE
-                            
-                            OKEJ.
-                 
-                    <img src={profile} alt={'mutalfriend'} className='relative' style={{width:'30px',height:'30px'}} />
-                    <img src={profile} alt={'mutalfriend'} className='absolute ml-4' style={{width:'30px',height:'30px'}}/>
-                    <p  style={{color:'grey'}}className='mutal-connection ml-7 text-sm mt-1' > <span className="font-semibold " style={{color:'grey'}}>Flori Vula, Ajete Krasniqi,</span> and 64 other mutual connections</p>
-                    </div> */}
 
           <div className="mt-2">
             <button

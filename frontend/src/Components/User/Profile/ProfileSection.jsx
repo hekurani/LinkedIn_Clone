@@ -2,7 +2,7 @@ import React from "react";
 
 const ProfileSection = () => {
   return (
-    <div className="main mx-auto mt-3 " style={{ width: "804px" }}>
+    <div className="mx-auto mt-3 " style={{ width: "804px" }}>
       <div className="header flex justify-between m-5 ">
         <div className="sectionName ">
           <p>Name</p>

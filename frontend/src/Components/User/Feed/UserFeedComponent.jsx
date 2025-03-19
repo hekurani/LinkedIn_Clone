@@ -15,12 +15,12 @@ const UserFeedComponent = ({
   return (
     <div
       className={`w-56 rounded-md ml-16 mt-6 relative transition-all duration-500 `}
-      style={{ height: "310px", border: "1px solid grey" }}
+      style={{ height: "310px", border: "1px solid #D3D3D3" }}
     >
-      <div className="h-36" style={{ borderBottom: "1px solid grey" }}>
+      <div className="h-36" style={{ borderBottom: "1px solid #D3D3D3" }}>
         <div
           className="Cover rounded-t-md h-14"
-          style={{ backgroundColor: "yellow", border: "1px solid grey" }}
+          style={{ backgroundColor: "yellow", border: "1px solid #D3D3D3" }}
         >
           {user && (
             <img
@@ -63,7 +63,7 @@ const UserFeedComponent = ({
       </div>
       <div
         className="Connections w-56 h-10 flex"
-        style={{ borderBottom: "0.5px solid grey" }}
+        style={{ borderBottom: "0.5px solid #D3D3D3" }}
       >
         <p className="ml-3 mt-3 text-xs text-gray-600 font-semibold">
           Connections
@@ -78,7 +78,7 @@ const UserFeedComponent = ({
       </div>
       <div
         className="Premium w-56 h-11 mt-4"
-        style={{ borderBottom: "0.5px solid grey" }}
+        style={{ borderBottom: "0.5px solid #D3D3D3" }}
       >
         <p className="text-xs text-center text-gray-600">
           Accelerate your career with Premium

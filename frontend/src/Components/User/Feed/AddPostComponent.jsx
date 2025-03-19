@@ -29,7 +29,7 @@ const AddPostComponent = ({ user, isUserFeedVisible, setAllPosts = () => {} }) =
     >
       <div
         className="mt-6 rounded-md pr-3 pb-1 w-full  md:w-[525px] sm:w-[450px] ml-5"
-        style={{ border: "1px solid black" }}
+        style={{ border: "1px solid #D3D3D3" }}
       >
         <div className="Image_andImput flex">
           <img
@@ -42,7 +42,7 @@ const AddPostComponent = ({ user, isUserFeedVisible, setAllPosts = () => {} }) =
             type="submit"
             style={{
               backgroundColor: "transparent",
-              border: "1px solid black",
+              border: "1px solid #D3D3D3",
               width: "467px",
               textAlign: "left",
               color: "grey",

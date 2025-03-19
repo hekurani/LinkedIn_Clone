@@ -103,15 +103,15 @@ function ChatPage({ user = null, onCloseChat = () => {}, chatRoomId = null }) {
         isChatOpen ? "" : "hidden"
       }`}
       style={{
-        borderTop: "1px solid grey",
-        borderLeft: "1px solid grey",
+        borderTop: "1px solid #D3D3D3",
+        borderLeft: "1px solid #D3D3D3",
         backgroundColor: "white",
-        borderRight: "1px solid grey",
+        borderRight: "1px solid #D3D3D3",
       }}
     >
       <div
         className="header flex justify-items-center items-center"
-        style={{ borderBottom: "1px solid black" }}
+        style={{ borderBottom: "1px solid #D3D3D3" }}
       >
         <img
           src={otherUser?.imageProfile}
@@ -138,7 +138,7 @@ function ChatPage({ user = null, onCloseChat = () => {}, chatRoomId = null }) {
 
       <div
         className="max-h-56 w-80 overflow-y-auto pb-5 pl-2 mb-1 h-96"
-        style={{ borderBottom: "1px solid grey" }}
+        style={{ borderBottom: "1px solid #D3D3D3" }}
       >
         <ul style={{ wordWrap: "break-word" }}>
           {messages.map((message, index) => (

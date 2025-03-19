@@ -116,7 +116,7 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
       {allPosts.map((postItem, index) => (
         <div
           className="ml-16 mt-8 rounded-md"
-          style={{ border: "1px solid black", marginBottom: "20px" }}
+          style={{ border: "1px solid #D3D3D3", marginBottom: "20px" }}
         >
           <div key={index} className="mb-4">
             <div className="header m-3 flex">
@@ -152,7 +152,7 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
               <div
                 className="media flex flex-wrap"
                 style={{
-                  border: "1px solid black",
+                  border: "1px solid #D3D3D3",
                   maxWidth: "555px",
                   height: "400px",
                   maxHeight: "300px",
@@ -196,7 +196,7 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
 
             <div
               className="socials-feedback h-7 flex"
-              style={{ borderBottom: "1px solid black" }}
+              style={{ borderBottom: "1px solid #D3D3D3" }}
             >
               <img
                 className="reactions-icon social-detail-social-counts__count-icon socia...tions-icon-type-EMPATHY data-test-reactions-icon-theme-light m-1 absolute"
@@ -265,7 +265,7 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
                     style={{
                       backgroundColor: "transparent",
                       width: "475px",
-                      border: "1px solid black",
+                      border: "1px solid #D3D3D3",
                       wordWrap: "break-word",
                       overflowWrap: "break-word",
                       color: "grey",
@@ -318,7 +318,6 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
                         <div
                           className="ml-2 flex-column w-96 h-auto p-2 pl-3 pr-5"
                           style={{
-                            backgroundColor: "#f5f5ef",
                             wordWrap: "break-word",
                           }}
                         >

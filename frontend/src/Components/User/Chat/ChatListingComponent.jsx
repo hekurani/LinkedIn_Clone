@@ -64,14 +64,14 @@ const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
         isCollapsed ? "h-12" : "rounded-t-md"
       }`}
       style={{
-        border: "1px solid grey",
+        border: "1px solid #D3D3D3",
         backgroundColor: "white",
         height: isCollapsed ? "auto" : "80vh",
       }}
     >
       <div
         className="header h-12 flex justify-items-center items-center"
-        style={{ borderBottom: "1px solid grey" }}
+        style={{ borderBottom: "1px solid #D3D3D3" }}
       >
         <img
           className="ml-2 h-8 w-8 mr-2"
@@ -145,7 +145,7 @@ const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
                   onClick={() => handleChatRowClick(chatroom.id)}
                   className="p-2 oneProfile h-16 flex justify-items-center items-center "
                   style={{
-                    border: "1px solid grey",
+                    border: "1px solid #D3D3D3",
                     borderBottom: "0px",
                     borderLeft: "0px",
                   }}
