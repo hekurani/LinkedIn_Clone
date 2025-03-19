@@ -24,49 +24,52 @@ import ProtectedRoutes from "./Components/ProtectedRoutes.js";
 import { getToken } from "./utilities/getToken";
 import AdminDashboard from "./admin/components/AdminDashboard.jsx";
 import LeftCompanyMenu from "./company/components/LeftCompanyMenu.jsx";
+import ErrorBoundary from "./ErrorBoundary.jsx";
 
 function App() {
   return (
     <BrowserRouter>
-      <HeaderComponent />
-      <EmailProvider>
-        <Routes>
-          <Route
-            path="/Register"
-            element={
-              <FormProvider>
-                <Register />
-              </FormProvider>
-            }
-          />
-          <Route path="/Login" element={<Login />} />
-          <Route
-            path="/reset-password-request-email"
-            element={<EmailInput />}
-          />
-          <Route
-            path="/verification-code-forgotpass"
-            element={<EnterCodeForgotPassword />}
-          />
-          <Route
-            path="/success-reset-change-password"
-            element={<ResetPassword />}
-          />
+      <ErrorBoundary>
+        <HeaderComponent />
+        <EmailProvider>
+          <Routes>
+            <Route
+              path="/Register"
+              element={
+                <FormProvider>
+                  <Register />
+                </FormProvider>
+              }
+            />
+            <Route path="/Login" element={<Login />} />
+            <Route
+              path="/reset-password-request-email"
+              element={<EmailInput />}
+            />
+            <Route
+              path="/verification-code-forgotpass"
+              element={<EnterCodeForgotPassword />}
+            />
+            <Route
+              path="/success-reset-change-password"
+              element={<ResetPassword />}
+            />
 
-          <Route element={<ProtectedRoutes role="admin" />}>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          </Route>
+            <Route element={<ProtectedRoutes role="admin" />}>
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            </Route>
 
-          <Route element={<ProtectedRoutes role="jobseeker" />}>
-            <Route path="/" element={<Feed />} />
-            <Route path="/:userId/profile" element={<Profile />} />
-            <Route path="/jobs" element={<Job />} />
-            <Route path="/job-listing" element={<JobListing />} />
-            <Route path="/connections" element={<Connections />} />
-            <Route path="/company-dashboard" element={<LeftCompanyMenu />} />
-          </Route>
-        </Routes>
-      </EmailProvider>
+            <Route element={<ProtectedRoutes role="jobseeker" />}>
+              <Route path="/" element={<Feed />} />
+              <Route path="/:userId/profile" element={<Profile />} />
+              <Route path="/jobs" element={<Job />} />
+              <Route path="/job-listing" element={<JobListing />} />
+              <Route path="/connections" element={<Connections />} />
+              <Route path="/company-dashboard" element={<LeftCompanyMenu />} />
+            </Route>
+          </Routes>
+        </EmailProvider>
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }
