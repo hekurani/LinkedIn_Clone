@@ -39,7 +39,6 @@ export class AuthService {
     if (storedHash !== hash.toString('hex')) {
       return new BadRequestException('Wrong password!');
     }
-    console.log(user);
     const payload_access = {
       userId: user?.id,
       roles: user.roles,
@@ -202,7 +201,6 @@ export class AuthService {
   }
   async logout(userId: number) {
     const user = await this.usersService.findOne(userId);
-    console.log(userId);
     if (!user) {
       throw new NotFoundException('No user is found');
     }

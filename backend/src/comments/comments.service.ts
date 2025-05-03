@@ -82,7 +82,6 @@ export class CommentsService {
       user: user,
     });
     const Comment = await this.repo.save(replyComment);
-    console.log(Comment);
     return Comment;
   }
 

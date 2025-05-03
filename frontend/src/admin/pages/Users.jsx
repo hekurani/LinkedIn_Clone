@@ -10,15 +10,14 @@ const Users = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [totalUsers, setTotalUsers] = useState(0); // To keep track of total users
+  const [totalUsers, setTotalUsers] = useState(0);
 
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
         const res = await getAllUsers({ page, limit });
-        console.log(res);
-        setUsers(res?.users || []); // Update this line based on your response structure
-        setTotalUsers(res?.totalCount || 0); // Update this line based on your response structure
+        setUsers(res?.users || []);
+        setTotalUsers(res?.totalCount || 0);
       } catch (err) {
         console.error(err);
       }
@@ -117,20 +116,7 @@ const Users = () => {
             )}
           </tbody>
         </table>
-        {/*         <div className="flex items-center justify-between rounded-b-lg bg-white !px-5 !py-2">
-          {data?.count > 0 && (
-            <p className="font-light text-primary-900">
-              Showing {(page - 1) * limit} -{' '}
-              {data?.count > page * limit ? page * limit : data?.count} out of {data?.count}
-            </p>
-          )}
-          <Pagination
-            containerClassName="flex"
-            onPageChange={({ selected }) => setPage(selected + 1)}
-            perPage={limit}
-            totalItems={data?.count}
-            page={page}
-          /> */}
+
         <div className="flex justify-between mt-4">
           <p className="text-white">
             {totalUsers > 0 && (
