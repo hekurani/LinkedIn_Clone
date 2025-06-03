@@ -12,8 +12,7 @@ import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { FindManyOptions } from 'typeorm';
 import { promisify } from 'util';
 import { Skill } from 'src/skills/skills.entity';
-import { UserRole } from 'src/roles/types/role.type';
-import { Role } from 'src/roles/Roles.entity';
+import { Role } from 'src/role/entities/role.entity';
 import { PaginationDto } from 'src/pagination/pagination.dto';
 const scrypt = promisify(_scrypt);
 @Injectable()
@@ -38,12 +37,15 @@ export class UsersService {
       email,
       password,
       imageProfile,
+      roleId: role.id,
     });
-    if (!user.roles) {
-      user.roles = [];
-    }
-    user.roles.push(role);
-    return this.repo.save(user);
+  
+    const savedUser = await this.repo.save(user);
+  
+    return {
+      ...savedUser,
+      role: role?.name,
+    };
   }
 
   async findOne(id: number) {
@@ -61,7 +63,9 @@ export class UsersService {
         'lastname',
         'RefreshToken',
         'countUnseenConnections',
+        'roleId',
       ],
+      relations: ['role'],
     });
 
     return user ?? null;
@@ -92,8 +96,9 @@ export class UsersService {
           'gender',
           'imageProfile',
           'password',
+          'roleId',
         ],
-        relations: ['roles'],
+        relations: ['role'],
       });
     }
     return this.repo.find({
@@ -106,8 +111,9 @@ export class UsersService {
         'gender',
         'imageProfile',
         'password',
+        'roleId',
       ],
-      relations: ['roles'],
+      relations: ['role'],
     });
   }
   find(email: string) {
@@ -213,7 +219,7 @@ export class UsersService {
           }),
         },
       ],
-      relations: ['roles'],
+      relations: ['role'],
       skip: (page - 1) * limit,
       take: limit,
     };

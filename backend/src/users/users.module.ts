@@ -10,8 +10,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { Posts } from '../posts/post.entity';
 import { Comment } from 'src/comments/Entity/comment.entity';
 import { Skill } from 'src/skills/skills.entity';
-import { RolesService } from 'src/roles/roles.service';
-import { Role } from 'src/roles/Roles.entity';
+import { RoleService } from 'src/role/role.service';
+import { Role } from 'src/role/entities/role.entity';
 import { company } from 'src/company/company.entity';
 
 @Module({
@@ -24,7 +24,7 @@ import { company } from 'src/company/company.entity';
   providers: [
     UsersService,
     AuthService,
-    RolesService,
+    RoleService,
     { provide: APP_INTERCEPTOR, useClass: CurrentUserInterceptor },
   ],
 })

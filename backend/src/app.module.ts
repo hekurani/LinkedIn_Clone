@@ -25,20 +25,17 @@ import { FriendRequestService } from './friend-request/friend-request.service';
 import { FriendRequestModule } from './friend-request/friend-request.module';
 import { AuthentGuard } from './auth/guards/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
-import { RolesModule } from './roles/roles.module';
 import { PostReactionModule } from './PostReaction/postreaction.module';
 import { CommentReactionModule } from './comment-reaction/comment-reaction.module';
 import { RepostsModule } from './reposts/reposts.module';
-// import { JobapplicationService } from './jobapplication/jobapplication.service';
-// import { JobapplicationController } from './jobapplication/jobapplication.controller';
 import { CompanyModule } from './company/company.module';
 import { FollowerModule } from './follower/follower.module';
 import { JobPostModule } from './job-post/job-post.module';
-// import { JobPsotController } from './job-psot/job-psot.controller';
 import { LocationModule } from './location/location.module';
 import { WorkExperienceModule } from './work-experience/work-experience.module';
 import { JobApplication } from './job-application/job-application.entity';
 import { JobApplicationModule } from './job-application/job-application.module';
+import { RoleModule } from './role/role.module';
 const cookieSession = require('cookie-session');
 @Module({
   imports: [
@@ -70,7 +67,6 @@ const cookieSession = require('cookie-session');
     FriendsModule,
     CommentsModule,
     FriendRequestModule,
-    RolesModule,
     PostReactionModule,
     CommentReactionModule,
     RepostsModule,
@@ -80,6 +76,7 @@ const cookieSession = require('cookie-session');
     LocationModule,
     WorkExperienceModule,
     JobApplicationModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [

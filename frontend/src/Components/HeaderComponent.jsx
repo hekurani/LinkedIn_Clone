@@ -32,9 +32,7 @@ const HeaderComponent = () => {
   };
   const location = useLocation();
   const token = getToken();
-  useEffect(() => {
-    if (!token) return;
-  }, [token]);
+
 
   useEffect(() => {
     connectionBadge();
@@ -108,6 +106,8 @@ const HeaderComponent = () => {
       </div>
     );
   };
+
+  if (!token) return null;
   return (
     <div
       className="h-16 grid grid-cols-12 items-center lg:pr-3 md:pr-40 sm:pr-[440px] xmd:pr-[400px]"

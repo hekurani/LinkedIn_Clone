@@ -15,20 +15,22 @@ import { JWTpayloadRt } from './types/JWTpayloadRt.type';
 import * as argon from 'argon2';
 import { OAuth2Client } from 'google-auth-library';
 import { Response } from 'express';
-import { UserRole } from 'src/roles/types/role.type';
-import { RolesService } from 'src/roles/roles.service';
+import { RoleService } from 'src/role/role.service';
+
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
 );
 const scrypt = promisify(_scrypt);
+
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-    private rolesService: RolesService,
+    private roleService: RoleService,
   ) {}
+
   async signIn(email: string, password: string) {
     const [user] = await this.usersService.findByPassword(email, false);
     if (!user || !user?.password) {
@@ -41,11 +43,13 @@ export class AuthService {
     }
     const payload_access = {
       userId: user?.id,
-      roles: user.roles,
+      roleId: user.roleId,
       email: user?.email,
+      role: user?.role?.name,
     } as JWTpayload;
     const payload_refresh = { userId: user?.id } as JWTpayloadRt;
     const access_token = await this.jwtService.signAsync(payload_access);
+    console.log("access_token: ", access_token);
     const refresh_token = await this.jwtService.signAsync(payload_refresh);
     const refresh_hash = await argon.hash(refresh_token);
     await this.usersService.update(user?.id, {}, refresh_hash);
@@ -56,11 +60,13 @@ export class AuthService {
       refresh_token,
     } as Tokens;
   }
+
   async findById(id) {
     const user = await this.usersService.findOne(id);
     if (!user) throw new NotFoundException('User not found');
     return user;
   }
+
   async googleSignUp(token: string) {
     const ticket = client.verifyIdToken({
       idToken: token,
@@ -72,9 +78,9 @@ export class AuthService {
     if (users.length && users.find((user) => !user?.password)) {
       throw new ForbiddenException('The email is used before');
     }
-    const role = await this.rolesService.findRole(UserRole.JOBSEEKER);
+    const role = await this.roleService.findRole('jobseeker');
     if (!role) {
-      throw new InternalServerErrorException('Somethig went wrong');
+      throw new InternalServerErrorException('Something went wrong');
     }
     const user = await this.usersService.create(
       payLoad?.given_name,
@@ -86,13 +92,16 @@ export class AuthService {
     );
     const payload_access = {
       userId: user?.id,
-      roles: user.roles,
+      roleId: user.roleId,
       email: user?.email,
+      role: user?.role,
     } as JWTpayload;
     const payload_refresh = {
       userId: user?.id,
       email: user.email,
     } as JWTpayloadRt;
+
+    console.log("payload_access: ", payload_access);
     const access_token = await this.jwtService.signAsync(payload_access);
     const refresh_token = await this.jwtService.signAsync(payload_refresh);
     const refresh_hash = await argon.hash(refresh_token);
@@ -103,6 +112,7 @@ export class AuthService {
       refresh_token,
     } as Tokens;
   }
+
   async googleLogIn(token: string) {
     const ticket = client.verifyIdToken({
       idToken: token,
@@ -113,10 +123,12 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException('User not found!');
     }
+    const role  = await this.roleService.findOne(user?.roleId);
     const payload_access = {
       userId: user?.id,
-      roles: user.roles,
+      roleId: user.roleId,
       email: user?.email,
+      role: role?.name,
     } as JWTpayload;
     const payload_refresh = { userId: user?.id } as JWTpayloadRt;
     const access_token = await this.jwtService.signAsync(payload_access);
@@ -129,6 +141,7 @@ export class AuthService {
       refresh_token,
     } as Tokens;
   }
+
   async signUp(
     name: string,
     lastname: string,
@@ -147,9 +160,9 @@ export class AuthService {
     const hash = (await scrypt(password, salt, 32)) as Buffer;
     // join the salt at the encoded password as the strings
     const result = salt + '.' + hash.toString('hex');
-    const role = await this.rolesService.findRole(UserRole.JOBSEEKER);
+    const role = await this.roleService.findOne(1); // Assuming 1 is the default role ID for jobseekers
     if (!role) {
-      throw new InternalServerErrorException('Somethig went wrong');
+      throw new InternalServerErrorException('Something went wrong');
     }
     //Create the user
     const user = await this.usersService.create(
@@ -162,8 +175,9 @@ export class AuthService {
     );
     const payload_access = {
       userId: user?.id,
-      roles: user.roles,
+      roleId: user.roleId,
       email: user?.email,
+      role: user?.role,
     } as JWTpayload;
     const payload_refresh = { userId: user?.id } as JWTpayloadRt;
     const access_token = await this.jwtService.signAsync(payload_access);
@@ -171,12 +185,15 @@ export class AuthService {
     const refresh_hash = await argon.hash(refresh_token);
     await this.usersService.update(user?.id, {}, refresh_hash);
 
+    console.log("access_token: ", access_token);
+
     return {
       status: 'success',
       access_token,
       refresh_token,
     } as Tokens;
   }
+
   async refreshToken(userId: number, rt: string) {
     const user = await this.usersService.findOne(userId);
 
@@ -187,7 +204,10 @@ export class AuthService {
     if (!rtMatches) {
       throw new NotFoundException('The Refresh Token is not found');
     }
-    const payload_access = { userId: user?.id } as JWTpayload;
+    const payload_access = { 
+      userId: user?.id,
+      roleId: user.roleId,
+    } as JWTpayload;
     const payload_refresh = { userId: user?.id } as JWTpayloadRt;
     const access_token = await this.jwtService.signAsync(payload_access);
     const refresh_token = await this.jwtService.signAsync(payload_refresh);
@@ -199,6 +219,7 @@ export class AuthService {
       refresh_token,
     };
   }
+
   async logout(userId: number) {
     const user = await this.usersService.findOne(userId);
     if (!user) {

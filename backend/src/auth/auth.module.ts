@@ -8,8 +8,8 @@ import { AuthentGuard } from './guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { MulterModule } from '@nestjs/platform-express';
 import { MailService } from 'src/mailer-forgot-password/mail.service';
-import { RolesService } from 'src/roles/roles.service';
-import { Role } from 'src/roles/Roles.entity';
+import { RoleService } from 'src/role/role.service';
+import { Role } from 'src/role/entities/role.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
@@ -34,7 +34,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   providers: [
     AuthService,
     MailService,
-    RolesService,
+    RoleService,
     {
       provide: APP_GUARD,
       useClass: AuthentGuard,

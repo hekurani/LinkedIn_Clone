@@ -9,7 +9,7 @@ import { ChatRoom } from 'src/chatroom/chat.entity';
 import { Comment } from 'src/comments/Entity/comment.entity';
 import { Friend } from 'src/friends/friends.entity';
 import { FriendRequest } from 'src/friend-request/friend-request.entity';
-import { Role } from 'src/roles/Roles.entity';
+import { Role } from 'src/role/entities/role.entity';
 import { postreaction } from 'src/PostReaction/postreaction.entity';
 import { commentreaction } from 'src/comment-reaction/comment-reaction.entity';
 import { Reposts } from 'src/reposts/reposts.entity';

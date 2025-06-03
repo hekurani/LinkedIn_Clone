@@ -77,13 +77,12 @@ const Register = () => {
       const response = await axiosInstance.post(
         "http://localhost:4000/auth/signUp",
         {
-          name: data.firstName,
-          email: data.email,
-          lastname: data.lastName,
-          password: data.password,
+          name: data?.firstName,
+          email: data?.email,
+          lastname: data?.lastName,
+          password: data?.password,
         }
       );
-
       localStorage.setItem("access_token", response?.data?.access_token);
       localStorage.setItem("refresh_token", response?.data?.refresh_token);
       navigate("/");

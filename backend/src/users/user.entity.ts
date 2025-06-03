@@ -4,6 +4,7 @@ import {
   BeforeUpdate,
   JoinColumn,
   JoinTable,
+  ManyToOne,
   ManyToMany,
   Unique,
 } from 'typeorm';
@@ -12,7 +13,7 @@ import { Exclude } from 'class-transformer';
 import { Posts } from '../posts/post.entity';
 import { Comment } from '../comments/Entity/comment.entity';
 import { Skill } from 'src/skills/skills.entity';
-import { Role } from 'src/roles/Roles.entity';
+import { Role } from 'src/role/entities/role.entity';
 import { ArrayNotEmpty } from 'class-validator';
 import { postreaction } from 'src/PostReaction/postreaction.entity';
 import { commentreaction } from 'src/comment-reaction/comment-reaction.entity';
@@ -42,10 +43,12 @@ export class User {
   @OneToMany(() => commentreaction, (commentreaction) => commentreaction.user)
   commentReaction: commentreaction[];
 
-  @ManyToMany(() => Role)
-  @ArrayNotEmpty()
-  @JoinTable()
-  roles: Role[];
+  @ManyToOne(() => Role)
+  @JoinColumn({ name: 'roleId' })
+  role: Role;
+
+  @Column()
+  roleId: number;
 
   @Exclude()
   @Column({ nullable: true, select: false })
@@ -69,7 +72,7 @@ export class User {
   imageProfile: string;
 
   @Column({ nullable: true })
-  gender: String;
+  gender: string;
 
   @OneToMany(() => company, (company) => company.owner)
   companies: company[];
@@ -79,16 +82,16 @@ export class User {
 
   @BeforeRemove()
   beforeRemove() {
-    console.log(`The removed user id is ${this.id}`);
+    console.log(`The removed user id is ${this?.id}`);
   }
 
   @BeforeUpdate()
   beforeUpdate() {
-    console.log(`The updated user id is ${this.id}`);
+    console.log(`The updated user id is ${this?.id}`);
   }
 
   @BeforeInsert()
   beforeInsert() {
-    console.log(`The new user id is ${this.id}`);
+    console.log(`The new user id is ${this?.id}`);
   }
 }
