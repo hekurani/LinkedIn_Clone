@@ -13,7 +13,6 @@ const Companies = () => {
     const fetchAllCompanies = async () => {
       try {
         const res = await getCompanies();
-        console.log({res})
         setCompanies(res || []);
       } catch (err) {
         console.error(err);

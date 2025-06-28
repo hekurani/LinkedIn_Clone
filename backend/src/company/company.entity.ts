@@ -10,7 +10,7 @@ import {
   Unique,
 } from 'typeorm';
 import { IndustryType } from './enum/industry_type.enum';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsEmail } from 'class-validator';
 import { WorkPlace } from './enum/workplace.enum';
 import { city } from 'src/location/entity/city.entity';
 @Entity()
@@ -24,8 +24,13 @@ export class company {
   @Column({ nullable: false, unique: true })
   slug: String;
 
-  // @Column({ nullable: false, unique: true })
-  // email: String;
+  @Column({ nullable: false, unique: true })
+  @IsEmail()
+  email: String;
+  
+  @Column({ nullable: false })
+  @IsNotEmpty()
+  password: String;
   
   @Column({
     type: 'enum',
