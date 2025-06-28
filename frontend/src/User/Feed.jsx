@@ -13,6 +13,7 @@ const Feed = () => {
   const [chatRoomId, setChatRoomId] = useState(null);
   const [isUserFeedVisible, setIsUserFeedVisible] = useState(true);
   const [allPosts, setAllPosts] = useState([]);
+  const [otherYser, setOtherUser] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,6 +22,7 @@ const Feed = () => {
     };
     const getAllPosts = async () => {
       const { data } = await axiosInstance.get("/posts");
+      console.log(data)
       setAllPosts(data?.posts);
     };
     getAllPosts();
@@ -54,7 +56,7 @@ const Feed = () => {
 
   return (
     <div
-      className={`flex w-full ${isUserFeedVisible ? "flex-row" : "flex-col"}`}
+      className={`flex w-full bg-[#f4f2ee] ${isUserFeedVisible ? "flex-row" : "flex-col"}`}
     >
       {isUserFeedVisible && <UserFeedComponent user={user} setUser={setUser} setAllPosts={setAllPosts} />}
       <div style={{ marginLeft: "calc(50vw - 520px)" }}>
@@ -64,6 +66,7 @@ const Feed = () => {
         {isChatOpen && (
           <ChatPage
             user={user}
+            // otherUser={otherUser}
             onCloseChat={handleCloseChatPage}
             chatRoomId={chatRoomId}
           />

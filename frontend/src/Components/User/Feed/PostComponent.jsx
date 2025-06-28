@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, {  useState } from "react";
 import defaultProfile from "../../../assets/profile.png";
 import axiosInstance from "../../../axios/axios.tsx";
 import PreviewPostImage from "./Modals/PreviewPostImage.jsx";
@@ -116,7 +115,7 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
       {allPosts.map((postItem, index) => (
         <div
           className="ml-16 mt-8 rounded-md"
-          style={{ border: "1px solid #D3D3D3", marginBottom: "20px" }}
+          style={{ border: "1px solid #D3D3D3", background:'white', marginBottom: "20px" }}
         >
           <div key={index} className="mb-4">
             <div className="header m-3 flex">
@@ -132,11 +131,11 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
               />
               <div className="profileinfo text-left ml-2">
                 <p>
-                  {postItem.user.name} {postItem.user.lastname}
+                  {postItem?.user?.name} {postItem?.user?.lastname}
                 </p>
-                <p className="position text-xs">Software Developer</p>
+                <p className="position text-xs">{postItem?.user?.profession?.name}</p>
                 <p className="time text-xs">
-                  {getTimePassed(postItem.publishDate)} •
+                  {getTimePassed(postItem?.publishDate)} •
                 </p>
               </div>
               <div className="ml-auto flex">

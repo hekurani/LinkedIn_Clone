@@ -41,26 +41,30 @@ const Profile = () => {
   };
 
   return (
-    <div>
-      {userId == loggedUser.id ? (
-        <ProfileLoggedUserInfo user={loggedUser} />
-      ) : (
-        <FriendsProfile user={foreignUser} />
-      )}
-      <ProfileSection user={loggedUser} />
+    <div className="bg-[#f4f2ee] w-full min-h-screen">
+      <div className="flex flex-col items-center justify-center w-full">
 
-      <ChatListingComponent
-        user={loggedUser}
-        onChatRowClick={handleOpenChatPage}
-      />
 
-      {isChatOpen && (
-        <ChatPage
+        {userId == loggedUser.id ? (
+          <ProfileLoggedUserInfo user={loggedUser} />
+        ) : (
+          <FriendsProfile user={foreignUser} />
+        )}
+        <ProfileSection user={loggedUser} />
+
+        <ChatListingComponent
           user={loggedUser}
-          onCloseChat={handleCloseChatPage}
-          chatRoomId={chatRoomId}
+          onChatRowClick={handleOpenChatPage}
         />
-      )}
+
+        {isChatOpen && (
+          <ChatPage
+            user={loggedUser}
+            onCloseChat={handleCloseChatPage}
+            chatRoomId={chatRoomId}
+          />
+        )}
+      </div>
     </div>
   );
 };

@@ -4,6 +4,8 @@ import logo from "../assets/LinkedIn-logo.png";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import axiosInstance from "../axios/axios.tsx";
 import { useAlert } from "../utilities/alert/AlertContext.js";
+import { getToken } from "../utilities/getToken.js";
+
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -59,9 +61,21 @@ const Login = () => {
     };
     try {
       const response = await axiosInstance.post("auth/login", loginInfo);
+      console.log(response);
+
       const token = response?.data?.access_token;
       if (token) {
         localStorage.setItem("access_token", token);
+      }
+      const innerToken = getToken();
+     
+      if (innerToken?.role === 'admin') {
+        navigate("/admin/dashboard");
+      }
+      else if (innerToken?.role === 'company')  {
+        navigate("/company-dashboard");
+      }
+      else {
         navigate("/");
       }
     } catch (err) {
@@ -72,6 +86,7 @@ const Login = () => {
       });
     }
   };
+  
   return (
     <>
       <div

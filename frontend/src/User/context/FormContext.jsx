@@ -25,6 +25,7 @@ export const FormProvider = ({ children }) => {
     password: "",
     firstName: "",
     lastName: "",
+    professionId: "",
   });
   const canSubmit = page === Object.keys(title).length - 1;
   const [error, setError] = useState({});

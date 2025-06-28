@@ -24,6 +24,9 @@ export class company {
   @Column({ nullable: false, unique: true })
   slug: String;
 
+  // @Column({ nullable: false, unique: true })
+  // email: String;
+  
   @Column({
     type: 'enum',
     enum: IndustryType,

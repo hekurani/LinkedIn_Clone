@@ -19,6 +19,7 @@ import { postreaction } from 'src/PostReaction/postreaction.entity';
 import { commentreaction } from 'src/comment-reaction/comment-reaction.entity';
 import { Reposts } from 'src/reposts/reposts.entity';
 import { company } from 'src/company/company.entity';
+import { Profession } from 'src/profession/profession.entity';
 
 @Entity()
 export class User {
@@ -79,6 +80,13 @@ export class User {
 
   @OneToMany(() => Reposts, (reposts) => reposts.user)
   reposts: Reposts[];
+
+  @ManyToOne(() => Profession, { nullable: true })
+  @JoinColumn({ name: 'professionId' })
+  profession: Profession;
+
+  @Column({ nullable: true })
+  professionId: number;
 
   @BeforeRemove()
   beforeRemove() {

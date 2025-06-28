@@ -3,6 +3,8 @@ import AdminHeader from "./AdminHeader";
 import AdminSideBar from "./AdminSideBar";
 import Dashboard from "../pages/Dashboard";
 import Users from "../pages/Users";
+import Companies from "../pages/Companies";
+
 const AdminDashboard = () => {
   const [page, setPage] = useState("dashboard");
   return (
@@ -12,6 +14,7 @@ const AdminDashboard = () => {
         <AdminSideBar setPage={setPage} />
         {page === "dashboard" && <Dashboard />}
         {page === "users" && <Users />}
+        {page === "companies" && <Companies />}
       </div>
     </>
   );

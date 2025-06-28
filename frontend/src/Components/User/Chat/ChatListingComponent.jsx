@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useFeedContext } from "../../../User/context/FeedContext";
 
 const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
   const [chatRooms, setChatRooms] = useState([]);
   const [messages, setAllMessages] = useState([]);
   const [loggedInUser, setLoggedInUser] = useState({});
+  const [otherUser, setOtherUser] = useState({});
 
   useEffect(() => {
     const getAllChats = async () => {
@@ -43,6 +45,17 @@ const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
     fetchAllMessages();
   }, [user.id]);
 
+  // useEffect(() => { -- TO RETHINK THIS 
+  //   if (showMessageList) {
+  //     setIsCollapsed(false);
+  //     setShowMessageList(true);
+  //   } else {  
+  //     setIsCollapsed(true);
+  //     setShowMessageList(false);
+  //   }
+
+  // }, [showMessageList]);
+
   const findMessageById = (messageId) => {
     const message = messages.find((message) => message.id == messageId);
     return message;
@@ -55,7 +68,7 @@ const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
   };
 
   const handleChatRowClick = (chatRoomId) => {
-    onChatRowClick(chatRoomId);
+    onChatRowClick(chatRoomId, otherUser);
   };
 
   return (

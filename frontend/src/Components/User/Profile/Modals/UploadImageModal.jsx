@@ -96,7 +96,7 @@ const UploadImageModal = ({
 
         <div
           className="bg-white p-4 rounded shadow-2xl"
-          style={{ width: "700px", height: "90vh" }}
+          style={{ width: "700px", height: "55vh" }}
         >
           <div className="flex m-7">
             <h2 className="text-xl font-semibold mb-4">Add Photo</h2>

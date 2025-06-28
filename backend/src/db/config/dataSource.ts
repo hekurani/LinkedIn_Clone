@@ -20,6 +20,7 @@ import { Follower } from 'src/follower/follower.entity';
 import { WorkExperience } from 'src/work-experience/work-experience.entity';
 import { jobPost } from 'src/job-post/job-post.entity';
 import { JobApplication } from 'src/job-application/job-application.entity';
+import { Profession } from 'src/profession/profession.entity';
 
 
  const createDataSourceOptions = (configService: ConfigService): DataSourceOptions & SeederOptions => {
@@ -30,7 +31,7 @@ import { JobApplication } from 'src/job-application/job-application.entity';
         username:'postgres',
         port:configService.get('PORT'),
         password:'password',
-        entities: [User,Posts,Skill,Message,ChatRoom,Comment,Friend,FriendRequest,Role,postreaction,commentreaction,Reposts,country,city,company,Follower,WorkExperience,jobPost,JobApplication],
+        entities: [User,Posts,Skill,Message,ChatRoom,Comment,Friend,FriendRequest,Role,postreaction,commentreaction,Reposts,country,city,company,Follower,WorkExperience,jobPost,JobApplication,Profession],
         migrations: [__dirname + '/../migrations/*{.ts,.js}'],
         seeds: ['dist/db/seeds/**/*.js'],
         synchronize: false,

@@ -6,22 +6,17 @@ import {
   Param,
   Patch,
   Post,
-  UploadedFile,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCommpanyDto } from './dto/CreateCompany.dto';
 import { AuthUser } from 'src/auth/decorators/AuthUser-decorator';
-import { create } from 'domain';
 import {
   FileFieldsInterceptor,
-  FileInterceptor,
-  FilesInterceptor,
 } from '@nestjs/platform-express';
 import { multerOptions } from 'src/utils/multer/multerOptions.multer';
 import { DeleteCommpanyDto } from './dto/DeleteCompany.dto';
-import { UpdateCommentDto } from 'src/comments/dto/update.dto.entity';
 import { UpdateCommpanyDto } from './dto/UpdateCompany.dto';
 
 @Controller('company')
@@ -44,8 +39,7 @@ export class CompanyController {
       ),
     ),
   )
-  // @UseInterceptors(FilesInterceptor({'logo',{...multerOptions,storage:multerOptions.storage("../Images/logo")}}))
-  // @UseInterceptors(FileInterceptor('imageCover',{...multerOptions,storage:multerOptions.storage("../Images/imageCover")}))
+
   createCompany(
     @Body() createCompanyDto: CreateCommpanyDto,
     @AuthUser() user: { userId: number },

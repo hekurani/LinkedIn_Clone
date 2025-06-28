@@ -16,6 +16,12 @@ const AdminSideBar = ({ setPage }) => {
         >
           <h1 className="text-white text-2xl">Users</h1>
         </div>
+        <div
+          onClick={() => setPage("companies")}
+          className="flex items-center justify-center h-16 w-full border-b border-gray-700"
+        >
+          <h1 className="text-white text-2xl">Companies</h1>
+        </div>
       </div>
     </div>
   );

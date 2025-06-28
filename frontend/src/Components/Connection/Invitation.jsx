@@ -48,7 +48,7 @@ const Invitation = () => {
         maxWidth: "880px",
         borderRadius: "7px",
       }}
-      className="mx-auto p-5 mt-3"
+      className="mx-auto p-5"
     >
       {!!data && data.length > 0 ? (
         <div className="header flex items-center mb-3">

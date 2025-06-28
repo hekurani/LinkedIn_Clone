@@ -81,6 +81,7 @@ const Register = () => {
           email: data?.email,
           lastname: data?.lastName,
           password: data?.password,
+          professionId: data?.professionId || null,
         }
       );
       localStorage.setItem("access_token", response?.data?.access_token);

@@ -13,20 +13,28 @@ import sendMessage from "../../../utilities/messages/sendMessage";
 
 let socket;
 
-function ChatPage({ user = null, onCloseChat = () => {}, chatRoomId = null }) {
+function ChatPage({ user = null, onCloseChat = () => { }, chatRoomId = null }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(true); //me handle chat open/close
   const messagesEndRef = useRef(null); //mesazhi i fundit
   const [otherUser, setOtherUser] = useState(null);
+  console.log({ user, chatRoomId });
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
         `http://localhost:4000/chatroom/allMessages/${chatRoomId}`
       );
-      const apiMessages = response.data;
-      setOtherUser(response.data[0].user);
+      
+      if (!response) return;
+
+      const apiMessages = response?.data;
+      if (Array.isArray(apiMessages) && apiMessages.length > 0) {
+        setOtherUser(apiMessages[0]?.user);
+      } else {
+        setOtherUser(null);
+      }
       setMessages(apiMessages);
     };
 
@@ -96,12 +104,11 @@ function ChatPage({ user = null, onCloseChat = () => {}, chatRoomId = null }) {
       handleMessageSubmit();
     }
   };
-
+  console.log({otherUser})
   return (
     <div
-      className={`h-96 w-80  rounded-t-md fixed bottom-0 right-40 mr-40 ${
-        isChatOpen ? "" : "hidden"
-      }`}
+      className={`h-96 w-80  rounded-t-md fixed bottom-0 right-40 mr-40 ${isChatOpen ? "" : "hidden"
+        }`}
       style={{
         borderTop: "1px solid #D3D3D3",
         borderLeft: "1px solid #D3D3D3",

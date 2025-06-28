@@ -111,6 +111,7 @@ export class PostsService {
         'comments.childComments',
         'comments.parentComment',
         'comments.user',
+        'user.profession'
       ],
       order: {
         publishDate: 'DESC',

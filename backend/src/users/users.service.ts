@@ -65,8 +65,9 @@ export class UsersService {
         'countUnseenConnections',
         'roleId',
       ],
-      relations: ['role'],
+      relations: ['role', 'profession'],
     });
+    
 
     return user ?? null;
   }

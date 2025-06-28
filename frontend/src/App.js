@@ -11,7 +11,6 @@ import ResetPassword from "./User/ForgotPassword/ResetPassword";
 // context for forgot password
 import { EmailProvider } from "./User/ForgotPassword/EmailContext";
 // components
-import HeaderComponent from "./Components/HeaderComponent";
 import Feed from "./User/Feed";
 import Profile from "./User/Profile";
 import { FormProvider } from "./User/context/FormContext";
@@ -21,15 +20,18 @@ import Connections from "./User/Connections";
 // protected routes component
 import ProtectedRoutes from "./Components/ProtectedRoutes.js";
 // utilities
-import { getToken } from "./utilities/getToken";
 import AdminDashboard from "./admin/components/AdminDashboard.jsx";
 import LeftCompanyMenu from "./company/components/LeftCompanyMenu.jsx";
 import ErrorBoundary from "./ErrorBoundary.jsx";
+import HeaderComponent from "./Components/HeaderComponent.jsx";
+import { FeedProvider } from "./User/context/FeedContext.jsx";
 
 function App() {
   return (
     <BrowserRouter>
       <ErrorBoundary>
+        <FeedProvider>
+         
         <HeaderComponent />
         <EmailProvider>
           <Routes>
@@ -55,11 +57,11 @@ function App() {
               element={<ResetPassword />}
             />
 
-            <Route element={<ProtectedRoutes role="admin" />}>
+            <Route element={<ProtectedRoutes roles={['admin']} />}>
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Route>
 
-            <Route element={<ProtectedRoutes role="jobseeker" />}>
+            <Route element={<ProtectedRoutes roles={['admin', 'jobseeker']} />}>
               <Route path="/" element={<Feed />} />
               <Route path="/:userId/profile" element={<Profile />} />
               <Route path="/jobs" element={<Job />} />
@@ -69,6 +71,7 @@ function App() {
             </Route>
           </Routes>
         </EmailProvider>
+        </FeedProvider>
       </ErrorBoundary>
     </BrowserRouter>
   );

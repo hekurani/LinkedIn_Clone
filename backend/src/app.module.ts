@@ -36,6 +36,7 @@ import { WorkExperienceModule } from './work-experience/work-experience.module';
 import { JobApplication } from './job-application/job-application.entity';
 import { JobApplicationModule } from './job-application/job-application.module';
 import { RoleModule } from './role/role.module';
+import { ProfessionModule } from './profession/profession.module';
 const cookieSession = require('cookie-session');
 @Module({
   imports: [
@@ -77,6 +78,7 @@ const cookieSession = require('cookie-session');
     WorkExperienceModule,
     JobApplicationModule,
     RoleModule,
+    ProfessionModule,
   ],
   controllers: [AppController],
   providers: [
