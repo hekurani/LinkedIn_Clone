@@ -1,11 +1,11 @@
-import React from "react";
-import { useNavigate, Link } from "react-router-dom";
-import useFormContext from "./context/FormContext";
-import logo from "../assets/LinkedIn-logo.png";
-import FormInputs from "./RegistrationComponents/FormInputs";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../assets/LinkedIn-logo.png";
 import axiosInstance from "../axios/axios.tsx";
 import { useAlert } from "../utilities/alert/AlertContext.js";
+import useFormContext from "./context/FormContext";
+import FormInputs from "./RegistrationComponents/FormInputs";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -98,7 +98,7 @@ const Register = () => {
 
   return (
     <>
-      <div className="page bg-gray-100 m-0 p-0 " style={{ height: "800px" }}>
+      <div className="page h-screen bg-gray-100">
         {" "}
         {/* div kryesor */}
         {/* Header Section */}
@@ -118,7 +118,7 @@ const Register = () => {
             Make the most of your professional life
           </h1>
         </div>
-        <div className="form w-96 h-96 mt-6 mx-auto">
+        <div className="form w-96 h-full my-auto mt-6 mx-auto">
           {" "}
           {/* div per krejt formen */}
           <div className="credentials m-5">

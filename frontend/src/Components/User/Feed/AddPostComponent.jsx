@@ -1,14 +1,18 @@
-import React, { useState } from "react";
 import {
   faCalendarDays,
   faImage,
   faNewspaper,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from "react";
+import defaultProfile from "../../../assets/default.png";
 import AddPostModal from "./Modals/AddPostModal";
-import defaultProfile from "../../../assets/profile.png";
 
-const AddPostComponent = ({ user, isUserFeedVisible, setAllPosts = () => {} }) => {
+const AddPostComponent = ({
+  user,
+  isUserFeedVisible,
+  setAllPosts = () => {},
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -20,10 +24,16 @@ const AddPostComponent = ({ user, isUserFeedVisible, setAllPosts = () => {} }) =
   };
 
   return (
-    <div className="flex justify-center items-center w-[555px] mx-auto" >
+    <div
+      className={
+        isUserFeedVisible
+          ? "relative !w-[650px]"
+          : "relative !w-[!650px] max-w-[650px] mx-auto mt-[62px]"
+      }
+    >
       <div
-        className="mt-6 rounded-md pr-3 pb-1 w-full ml-5"
-        style={{ border: "1px solid #D3D3D3", background:'white' }}
+        className="mt-6 rounded-md pr-3 pb-1 w-full  md:w-[525px] sm:w-[450px] ml-5"
+        style={{ border: "1px solid #D3D3D3", background: "white" }}
       >
         <div className="Image_andImput flex">
           <img
@@ -85,7 +95,13 @@ const AddPostComponent = ({ user, isUserFeedVisible, setAllPosts = () => {} }) =
             Article
           </button>
         </div>
-        {isModalOpen && <AddPostModal user={user} closeModal={closeModal} setAllPosts={setAllPosts} />}
+        {isModalOpen && (
+          <AddPostModal
+            user={user}
+            closeModal={closeModal}
+            setAllPosts={setAllPosts}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,17 +1,33 @@
-import React, { useState } from "react";
-import cover from "../../../assets/cover.jpg";
-import profile from "../../../assets/profile.png";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { requestAddFriend } from "../../../utilities/friends/getFriends";
+import React, { useEffect, useState } from "react";
+import cover from "../../../assets/cover.jpg";
+import profile from "../../../assets/default.png";
 import ShowAlert from "../../../utilities/alert/showAlert";
-import getMe from "../../../utilities/user/getMe";
 import { createChat } from "../../../utilities/chat/getChat";
+import {
+  getFriends,
+  requestAddFriend,
+} from "../../../utilities/friends/getFriends";
+import getMe from "../../../utilities/user/getMe";
+
 const ProfileInfo = ({ user }) => {
   const [status, setStatus] = useState("Connect");
+  const [alreadyFriends, setAllReadyFriends] = useState(false);
   const handleHover = (e) => {
     e.target.style.color = "blue";
   };
+  const getMyFriends = async () => {
+    const data = await getFriends();
+    const existingFriend = data?.filter((friend) => friend?.id === user?.id);
+    console.log({ existingFriend });
+    setAllReadyFriends(
+      Array.isArray(existingFriend) && existingFriend.length > 0 ? 1 : 0
+    );
+  };
+  useEffect(() => {
+    getMyFriends();
+  }, [alreadyFriends]);
 
   const handleHoverOut = (e) => {
     e.target.style.color = "#0a66c2";
@@ -128,10 +144,10 @@ const ProfileInfo = ({ user }) => {
           <div className="mt-2">
             <button
               onClick={() => addFriend()}
-              className="rounded-full w-24 p-1 pr-3 pb-1 font-semibold"
+              className="rounded-full w-28 p-1 px-3 font-semibold"
               style={{ color: "white", backgroundColor: "#0a66c2" }}
             >
-              {status}
+              {alreadyFriends ? "Connected" : status}
             </button>
             <button
               className="rounded-full ml-2 pb-1 pt-1 pl-3 pr-3 font-semibold"

@@ -6,16 +6,18 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as argon from 'argon2';
+import * as argon from 'argon2';
+import { scrypt as _scrypt, randomBytes } from 'crypto';
+import { Response } from 'express';
+import { OAuth2Client, OAuth2Client } from 'google-auth-library';
+import { CompanyService } from 'src/company/company.service';
+import { RoleService, RoleService } from 'src/role/role.service';
 import { UsersService } from 'src/users/users.service';
-import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
-import { Token, Tokens } from './types/tokens.type';
 import { JWTpayload, JWTpayloadCompany } from './types/JWTpayload.type';
 import { JWTpayloadRt } from './types/JWTpayloadRt.type';
-import * as argon from 'argon2';
-import { OAuth2Client } from 'google-auth-library';
-import { RoleService } from 'src/role/role.service';
-import { CompanyService } from 'src/company/company.service';
+import { Token, Tokens } from './types/tokens.type';
 
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
@@ -50,7 +52,6 @@ export class AuthService {
     } as JWTpayload;
     const payload_refresh = { userId: user?.id } as JWTpayloadRt;
     const access_token = await this.jwtService.signAsync(payload_access);
-    console.log("access_token: ", access_token);
     const refresh_token = await this.jwtService.signAsync(payload_refresh);
     const refresh_hash = await argon.hash(refresh_token);
     await this.usersService.update(user?.id, {}, refresh_hash);
@@ -132,7 +133,6 @@ export class AuthService {
       email: user.email,
     } as JWTpayloadRt;
 
-    console.log("payload_access: ", payload_access);
     const access_token = await this.jwtService.signAsync(payload_access);
     const refresh_token = await this.jwtService.signAsync(payload_refresh);
     const refresh_hash = await argon.hash(refresh_token);
@@ -191,7 +191,7 @@ export class AuthService {
     const hash = (await scrypt(password, salt, 32)) as Buffer;
     // join the salt at the encoded password as the strings
     const result = salt + '.' + hash.toString('hex');
-    const role = await this.roleService.findOne(1); // Assuming 1 is the default role ID for jobseekers
+    const role = await this.roleService.findOne(1);
     if (!role) {
       throw new InternalServerErrorException('Something went wrong');
     }

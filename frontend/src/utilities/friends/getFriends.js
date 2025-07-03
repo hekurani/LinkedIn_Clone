@@ -21,10 +21,10 @@ const acceptRequest = async (id) => {
   await axiosInstance.post(`friend-request/${id}/accept`);
 };
 export {
-  getFriends,
-  requestAddFriend,
-  getRequestSendedToMe,
-  sentRequestsByMe,
-  cancelRequest,
   acceptRequest,
+  cancelRequest,
+  getFriends,
+  getRequestSendedToMe,
+  requestAddFriend,
+  sentRequestsByMe,
 };

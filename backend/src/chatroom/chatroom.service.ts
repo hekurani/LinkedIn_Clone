@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ChatRoom } from './chat.entity';
-import { Message } from '../message/message.entity';
 import { User } from 'src/users/user.entity';
+import { Repository } from 'typeorm';
+import { Message } from '../message/message.entity';
+import { ChatRoom } from './chat.entity';
 @Injectable()
 export class ChatRoomService {
   constructor(
@@ -24,15 +24,29 @@ export class ChatRoomService {
     return chat;
   }
 
-  async getChatRoomByUser(id: number) {
-    return this.repo
-      .createQueryBuilder('chatroom')
-      .leftJoinAndSelect('chatroom.user1', 'user1')
-      .leftJoinAndSelect('chatroom.user2', 'user2')
-      .where('chatroom.user1 = :id', { id })
-      .orWhere('chatroom.user2 = :id', { id })
-      .getMany();
+async getChatRoomByUser(id: number): Promise<ChatRoom[]> {
+
+  const rawRooms = await this.repo
+    .createQueryBuilder('chatroom')
+    .leftJoinAndSelect('chatroom.user1', 'user1')
+    .leftJoinAndSelect('chatroom.user2', 'user2')
+    .where('chatroom.user1Id = :id', { id })
+    .orWhere('chatroom.user2Id = :id', { id })
+    .getMany();
+
+  const unique = new Map<string, ChatRoom>();
+  for (const room of rawRooms) {
+    const a = room?.user1?.id;
+    const b = room?.user2?.id;
+
+    const key = a < b ? `${a}-${b}` : `${b}-${a}`;
+    if (!unique.has(key)) {
+      unique.set(key, room);                     
+    }
   }
+
+  return [...unique.values()];
+}
 
   async findOne(id: number) {
     if (!id) {

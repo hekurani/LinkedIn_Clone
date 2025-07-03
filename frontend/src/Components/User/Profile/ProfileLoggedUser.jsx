@@ -1,9 +1,11 @@
-import React from "react";
-import cover from "../../../assets/cover.jpg";
-import profile from "../../../assets/profile.png";
-import defaultProfile from "../../../assets/default.png";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+import cover from "../../../assets/cover.jpg";
+import {
+  default as defaultProfile,
+  default as profile,
+} from "../../../assets/default.png";
 const ProfileInfo = ({ user }) => {
   const handleHover = (e) => {
     e.target.style.color = "blue";
@@ -15,8 +17,8 @@ const ProfileInfo = ({ user }) => {
 
   return (
     <div
-      className="mx-auto mt-7  left-3 rounded-md"
-      style={{ width: "804px", border:"1px solid #D3D3D3" }}
+      className="mx-auto mt-7  left-3 rounded-md bg-white"
+      style={{ width: "804px", border: "1px solid #D3D3D3" }}
     >
       <div
         className="header rounded-md"

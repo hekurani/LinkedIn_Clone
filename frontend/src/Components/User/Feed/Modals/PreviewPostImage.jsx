@@ -1,19 +1,14 @@
-import React, { useState } from "react";
-import Modal from "react-modal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
-import getMe from "../../../../utilities/user/getMe";
-import axiosInstance from "../../../../axios/axios.tsx";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+import Modal from "react-modal";
 Modal.setAppElement("#root");
 
 const PreviewPostImage = ({
   isOpen = false,
   image = null,
-  closeModal = () => {}
+  closeModal = () => {},
 }) => {
-
   return (
     <Modal
       isOpen={isOpen}
@@ -28,7 +23,7 @@ const PreviewPostImage = ({
       >
         <div
           className="bg-white p-4 rounded shadow-2xl"
-          style={{ width: "700px", height: "70vh" , backgroundColor:"black"}}
+          style={{ width: "700px", height: "500px", backgroundColor: "black" }}
         >
           <div className="flex m-7">
             <FontAwesomeIcon
@@ -40,14 +35,12 @@ const PreviewPostImage = ({
           </div>
 
           <div className="text-center">
-
             <img
               className="mx-auto mt-5 mb-5 max-h-56"
               src={`Images/postImages/${image}`}
               alt="social"
             />
           </div>
-    
         </div>
       </div>
     </Modal>

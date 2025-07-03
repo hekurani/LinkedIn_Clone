@@ -1,5 +1,6 @@
-import React, {  useState } from "react";
-import defaultProfile from "../../../assets/profile.png";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import defaultProfile from "../../../assets/default.png";
 import axiosInstance from "../../../axios/axios.tsx";
 import PreviewPostImage from "./Modals/PreviewPostImage.jsx";
 
@@ -9,6 +10,7 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
 
   const [imageToPreview, setImageToPreview] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const navigate = useNavigate();
 
   const openModal = (image) => {
     setImageToPreview(image);
@@ -114,14 +116,19 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
     <div className="mx-auto flex-1 w-[555px] px-2">
       {allPosts.map((postItem, index) => (
         <div
-          className="ml-8 mt-8 rounded-md"
-          style={{ border: "1px solid #D3D3D3", background:'white', marginBottom: "20px" }}
+          className="ml-16 mt-8 rounded-md"
+          style={{
+            border: "1px solid #D3D3D3",
+            background: "white",
+            marginBottom: "20px",
+          }}
         >
           <div key={index} className="mb-4">
             <div className="header m-3 flex">
               <img
+                onClick={() => navigate(`${postItem?.user?.id}/profile`)}
                 src={
-                  postItem.user.imageProfile
+                  postItem?.user?.imageProfile
                     ? postItem.user.imageProfile
                     : defaultProfile
                 }
@@ -133,7 +140,9 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
                 <p>
                   {postItem?.user?.name} {postItem?.user?.lastname}
                 </p>
-                <p className="position text-xs">{postItem?.user?.profession?.name}</p>
+                <p className="position text-xs">
+                  {postItem?.user?.profession?.name}
+                </p>
                 <p className="time text-xs">
                   {getTimePassed(postItem?.publishDate)} •
                 </p>
@@ -164,7 +173,7 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
                       key={imageIndex}
                       src={`Images/postImages/${image}`}
                       alt={`media-${index}-${imageIndex}`}
-                      onClick={() => openModal(image)}            
+                      onClick={() => openModal(image)}
                       style={{
                         width:
                           postItem?.postImages.length === 1
@@ -246,7 +255,7 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
                 <img
                   className="ml-3 mt-3 w-10 h-10 mb-2"
                   style={{ borderRadius: "50%", objectFit: "cover" }}
-                  src={user.imageProfile}
+                  src={defaultProfile || user.imageProfile}
                   alt={"p"}
                 />
                 <div className="input-container">
@@ -338,8 +347,12 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
           </div>
         </div>
       ))}
-      {modalVisible && imageToPreview &&  (
-        <PreviewPostImage image={imageToPreview} isOpen={modalVisible} closeModal={closeModal} />
+      {modalVisible && imageToPreview && (
+        <PreviewPostImage
+          image={imageToPreview}
+          isOpen={modalVisible}
+          closeModal={closeModal}
+        />
       )}
     </div>
   );

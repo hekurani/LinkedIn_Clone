@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import ProfileLoggedUserInfo from "../Components/User/Profile/ProfileLoggedUser";
-import FriendsProfile from "../Components/User/Profile/ProfileSearchingUser";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import ChatPage from "../Components/User/Chat/ChatComponent";
 import ChatListingComponent from "../Components/User/Chat/ChatListingComponent";
-import ProfileSection from "../Components/User/Profile/ProfileSection";
-import { useParams } from "react-router-dom";
+import ProfileLoggedUserInfo from "../Components/User/Profile/ProfileLoggedUser";
+import FriendsProfile from "../Components/User/Profile/ProfileSearchingUser";
+import SkillsSection from "../Components/User/Profile/SkillsSection";
 import getMe from "../utilities/user/getMe";
 import getUser from "../utilities/user/getUser";
 
@@ -43,14 +43,12 @@ const Profile = () => {
   return (
     <div className="bg-[#f4f2ee] w-full min-h-screen">
       <div className="flex flex-col items-center justify-center w-full">
-
-
         {userId == loggedUser.id ? (
           <ProfileLoggedUserInfo user={loggedUser} />
         ) : (
           <FriendsProfile user={foreignUser} />
         )}
-        <ProfileSection user={loggedUser} />
+        <SkillsSection user={loggedUser} />
 
         <ChatListingComponent
           user={loggedUser}

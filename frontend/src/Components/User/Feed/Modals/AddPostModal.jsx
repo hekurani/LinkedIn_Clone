@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
   faCalendarDays,
   faClock,
@@ -7,8 +6,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import React, { useState } from "react";
+import defaultProfile from "../../../../assets/default.png";
 import axiosInstance from "../../../../axios/axios.tsx";
-import defaultProfile from "../../../../assets/profile.png";
 
 const AddPostModal = ({ user, closeModal, setAllPosts = () => {} }) => {
   const [description, setDescription] = useState("");
@@ -32,9 +32,9 @@ const AddPostModal = ({ user, closeModal, setAllPosts = () => {} }) => {
   const handlePost = async () => {
     const formData = new FormData();
     formData.append("description", description);
-    console.log(images);
+
     if (Array.isArray(images) && images.length) {
-     images.forEach((image, index) => {
+      images.forEach((image, index) => {
         formData.append("images", image);
       });
     }
@@ -53,8 +53,8 @@ const AddPostModal = ({ user, closeModal, setAllPosts = () => {} }) => {
       style={{ zIndex: 50 }}
     >
       <div
-        className="w-96 h-96 rounded shadow-2xl"
-        style={{ backgroundColor: "white", width: "700px", height: "90vh" }}
+        className="w-full min-w-96 h-96 bg-white rounded shadow-2xl"
+        style={{ backgroundColor: "white", width: "850px", height: "420px" }}
       >
         <div className="header m-7 flex">
           <img

@@ -1,6 +1,3 @@
-import React, { useState, useEffect, useRef } from "react";
-import io from "socket.io-client";
-import axios from "axios";
 import {
   faEllipsis,
   faImage,
@@ -9,32 +6,34 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
+import io from "socket.io-client";
+import defaultProfile from "../../../assets/default.png";
 import sendMessage from "../../../utilities/messages/sendMessage";
 
 let socket;
 
-function ChatPage({ user = null, onCloseChat = () => { }, chatRoomId = null }) {
+function ChatPage({
+  otherUser = null,
+  user = null,
+  onCloseChat = () => {},
+  chatRoomId = null,
+}) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isChatOpen, setIsChatOpen] = useState(true); //me handle chat open/close
   const messagesEndRef = useRef(null); //mesazhi i fundit
-  const [otherUser, setOtherUser] = useState(null);
-  console.log({ user, chatRoomId });
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
         `http://localhost:4000/chatroom/allMessages/${chatRoomId}`
       );
-      
+
       if (!response) return;
 
       const apiMessages = response?.data;
-      if (Array.isArray(apiMessages) && apiMessages.length > 0) {
-        setOtherUser(apiMessages[0]?.user);
-      } else {
-        setOtherUser(null);
-      }
       setMessages(apiMessages);
     };
 
@@ -68,15 +67,15 @@ function ChatPage({ user = null, onCloseChat = () => { }, chatRoomId = null }) {
       const messageData = {
         description: input,
         user: {
-          id: user.id,
-          name: user.name,
-          lastname: user.lastname,
-          imageProfile: user.imageProfile,
+          id: user?.id,
+          name: user?.name,
+          lastname: user?.lastname,
+          imageProfile: user?.imageProfile,
         },
       };
 
       socket.emit("message", messageData);
-      await sendMessage(user.id, chatRoomId, input);
+      await sendMessage(user?.id, chatRoomId, input);
       setInput("");
       scrollToBottom();
     }
@@ -87,7 +86,7 @@ function ChatPage({ user = null, onCloseChat = () => { }, chatRoomId = null }) {
     if (!isChatOpen) {
       scrollToBottom();
     } else {
-      onCloseChat(); // This will close the chat when clicking on the "X" button
+      onCloseChat();
     }
   };
 
@@ -104,11 +103,12 @@ function ChatPage({ user = null, onCloseChat = () => { }, chatRoomId = null }) {
       handleMessageSubmit();
     }
   };
-  console.log({otherUser})
+
   return (
     <div
-      className={`h-96 w-80  rounded-t-md fixed bottom-0 right-40 mr-40 ${isChatOpen ? "" : "hidden"
-        }`}
+      className={`h-96 w-80  rounded-t-md fixed bottom-0 right-40 mr-40 ${
+        isChatOpen ? "" : "hidden"
+      }`}
       style={{
         borderTop: "1px solid #D3D3D3",
         borderLeft: "1px solid #D3D3D3",
@@ -121,11 +121,12 @@ function ChatPage({ user = null, onCloseChat = () => { }, chatRoomId = null }) {
         style={{ borderBottom: "1px solid #D3D3D3" }}
       >
         <img
-          src={otherUser?.imageProfile}
+          src={otherUser?.imageProfile || defaultProfile}
           className="ml-2 h-8 w-8"
           alt="profili"
           style={{ borderRadius: "50%", objectFit: "cover" }}
         />
+        {console.log({ otherUser })}
         <div className="ml-4 mr-3">
           <p className="font-semibold">
             {otherUser?.name} {otherUser?.lastname}{" "}
@@ -151,7 +152,7 @@ function ChatPage({ user = null, onCloseChat = () => { }, chatRoomId = null }) {
           {messages.map((message, index) => (
             <div className="flex mb-5">
               <img
-                src={message.user.imageProfile}
+                src={message.user.imageProfile || defaultProfile}
                 className="ml-2  mt-2 h-10 w-10"
                 alt="profili"
                 style={{ borderRadius: "50%", objectFit: "cover" }}

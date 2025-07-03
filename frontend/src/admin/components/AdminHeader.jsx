@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/LinkedIn-logo.png";
-import profile from "../../assets/profile.png";
+import defaultImage from "../../assets/default.png";
 
 import getMe from "../../utilities/user/getMe";
 
@@ -11,7 +11,7 @@ const AdminHeader = () => {
     const fetchData = async () => {
       const admin = await getMe();
       setAdmin(admin);
-    }
+    };
     fetchData();
   }, []);
 
@@ -27,7 +27,13 @@ const AdminHeader = () => {
         />
       </div>
       <div className="ml-auto">
-        <img src={admin.imageProfile || profile} width={40} height={40} alt="" className="rounded-full mr-5"/>
+        <img
+          src={admin.imageProfile || defaultImage}
+          width={40}
+          height={40}
+          alt=""
+          className="rounded-full mr-5"
+        />
       </div>
     </div>
   );

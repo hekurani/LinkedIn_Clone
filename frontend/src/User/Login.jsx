@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import logo from "../assets/LinkedIn-logo.png";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../assets/LinkedIn-logo.png";
 import axiosInstance from "../axios/axios.tsx";
 import { useAlert } from "../utilities/alert/AlertContext.js";
 import { getToken } from "../utilities/getToken.js";
@@ -68,14 +68,12 @@ const Login = () => {
         localStorage.setItem("access_token", token);
       }
       const innerToken = getToken();
-     
-      if (innerToken?.role === 'admin') {
+
+      if (innerToken?.role === "admin") {
         navigate("/admin/dashboard");
-      }
-      else if (innerToken?.role === 'company')  {
+      } else if (innerToken?.role === "company") {
         navigate("/company-dashboard");
-      }
-      else {
+      } else {
         navigate("/");
       }
     } catch (err) {
@@ -86,7 +84,7 @@ const Login = () => {
       });
     }
   };
-  
+
   return (
     <>
       <div

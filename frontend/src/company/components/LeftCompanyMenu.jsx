@@ -103,5 +103,8 @@ const LeftCompanyMenu = ({
     </div>
   );
 };
+  );
+};
 
+export default LeftCompanyMenu;
 export default LeftCompanyMenu;

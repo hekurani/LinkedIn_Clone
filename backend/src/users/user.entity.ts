@@ -1,25 +1,28 @@
+import { Exclude } from 'class-transformer';
+import { ArrayNotEmpty } from 'class-validator';
+import { postreaction } from 'src/PostReaction/postreaction.entity';
+import { commentreaction } from 'src/comment-reaction/comment-reaction.entity';
+import { company } from 'src/company/company.entity';
+import { Profession } from 'src/profession/profession.entity';
+import { Reposts } from 'src/reposts/reposts.entity';
+import { Role } from 'src/role/entities/role.entity';
+import { Skill } from 'src/skills/skills.entity';
 import {
   BeforeInsert,
   BeforeRemove,
   BeforeUpdate,
+  Column,
+  Entity,
   JoinColumn,
   JoinTable,
-  ManyToOne,
   ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Exclude } from 'class-transformer';
-import { Posts } from '../posts/post.entity';
 import { Comment } from '../comments/Entity/comment.entity';
-import { Skill } from 'src/skills/skills.entity';
-import { Role } from 'src/role/entities/role.entity';
-import { ArrayNotEmpty } from 'class-validator';
-import { postreaction } from 'src/PostReaction/postreaction.entity';
-import { commentreaction } from 'src/comment-reaction/comment-reaction.entity';
-import { Reposts } from 'src/reposts/reposts.entity';
-import { company } from 'src/company/company.entity';
-import { Profession } from 'src/profession/profession.entity';
+import { Posts } from '../posts/post.entity';
 
 @Entity()
 export class User {
@@ -69,7 +72,7 @@ export class User {
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
 
-  @Column({ nullable: true, default: 'profile.png' })
+  @Column({ nullable: true })
   imageProfile: string;
 
   @Column({ nullable: true })

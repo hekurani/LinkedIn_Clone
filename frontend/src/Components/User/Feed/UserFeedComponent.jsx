@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import UploadImageModal from "../Profile/Modals/UploadImageModal";
-import defaultProfile from "../../../assets/profile.png";
 import { useNavigate } from "react-router-dom";
+import defaultProfile from "../../../assets/default.png";
+import UploadImageModal from "../Profile/Modals/UploadImageModal";
 
 const UserFeedComponent = ({
   user,
-  setUser = () => { },
-  setAllPosts = () => { },
+  setUser = () => {},
+  setAllPosts = () => {},
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
@@ -17,9 +17,16 @@ const UserFeedComponent = ({
   return (
     <div
       className={`w-56 rounded-md ml-16 mt-6 relative transition-all duration-500 `}
-      style={{ height: "310px", border: "1px solid #D3D3D3", background: 'white' }}
+      style={{
+        height: "310px",
+        border: "1px solid #D3D3D3",
+        background: "white",
+      }}
     >
-      <div className="h-36" style={{ borderBottom: "1px solid #D3D3D3", background: 'white' }}>
+      <div
+        className="h-36"
+        style={{ borderBottom: "1px solid #D3D3D3", background: "white" }}
+      >
         <div
           className="Cover rounded-t-md h-14"
           style={{ backgroundColor: "yellow", border: "1px solid #D3D3D3" }}
@@ -38,7 +45,10 @@ const UserFeedComponent = ({
           )}
         </div>
         <div className="flex flex-col items-center">
-          <p className="text-center mt-7 cursor-pointer font-semibold" onClick={() => navigate(`${user.id}/profile`)}>
+          <p
+            className="text-center mt-7 cursor-pointer font-semibold"
+            onClick={() => navigate(`${user.id}/profile`)}
+          >
             Welcome,{user.name}!
           </p>
           <button
@@ -51,7 +61,7 @@ const UserFeedComponent = ({
         </div>
       </div>
       <div className="ProfileViews  h-6 flex bg-white">
-        <p className="ml-3 mt-3 text-xs text-gray-600 font-semibold">
+        <p className="ml-3 mt-3 text-xs whitespace-nowrap text-gray-600 font-semibold">
           Profile Viewers
         </p>
         <p
@@ -63,7 +73,7 @@ const UserFeedComponent = ({
       </div>
       <div
         className="Connections h-10 flex"
-        style={{ borderBottom: "0.5px solid #D3D3D3", background: 'white' }}
+        style={{ borderBottom: "0.5px solid #D3D3D3", background: "white" }}
       >
         <p className="ml-3 mt-3 text-xs text-gray-600 font-semibold">
           Connections
@@ -71,14 +81,14 @@ const UserFeedComponent = ({
         <span style={{ color: "transparent" }}> s </span>
         <p
           className="ml-24 mt-3 mr-3 text-xs font-semibold"
-          style={{ color: "#0a66c2", background: 'white' }}
+          style={{ color: "#0a66c2", background: "white" }}
         >
           535
         </p>
       </div>
       <div
         className="Premium  h-16 pt-3"
-        style={{ borderBottom: "0.5px solid #D3D3D3", background: 'white' }}
+        style={{ borderBottom: "0.5px solid #D3D3D3", background: "white" }}
       >
         <p className="text-xs text-center text-gray-600">
           Accelerate your career with Premium

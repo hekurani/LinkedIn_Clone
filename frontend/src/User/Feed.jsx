@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import UserFeedComponent from "../Components/User/Feed/UserFeedComponent";
-import AddPostComponent from "../Components/User/Feed/AddPostComponent";
-import PostComponent from "../Components/User/Feed/PostComponent";
+import axiosInstance from "../axios/axios.tsx";
 import ChatPage from "../Components/User/Chat/ChatComponent";
 import ChatListingComponent from "../Components/User/Chat/ChatListingComponent";
+import AddPostComponent from "../Components/User/Feed/AddPostComponent";
+import PostComponent from "../Components/User/Feed/PostComponent";
+import UserFeedComponent from "../Components/User/Feed/UserFeedComponent";
 import getMe from "../utilities/user/getMe";
-import axiosInstance from "../axios/axios.tsx";
 
 const Feed = () => {
   const [user, setUser] = useState({});
@@ -13,7 +13,7 @@ const Feed = () => {
   const [chatRoomId, setChatRoomId] = useState(null);
   const [isUserFeedVisible, setIsUserFeedVisible] = useState(true);
   const [allPosts, setAllPosts] = useState([]);
-  const [otherYser, setOtherUser] = useState({});
+  const [otherUser, setOtherUser] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,14 +22,15 @@ const Feed = () => {
     };
     const getAllPosts = async () => {
       const { data } = await axiosInstance.get("/posts");
-      console.log(data)
+      console.log(data);
       setAllPosts(data?.posts);
     };
     getAllPosts();
     fetchData();
   }, []);
 
-  const handleOpenChatPage = (chatRoomId) => {
+  const handleOpenChatPage = (chatRoomId, chatListingOtherUser) => {
+    setOtherUser(chatListingOtherUser);
     setIsChatOpen(true);
     setChatRoomId(chatRoomId);
   };
@@ -56,16 +57,32 @@ const Feed = () => {
 
   return (
     <div
-      className={`flex w-full bg-[#f4f2ee] ${isUserFeedVisible ? "flex-row" : "flex-col"}`}
+      className={`flex w-full min-h-screen bg-[#f4f2ee] 
+                   ${isUserFeedVisible ? "lg:flex-row" : "flex-col"}`}
     >
-      {isUserFeedVisible && <UserFeedComponent user={user} setUser={setUser} setAllPosts={setAllPosts} />}
-      <div style={{ marginLeft: "calc(50vw - 520px)" }}>
-        <AddPostComponent user={user} setAllPosts={setAllPosts} isUserFeedVisible={isUserFeedVisible} />
-        <PostComponent user={user} allPosts={allPosts} setAllPosts={setAllPosts}/>
+      {isUserFeedVisible && (
+        <UserFeedComponent
+          user={user}
+          setUser={setUser}
+          setAllPosts={setAllPosts}
+        />
+      )}
+      <div className="mx-auto">
+        <AddPostComponent
+          user={user}
+          setAllPosts={setAllPosts}
+          isUserFeedVisible={isUserFeedVisible}
+        />
+        <PostComponent
+          user={user}
+          allPosts={allPosts}
+          setAllPosts={setAllPosts}
+        />
         <ChatListingComponent user={user} onChatRowClick={handleOpenChatPage} />
         {isChatOpen && (
           <ChatPage
             user={user}
+            otherUser={otherUser}
             // otherUser={otherUser}
             onCloseChat={handleCloseChatPage}
             chatRoomId={chatRoomId}

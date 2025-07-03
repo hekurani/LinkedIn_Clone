@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useFeedContext } from "../../../User/context/FeedContext";
+import React, { useEffect, useState } from "react";
+import defaultProfile from "../../../assets/default.png";
 
 const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
   const [chatRooms, setChatRooms] = useState([]);
   const [messages, setAllMessages] = useState([]);
   const [loggedInUser, setLoggedInUser] = useState({});
-  const [otherUser, setOtherUser] = useState({});
 
   useEffect(() => {
     const getAllChats = async () => {
@@ -45,17 +44,6 @@ const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
     fetchAllMessages();
   }, [user.id]);
 
-  // useEffect(() => { -- TO RETHINK THIS 
-  //   if (showMessageList) {
-  //     setIsCollapsed(false);
-  //     setShowMessageList(true);
-  //   } else {  
-  //     setIsCollapsed(true);
-  //     setShowMessageList(false);
-  //   }
-
-  // }, [showMessageList]);
-
   const findMessageById = (messageId) => {
     const message = messages.find((message) => message.id == messageId);
     return message;
@@ -67,7 +55,7 @@ const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
     setIsCollapsed(!isCollapsed);
   };
 
-  const handleChatRowClick = (chatRoomId) => {
+  const handleChatRowClick = (chatRoomId, otherUser) => {
     onChatRowClick(chatRoomId, otherUser);
   };
 
@@ -88,7 +76,7 @@ const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
       >
         <img
           className="ml-2 h-8 w-8 mr-2"
-          src={user.imageProfile}
+          src={user?.imageProfile || defaultProfile}
           style={{ borderRadius: "50%", objectFit: "cover" }}
           alt="profili"
         />
@@ -140,10 +128,11 @@ const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
           </div>
           <div className="list h-96 flex-grow overflow-y-auto">
             {chatRooms.map((chatroom, index) => {
-              const otherUserImage =
-                user.id === chatroom.user1.id
-                  ? chatroom.user2.imageProfile
-                  : chatroom.user1.imageProfile;
+              const otherUser =
+                user.id === chatroom.user1.id ? chatroom.user2 : chatroom.user1;
+
+              const otherUserImage = otherUser?.imageProfile;
+
               const lastMessageId =
                 chatroom.messages[chatroom.messages.length - 1];
               const lastMessage = findMessageById(lastMessageId);
@@ -155,7 +144,7 @@ const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
               return (
                 <div
                   key={chatroom.id}
-                  onClick={() => handleChatRowClick(chatroom.id)}
+                  onClick={() => handleChatRowClick(chatroom.id, otherUser)}
                   className="p-2 oneProfile h-16 flex justify-items-center items-center "
                   style={{
                     border: "1px solid #D3D3D3",
@@ -165,7 +154,7 @@ const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
                 >
                   <img
                     className="h-10 w-10 rounded-full object-cover"
-                    src={otherUserImage}
+                    src={otherUserImage || defaultProfile}
                     alt=""
                   />
                   <div className="">
