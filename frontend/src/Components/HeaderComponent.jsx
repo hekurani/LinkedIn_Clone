@@ -130,7 +130,9 @@ const HeaderComponent = () => {
             </div>
         );
     };
-    if (!token) return null;
+    
+    if (!token || token?.role !== 'jobseeker') return null;
+
     return (
         <div className={`h-[53px] w-full bg-white mt-1 min-w-[600px] ${showSearch ? 'grid grid-cols-2 gap-32' : 'flex items-center justify-center'}`}>
             {showSearch && (

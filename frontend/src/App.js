@@ -25,6 +25,8 @@ import LeftCompanyMenu from "./company/components/LeftCompanyMenu.jsx";
 import ErrorBoundary from "./ErrorBoundary.jsx";
 import HeaderComponent from "./Components/HeaderComponent.jsx";
 import { FeedProvider } from "./User/context/FeedContext.jsx";
+import CompanyLogin from "./company/components/CompanyLogin.jsx";
+import CompanyDashboard from "./company/CompanyDashboard.jsx";
 
 function App() {
   return (
@@ -44,6 +46,7 @@ function App() {
               }
             />
             <Route path="/Login" element={<Login />} />
+            <Route path="/company/Login" element={<CompanyLogin />} />
             <Route
               path="/reset-password-request-email"
               element={<EmailInput />}
@@ -67,7 +70,10 @@ function App() {
               <Route path="/jobs" element={<Job />} />
               <Route path="/job-listing" element={<JobListing />} />
               <Route path="/connections" element={<Connections />} />
-              <Route path="/company-dashboard" element={<LeftCompanyMenu />} />
+            </Route>
+
+            <Route element={<ProtectedRoutes roles={['admmin','company']} />}>
+            <Route path="/company-dashboard" element={<CompanyDashboard />} />
             </Route>
           </Routes>
         </EmailProvider>

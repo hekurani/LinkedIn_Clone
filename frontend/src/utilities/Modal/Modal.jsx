@@ -1,6 +1,6 @@
 import React from "react";
 
-const Modal = ({ isOpen, variant, onClose, onSave, title, children }) => {
+const Modal = ({ isOpen, variant, onClose, onSave, title, children, name = "Save"}) => {
   if (!isOpen) return null;
   const backgroundClass =
     variant === "dark" ? "bg-gray-800 text-white" : "bg-white text-black";
@@ -26,7 +26,7 @@ const Modal = ({ isOpen, variant, onClose, onSave, title, children }) => {
             style={{ backgroundColor: "#2196F3" }}
             onClick={onSave}
           >
-            Save
+            {name}
           </button>
         </div>
       </div>

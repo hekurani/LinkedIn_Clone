@@ -48,7 +48,7 @@ const Users = () => {
   };
 
   return (
-    <div className=" flex-1 p-5">
+    <div className="bg-blue-900 flex-1 p-5">
       <p className="text-white text-2xl font-bold">Users</p>
       <div className="table w-full">
         <table className="min-w-full mt-3 leading-normal">

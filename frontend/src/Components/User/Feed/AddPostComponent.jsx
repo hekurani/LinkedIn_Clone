@@ -20,15 +20,9 @@ const AddPostComponent = ({ user, isUserFeedVisible, setAllPosts = () => {} }) =
   };
 
   return (
-    <div
-      className={
-        isUserFeedVisible
-          ? "relative"
-          : "fixed inset-0 mt-[62px] mx-auto w-[550px]"
-      }
-    >
+    <div className="flex justify-center items-center w-[555px] mx-auto" >
       <div
-        className="mt-6 rounded-md pr-3 pb-1 w-full  md:w-[525px] sm:w-[450px] ml-5"
+        className="mt-6 rounded-md pr-3 pb-1 w-full ml-5"
         style={{ border: "1px solid #D3D3D3", background:'white' }}
       >
         <div className="Image_andImput flex">

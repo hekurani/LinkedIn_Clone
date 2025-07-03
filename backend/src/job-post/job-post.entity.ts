@@ -12,7 +12,6 @@ import { User } from '../users/user.entity';
 import { company } from 'src/company/company.entity';
 import { Skill } from 'src/skills/skills.entity';
 import { WorkType } from './enum/WorkPlace.enum';
-import { city } from 'src/location/entity/city.entity';
 
 @Entity({ name: 'job-post' })
 export class jobPost {
@@ -23,11 +22,9 @@ export class jobPost {
   @JoinColumn()
   company: company;
 
-  @OneToOne(() => User, { eager: true, createForeignKeyConstraints: false })
-  @JoinColumn()
-  supervisor: User;
   @Column()
   role: string;
+  
   @Column({ nullable: false })
   description: string;
 
@@ -48,10 +45,6 @@ export class jobPost {
 
   @CreateDateColumn({ type: 'date', default: () => 'CURRENT_DATE' })
   createdAt: Date;
-
-  @ManyToOne(() => city, { cascade: true })
-  @JoinColumn()
-  location: city;
 
   @Column({
     type: 'enum',

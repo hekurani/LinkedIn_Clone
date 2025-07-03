@@ -8,8 +8,6 @@ companyId:number;
 @IsOptional()
 redirectURL:string;
 @IsNumber()
-superVisorId:number;
-@IsNumber()
 @IsOptional()
 minSalary:number;
 @IsNumber()
@@ -24,9 +22,6 @@ description:string;
 skillsId:number[]
 @IsString()
 role:string
-@IsNumber()
-@IsOptional()
-location:number
 @IsEnum(WorkType)
 @IsOptional()
 workplace:WorkType

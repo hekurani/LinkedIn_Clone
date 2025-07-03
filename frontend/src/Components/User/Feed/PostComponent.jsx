@@ -111,10 +111,10 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
   };
 
   return (
-    <>
+    <div className="mx-auto flex-1 w-[555px] px-2">
       {allPosts.map((postItem, index) => (
         <div
-          className="ml-16 mt-8 rounded-md"
+          className="ml-8 mt-8 rounded-md"
           style={{ border: "1px solid #D3D3D3", background:'white', marginBottom: "20px" }}
         >
           <div key={index} className="mb-4">
@@ -341,7 +341,7 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
       {modalVisible && imageToPreview &&  (
         <PreviewPostImage image={imageToPreview} isOpen={modalVisible} closeModal={closeModal} />
       )}
-    </>
+    </div>
   );
 };
 

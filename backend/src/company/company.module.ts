@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CompanyController } from './company.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,7 +13,7 @@ import { city } from 'src/location/entity/city.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, city, company]),
-    UsersModule,
+    forwardRef(() => UsersModule),
     ConfigModule, // Make sure ConfigModule is imported to provide access to ConfigService
     JwtModule.registerAsync({
       imports: [ConfigModule], // Import ConfigModule here too
@@ -29,6 +29,7 @@ import { city } from 'src/location/entity/city.entity';
     }),
   ],
   providers: [CompanyService],
+  exports: [CompanyService],
   controllers: [CompanyController],
 })
 export class CompanyModule {}

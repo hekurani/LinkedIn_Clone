@@ -49,7 +49,7 @@ export class CompanyService {
     @InjectRepository(city) private cityRepository: Repository<city>,
     @InjectRepository(company)
     private readonly companyRepository: Repository<company>,
-  ) {}
+  ) { }
   async createCompany(createCompanyDto: CreateCommpanyDto, userId: number) {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     const city = await this.cityRepository.findOne({
@@ -110,5 +110,21 @@ export class CompanyService {
   }
   async getCompanies() {
     return await this.companyRepository.find();
+  }
+
+  async getCompanyByEmail(email: string): Promise<company> {
+    if (!email) {
+      throw new BadRequestException('Email is required');
+    }
+
+    const company = await this.companyRepository.findOne({
+      where: { email },
+    });
+
+    if (!company) {
+      throw new NotFoundException('Company not found with the given email');
+    }
+
+    return company;
   }
 }

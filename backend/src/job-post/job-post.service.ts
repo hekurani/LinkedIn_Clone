@@ -68,37 +68,11 @@ export class JobPostService {
         'You are not allowed to create a job post for this company!',
       );
 
-    const supervisor = await this.userService.findOne(
-      createJobPostDto.superVisorId,
-    );
-    if (!supervisor)
-      throw new NotFoundException("There's no supervisor with that ID!");
-
-    const location = await this.CityRepository.findOne({
-      where: { id: createJobPostDto.location },
-    });
-    if (!location)
-      throw new NotFoundException("There's no location with that id!");
-
-    const companyEmployer = await this.workExperienceRepo.findOne({
-      where: {
-        company: { id: company.id },
-        employer: { id: supervisor.id },
-        endDate: null,
-      },
-    });
-    if (!companyEmployer)
-      throw new NotFoundException(
-        "There's no supervisor that currently works in the company!",
-      );
-
     const jobPost = this.jobPost.create({
       ...createJobPostDto,
-      supervisor,
       company,
       deadLine,
       skills,
-      location,
     });
 
     const savedJobPost = await this.jobPost.save(jobPost);
@@ -118,7 +92,7 @@ export class JobPostService {
   }
   async getJobPosts() {
     const jobPosts = await this.jobPost.find({
-      relations: ['company', 'location']
+      relations: ['company']
     });
     return {
       status: 'success',
@@ -132,7 +106,7 @@ export class JobPostService {
   ) {
     let jobPostObject = await this.jobPost.findOne({
       where: { id },
-      relations: ['skills', 'company', 'supervisor'],
+      relations: ['skills', 'company'],
     });
     if (!jobPostObject)
       throw new NotFoundException("there's no jobPost Found!");
@@ -149,13 +123,6 @@ export class JobPostService {
       if (deadLine <= new Date())
         throw new ForbiddenException('You are entering an invalid Deadline!');
       jobPostObject.deadLine = updateJobPostDto.deadLine;
-    }
-    let supervisor;
-    if (updateJobPostDto.superVisorId) {
-      supervisor = this.userService.findOne(updateJobPostDto.superVisorId);
-      if (!supervisor)
-        throw new NotFoundException("there's no user with that id!");
-      jobPostObject.supervisor = supervisor;
     }
     if (updateJobPostDto.minSalary) {
       if (updateJobPostDto.minSalary < 0)
@@ -197,16 +164,8 @@ export class JobPostService {
     if (skills.length) {
       jobPostObject.skills = skills;
     }
-    if (supervisor) {
-      jobPostObject.supervisor = supervisor;
-    }
     if (updateJobPostDto.workplace) {
       jobPostObject.workPlace = updateJobPostDto.workplace;
-    }
-    if (updateJobPostDto.location) {
-      jobPostObject.location = await this.CityRepository.findOne({
-        where: { id: updateJobPostDto.location },
-      });
     }
     jobPostObject = await this.jobPost.save(jobPostObject);
     return {
@@ -220,11 +179,10 @@ export class JobPostService {
     const user = await this.userService.findOne(userId);
     if (!user) throw new NotFoundException("There's no user found!");
     if (
-      jobPost.company.owner.id !== user.id ||
-      jobPost.supervisor.id !== user.id
+      jobPost.company.owner.id !== user.id
     )
       throw new ForbiddenException(
-        'You are not allowed to delete jobPost without being owner or supervisor!',
+        'You are not allowed to delete jobPost without being owner!',
       );
     await this.jobPost.remove(jobPost);
     return {

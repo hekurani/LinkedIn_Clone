@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UsersModule } from 'src/users/users.module';
@@ -11,11 +11,13 @@ import { MailService } from 'src/mailer-forgot-password/mail.service';
 import { RoleService } from 'src/role/role.service';
 import { Role } from 'src/role/entities/role.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CompanyModule } from 'src/company/company.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Role]),
-    UsersModule,
+    forwardRef(() => UsersModule),         // 👈 completes the circular ref cleanly
+    CompanyModule,           
     ConfigModule, // Make sure ConfigModule is imported to provide access to ConfigService
     JwtModule.registerAsync({
       imports: [ConfigModule], // Import ConfigModule here too

@@ -79,6 +79,11 @@ export class AuthController {
   logIn(@Body() signInDto: SignInDto) {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
+  @Post('/company/login')
+  @Public()
+  companyLogIn(@Body() signInDto: SignInDto) {
+    return this.authService.companyLogin(signInDto.email, signInDto.password);
+  }
   @UseGuards(AuthentGuard)
   @Get('/profile')
   getProfile(@Request() req) {

@@ -4,9 +4,6 @@ import { WorkType } from "../enum/WorkPlace.enum";
 export class UpdateJobPostDto {
     @IsNumber()
     @IsOptional()
-    superVisorId:number;
-    @IsNumber()
-    @IsOptional()
     minSalary:number;
     @IsNumber()
     @IsOptional()
@@ -23,8 +20,6 @@ skillsId:number[];
 @IsString()
 @IsOptional()
 role:string;
-@IsNumber()
-location:number
 @IsEnum(WorkType)
 @IsOptional()
 workplace:WorkType

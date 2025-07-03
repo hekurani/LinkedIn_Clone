@@ -9,13 +9,13 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
-import { Tokens } from './types/tokens.type';
-import { JWTpayload } from './types/JWTpayload.type';
+import { Token, Tokens } from './types/tokens.type';
+import { JWTpayload, JWTpayloadCompany } from './types/JWTpayload.type';
 import { JWTpayloadRt } from './types/JWTpayloadRt.type';
 import * as argon from 'argon2';
 import { OAuth2Client } from 'google-auth-library';
-import { Response } from 'express';
 import { RoleService } from 'src/role/role.service';
+import { CompanyService } from 'src/company/company.service';
 
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
@@ -29,6 +29,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private roleService: RoleService,
+    private companyService: CompanyService,
   ) {}
 
   async signIn(email: string, password: string) {
@@ -59,6 +60,36 @@ export class AuthService {
       access_token,
       refresh_token,
     } as Tokens;
+  }
+
+  async companyLogin(email: string, password: string) {
+    const company = await this.companyService.getCompanyByEmail(email);
+    if (!company || !company?.password) {
+      throw new NotFoundException('Copmpany not found');
+    }
+    const [salt, storedHash] = company?.password.split('.');
+    const hash = (await scrypt(password, salt, 32)) as Buffer;
+    if (storedHash !== hash.toString('hex')) {
+      return new BadRequestException('Wrong password!');
+    }
+    const role = await this.roleService.findRole('company');
+    if (!role) {
+      throw new InternalServerErrorException('Something went wrong');
+    }
+
+    const payload_access = {
+      companyId: company?.id,
+      roleId: role?.id,
+      email: company?.email,
+      role: role?.name,
+    } as JWTpayloadCompany;
+
+    const access_token = await this.jwtService.signAsync(payload_access);
+
+    return {
+      status: 'success',
+      access_token,
+    } as Token;
   }
 
   async findById(id) {
