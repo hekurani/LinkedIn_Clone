@@ -7,12 +7,11 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as argon from 'argon2';
-import * as argon from 'argon2';
 import { scrypt as _scrypt, randomBytes } from 'crypto';
 import { Response } from 'express';
-import { OAuth2Client, OAuth2Client } from 'google-auth-library';
+import { OAuth2Client } from 'google-auth-library';
 import { CompanyService } from 'src/company/company.service';
-import { RoleService, RoleService } from 'src/role/role.service';
+import { RoleService } from 'src/role/role.service';
 import { UsersService } from 'src/users/users.service';
 import { promisify } from 'util';
 import { JWTpayload, JWTpayloadCompany } from './types/JWTpayload.type';

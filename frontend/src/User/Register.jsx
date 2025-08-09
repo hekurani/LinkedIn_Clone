@@ -154,23 +154,14 @@ const Register = () => {
                 </button>
               )}
               <p className="mx-4 mb-0  mt-5 text-center font-semibold dark:text-white"></p>
-              <p className="text-center py-2">or</p>
               <div className="flex justify-center items-center">
                 <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
                   {" "}
-                  <GoogleLogin onSuccess={responseGoogle}>
-                    <button
-                      type="submit"
-                      style={{
-                        backgroundColor: "transparent",
-                        color: "black",
-                        border: "1px solid black",
-                      }}
-                      className="w-80 h-12 font-semibold text-white rounded-full mt-3 mb-3"
-                    >
-                      Sign up with Google
-                    </button>
-                  </GoogleLogin>
+                  <GoogleLogin
+                    onSuccess={responseGoogle}
+                    shape="circle"
+                    width={300}
+                  />
                 </GoogleOAuthProvider>
               </div>
               <p className="mt-5 text-center">

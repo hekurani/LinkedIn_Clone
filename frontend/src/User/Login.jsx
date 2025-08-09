@@ -154,30 +154,21 @@ const Login = () => {
               >
                 Sign In
               </button>
-              <p className="text-center pt-2">or</p>
+              <div className="flex justify-center mt-3 mr-5 items-center">
+                <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
+                  <GoogleLogin
+                    onSuccess={responseGoogle}
+                    shape="circle"
+                    width={300}
+                  />
+                </GoogleOAuthProvider>
+              </div>
               <p className="text-xs mx-auto mt-5 mb-5 text-center">
                 By clicking Agree & Join, you agree to the LinkedIn{" "}
                 <span style={{ color: "purple" }}>User Agreement</span>,{" "}
                 <span style={{ color: "#0a66c2" }}>Privacy Policy</span>, and{" "}
                 <span style={{ color: "#0a66c2" }}>Cookie Policy</span>.{" "}
               </p>
-              <div className="flex justify-center items-center">
-                <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
-                  <GoogleLogin onSuccess={responseGoogle}>
-                    <button
-                      type="submit"
-                      style={{
-                        backgroundColor: "transparent",
-                        color: "black",
-                        border: "1px solid black",
-                      }}
-                      className="w-80 h-12 font-semibold rounded-full mt-3 mb-3"
-                    >
-                      Sign In with Google
-                    </button>
-                  </GoogleLogin>
-                </GoogleOAuthProvider>
-              </div>
             </form>
             <p className="text-center mt-5">
               New to LinkedIn?{" "}
