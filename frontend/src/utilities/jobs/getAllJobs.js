@@ -7,4 +7,12 @@ const getAllJobs = async () => {
   const { data } = await axiosInstance.get(`job-post`);
   return data;
 };
-export default getAllJobs;
+
+const applyToJob = async (jobPostId) => {
+  if (!jobPostId) return;
+  const token = getToken();
+  if (!token) return;
+  const { data } = await axiosInstance.post("job-application", { jobPostId });
+  return data;
+};
+export { applyToJob, getAllJobs };

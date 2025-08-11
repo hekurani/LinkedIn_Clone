@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import AdminHeader from "./AdminHeader";
-import AdminSideBar from "./AdminSideBar";
+import Companies from "../pages/Companies";
 import Dashboard from "../pages/Dashboard";
 import Users from "../pages/Users";
-import Companies from "../pages/Companies";
+import AdminHeader from "./AdminHeader";
+import AdminSideBar from "./AdminSideBar";
 
 const AdminDashboard = () => {
-  const [page, setPage] = useState("dashboard");
+  const [page, setPage] = useState("users");
   return (
     <>
       <AdminHeader />
       <div className="flex">
         <AdminSideBar setPage={setPage} />
-        {page === "dashboard" && <Dashboard />}
         {page === "users" && <Users />}
         {page === "companies" && <Companies />}
       </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import axiosInstance from "../axios/axios.tsx";
+import HeaderComponent from "../Components/HeaderComponent.jsx";
 import ChatPage from "../Components/User/Chat/ChatComponent";
 import ChatListingComponent from "../Components/User/Chat/ChatListingComponent";
 import AddPostComponent from "../Components/User/Feed/AddPostComponent";
@@ -56,38 +57,44 @@ const Feed = () => {
   }, []);
 
   return (
-    <div
-      className={`flex w-full min-h-screen bg-[#f4f2ee] 
-                   ${isUserFeedVisible ? "lg:flex-row" : "flex-col"}`}
-    >
-      {isUserFeedVisible && (
-        <UserFeedComponent
-          user={user}
-          setUser={setUser}
-          setAllPosts={setAllPosts}
-        />
-      )}
-      <div className="mx-auto">
-        <AddPostComponent
-          user={user}
-          setAllPosts={setAllPosts}
-          isUserFeedVisible={isUserFeedVisible}
-        />
-        <PostComponent
-          user={user}
-          allPosts={allPosts}
-          setAllPosts={setAllPosts}
-        />
-        <ChatListingComponent user={user} onChatRowClick={handleOpenChatPage} />
-        {isChatOpen && (
-          <ChatPage
+    <div className="w-full h-full">
+      <HeaderComponent />
+      <div
+        className={`flex w-full min-h-screen bg-[#f4f2ee] 
+       ${isUserFeedVisible ? "lg:flex-row" : "flex-col"}`}
+      >
+        {isUserFeedVisible && (
+          <UserFeedComponent
             user={user}
-            otherUser={otherUser}
-            // otherUser={otherUser}
-            onCloseChat={handleCloseChatPage}
-            chatRoomId={chatRoomId}
+            setUser={setUser}
+            setAllPosts={setAllPosts}
           />
         )}
+        <div className="mx-auto">
+          <AddPostComponent
+            user={user}
+            setAllPosts={setAllPosts}
+            isUserFeedVisible={isUserFeedVisible}
+          />
+          <PostComponent
+            user={user}
+            allPosts={allPosts}
+            setAllPosts={setAllPosts}
+          />
+          <ChatListingComponent
+            user={user}
+            onChatRowClick={handleOpenChatPage}
+          />
+          {isChatOpen && (
+            <ChatPage
+              user={user}
+              otherUser={otherUser}
+              // otherUser={otherUser}
+              onCloseChat={handleCloseChatPage}
+              chatRoomId={chatRoomId}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

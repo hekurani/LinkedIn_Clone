@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
-import getAllUsers from "../../utilities/user/getAllUsers";
+import React, { useEffect, useRef, useState } from "react";
+import AsyncSelect from "react-select/async";
 import Modal from "../../utilities/Modal/Modal";
-import updateUser from "../../utilities/user/updateUser";
 import Pagination from "../../utilities/pagination/Pagination";
+import createUser from "../../utilities/user/createUser";
+import getAllUsers from "../../utilities/user/getAllUsers";
+import updateUser from "../../utilities/user/updateUser";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -11,11 +13,13 @@ const Users = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [totalUsers, setTotalUsers] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const selectRef = useRef();
 
   useEffect(() => {
     const fetchAllUsers = async () => {
       try {
-        const res = await getAllUsers({ page, limit });
+        const res = await getAllUsers({ page, limit, search: searchTerm });
         setUsers(res?.users || []);
         setTotalUsers(res?.totalCount || 0);
       } catch (err) {
@@ -24,7 +28,7 @@ const Users = () => {
     };
 
     fetchAllUsers();
-  }, [page, limit]);
+  }, [page, limit, searchTerm]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,21 +39,54 @@ const Users = () => {
   };
 
   const handleEditClick = (user) => {
-    setSelectedUser(user);
+    setSelectedUser(user || {});
     setShowModal(true);
   };
 
   const handleSave = async () => {
-    const updatedUser = await updateUser(selectedUser.id, selectedUser);
-    setUsers((prevUsers) =>
-      prevUsers.map((user) => (user.id === updatedUser.id ? updatedUser : user))
-    );
+    if (selectedUser?.id) {
+      // Update existing user
+      const updatedUser = await updateUser(selectedUser.id, selectedUser);
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === updatedUser.id ? updatedUser : user
+        )
+      );
+    } else {
+      // Add new user
+      const newUser = await createUser(selectedUser);
+      setUsers((prevUsers) => [...prevUsers, newUser]);
+      setTotalUsers((prev) => prev + 1);
+    }
     setShowModal(false);
+  };
+
+  const handleSearchChange = (e) => {
+    const inputValue = e.target.value;
+    setSearchTerm(inputValue);
+    setPage(1); // Reset to first page when searching
   };
 
   return (
     <div className="bg-blue-900 flex-1 p-5">
-      <p className="text-white text-2xl font-bold">Users</p>
+      <div className="flex justify-between">
+        <p className="text-white text-2xl font-bold">Users</p>
+        <div className="search mr-5">
+          <input
+            ref={selectRef}
+            onChange={handleSearchChange}
+            placeholder="Search for users..."
+            className="bg-[$f4f2ee] rounded-md h-[2rem] w-52 px-3"
+          />
+        </div>
+        <button
+          className="text-white text-xl font-bold bg-blue-700 rounded-full px-5"
+          onClick={() => handleEditClick()}
+        >
+          Add User +
+        </button>
+      </div>
+
       <div className="table w-full">
         <table className="min-w-full mt-3 leading-normal">
           <thead>
@@ -95,12 +132,20 @@ const Users = () => {
                     {user.email}
                   </td>
                   <td className="px-3 py-2 border-b border-gray-600 text-sm">
-                    <button
-                      onClick={() => handleEditClick(user)}
-                      className="w-12 h-8 bg-blue-600 font-semibold text-white rounded-full"
-                    >
-                      Edit
-                    </button>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => handleEditClick(user)}
+                        className="w-12 h-8 bg-blue-600 font-semibold text-white rounded-full"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleEditClick(user)}
+                        className="w-16 h-8 bg-danger-600 font-semibold text-white rounded-full"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
@@ -145,7 +190,7 @@ const Users = () => {
           onClose={() => setShowModal(false)}
           onSave={handleSave}
           variant="dark"
-          title="Edit User"
+          title={selectedUser?.id ? "Edit User" : "Add User"}
         >
           <div className="p-4 grid grid-cols-3">
             <div>
@@ -178,6 +223,19 @@ const Users = () => {
                 className="mt-1 p-2 w-40 h-8 border text-black border-gray-300 rounded-md"
               />
             </div>
+
+            {!selectedUser?.id && (
+              <div>
+                <p>Password:</p>
+                <input
+                  type="password"
+                  name="password"
+                  value={selectedUser?.password || ""}
+                  onChange={handleChange}
+                  className="mt-1 p-2 w-40 h-8 border text-black border-gray-300 rounded-md"
+                />
+              </div>
+            )}
           </div>
         </Modal>
       )}

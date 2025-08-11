@@ -7,10 +7,10 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { CreateJobPostDto } from './dto/CreateJobPost.dto';
 import { AuthUser } from 'src/auth/decorators/AuthUser-decorator';
-import { JobPostService } from './job-post.service';
+import { CreateJobPostDto } from './dto/CreateJobPost.dto';
 import { UpdateJobPostDto } from './dto/updateJobPost.dto';
+import { JobPostService } from './job-post.service';
 
 @Controller('job-post')
 export class JobPostController {

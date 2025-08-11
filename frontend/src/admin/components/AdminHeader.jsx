@@ -1,40 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import logo from "../../assets/LinkedIn-logo.png";
-import defaultImage from "../../assets/default.png";
 
-import getMe from "../../utilities/user/getMe";
+import MeMenu from "../../Components/MeMenu";
 
 const AdminHeader = () => {
-  const [admin, setAdmin] = useState(false);
+  const menuRef = useRef(null);
+  const [showSettingsMenu, setShowSettingsMenu] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const admin = await getMe();
-      setAdmin(admin);
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowSettingsMenu(false);
+      }
     };
-    fetchData();
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   return (
-    <div className="flex justify-center items-center p-3 bg-gray-800">
-      <div className="mr-auto">
-        <img
-          className="logo"
-          width={120}
-          height={120}
-          src={logo}
-          alt="LinkedIn"
-        />
-      </div>
-      <div className="ml-auto">
-        <img
-          src={admin.imageProfile || defaultImage}
-          width={40}
-          height={40}
-          alt=""
-          className="rounded-full mr-5"
-        />
-      </div>
+    <div className="flex justify-between items-center p-3 bg-gray-800">
+      <img
+        className="logo"
+        width={120}
+        height={120}
+        src={logo}
+        alt="LinkedIn"
+      />
+
+      <MeMenu
+        showSettingsMenu={showSettingsMenu}
+        setShowSettingsMenu={setShowSettingsMenu}
+        menuRef={menuRef}
+        showText={true}
+      />
     </div>
   );
 };

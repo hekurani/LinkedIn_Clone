@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { getAllJobs } from "../../../utilities/jobs/getAllJobs";
 import "../style/JobListing.css";
-import cover from "../../../assets/cover.jpg";
-import getAllJobs from "../../../utilities/jobs/getAllJobs";
 
 const JobListing = ({ setSelectedJob = () => {} }) => {
   const [allJobs, setAllJobs] = useState([]);
@@ -30,7 +29,11 @@ const JobListing = ({ setSelectedJob = () => {} }) => {
 
       <div className="max-h-[calc(100vh-5rem)] overflow-y-auto">
         {allJobs.map((item, index) => (
-          <div className="content flex" key={index} onClick={() => setSelectedJob(item)}>
+          <div
+            className="content flex"
+            key={index}
+            onClick={() => setSelectedJob(item)}
+          >
             <div className="img">
               <img src={item?.company?.logo} alt="" className="w-14 h-14 m-2" />
             </div>
