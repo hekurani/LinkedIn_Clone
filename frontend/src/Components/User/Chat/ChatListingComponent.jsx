@@ -77,6 +77,10 @@ const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
         <img
           className="ml-2 h-8 w-8 mr-2"
           src={user?.imageProfile || defaultProfile}
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = defaultProfile;
+          }}
           style={{ borderRadius: "50%", objectFit: "cover" }}
           alt="profili"
         />

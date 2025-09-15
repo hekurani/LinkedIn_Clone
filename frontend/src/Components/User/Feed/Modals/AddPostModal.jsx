@@ -5,14 +5,20 @@ import {
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
 import React, { useState } from "react";
 import defaultProfile from "../../../../assets/default.png";
 import axiosInstance from "../../../../axios/axios.tsx";
+import { useAlert } from "../../../../utilities/alert/AlertContext.js";
 
-const AddPostModal = ({ user, closeModal, setAllPosts = () => {} }) => {
+const AddPostModal = ({
+  user,
+  closeModal,
+  setAllPosts = () => {},
+  setShowCommingSoonConfirm = () => {},
+}) => {
   const [description, setDescription] = useState("");
   const [images, setImages] = useState([]);
+  const showAlert = useAlert();
 
   const getAllPosts = async () => {
     const { data } = await axiosInstance.get("/posts");
@@ -26,6 +32,13 @@ const AddPostModal = ({ user, closeModal, setAllPosts = () => {} }) => {
   };
 
   const handleImageChange = (files) => {
+    if (Array.isArray(images) && images.length > 3) {
+      showAlert({
+        text: "Maximum media limit reached!",
+        variant: "danger",
+      });
+      return;
+    }
     setImages((prevImages) => [...prevImages, ...Array.from(files)]);
   };
 
@@ -49,12 +62,12 @@ const AddPostModal = ({ user, closeModal, setAllPosts = () => {} }) => {
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center"
+      className="fixed inset-0 flex items-center h-full justify-center"
       style={{ zIndex: 50 }}
     >
       <div
-        className="w-full min-w-96 h-96 bg-white rounded shadow-2xl"
-        style={{ backgroundColor: "white", width: "850px", height: "420px" }}
+        className="w-full min-w-96 h-full bg-white rounded shadow-2xl"
+        style={{ backgroundColor: "white", width: "850px", height: "450px" }}
       >
         <div className="header m-7 flex">
           <img
@@ -75,7 +88,7 @@ const AddPostModal = ({ user, closeModal, setAllPosts = () => {} }) => {
           </button>
         </div>
 
-        <div>
+        <div className="border border-solid border-primary-500 p-4">
           {" "}
           {/* message */}
           <textarea
@@ -108,7 +121,10 @@ const AddPostModal = ({ user, closeModal, setAllPosts = () => {} }) => {
             onChange={(e) => handleImageChange(e.target.files)}
             style={{ display: "none" }}
           />
-          <button className=" ml-7 text-lg font-semibold">
+          <button
+            className=" ml-7 text-lg font-semibold"
+            onClick={() => setShowCommingSoonConfirm(true)}
+          >
             {" "}
             <FontAwesomeIcon
               icon={faCalendarDays}
@@ -146,11 +162,14 @@ const AddPostModal = ({ user, closeModal, setAllPosts = () => {} }) => {
         </div>
 
         <div
-          className="flex justify-center items-center"
+          className="flex justify-center items-center mb-"
           style={{ float: "right" }}
         >
           {/* post button and schedule time */}
-          <button className="text-2xl pt-1">
+          <button
+            className="text-2xl pt-1"
+            onClick={() => setShowCommingSoonConfirm(true)}
+          >
             <FontAwesomeIcon
               style={{ color: "grey" }}
               icon={faClock}

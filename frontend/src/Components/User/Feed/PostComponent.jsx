@@ -4,7 +4,12 @@ import defaultProfile from "../../../assets/default.png";
 import axiosInstance from "../../../axios/axios.tsx";
 import PreviewPostImage from "./Modals/PreviewPostImage.jsx";
 
-const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
+const PostComponent = ({
+  user,
+  allPosts = [],
+  setAllPosts = () => {},
+  setShowCommingSoonConfirm,
+}) => {
   const [comments, setComments] = useState({});
   const [postButtonForPost, setPostButtonForPost] = useState(null);
 
@@ -113,7 +118,7 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
   };
 
   return (
-    <div className="mx-auto flex-1 w-[555px] px-2">
+    <div className="mx-auto flex-1 w-[655px] px-2">
       {allPosts.map((postItem, index) => (
         <div
           className="ml-16 mt-8 rounded-md"
@@ -124,7 +129,7 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
           }}
         >
           <div key={index} className="mb-4">
-            <div className="header m-3 flex">
+            <div className="m-3 flex">
               <img
                 onClick={() => navigate(`${postItem?.user?.id}/profile`)}
                 src={
@@ -132,6 +137,10 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
                     ? postItem.user.imageProfile
                     : defaultProfile
                 }
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = defaultProfile;
+                }}
                 style={{ borderRadius: "50%", objectFit: "cover" }}
                 className="w-12 h-12 mt-1"
                 alt={"userprofile"}
@@ -147,13 +156,16 @@ const PostComponent = ({ user, allPosts = [], setAllPosts = () => {} }) => {
                   {getTimePassed(postItem?.publishDate)} •
                 </p>
               </div>
-              <div className="ml-auto flex">
+              <div
+                className="ml-auto flex cursor-pointer"
+                onClick={() => setShowCommingSoonConfirm(true)}
+              >
                 <p>•••</p>
                 <p className="ml-2">X</p>
               </div>
             </div>
 
-            <div className="description m-4 text-sm max-h-96">
+            <div className="description m-4 text-sm break-words whitespace-pre-wrap max-h-96">
               <p>{postItem.description}</p>
             </div>
             {postItem?.postImages.length > 0 && (

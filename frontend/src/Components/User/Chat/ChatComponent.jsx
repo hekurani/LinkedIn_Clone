@@ -19,6 +19,7 @@ function ChatPage({
   user = null,
   onCloseChat = () => {},
   chatRoomId = null,
+  setChatRoomId = () => {},
 }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -27,6 +28,7 @@ function ChatPage({
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!chatRoomId) return;
       const response = await axios.get(
         `http://localhost:4000/chatroom/allMessages/${chatRoomId}`
       );
@@ -75,7 +77,13 @@ function ChatPage({
       };
 
       socket.emit("message", messageData);
-      await sendMessage(user?.id, chatRoomId, input);
+      const { data } = await sendMessage(
+        user?.id,
+        !chatRoomId ? otherUser?.id : null,
+        chatRoomId,
+        input
+      );
+      setChatRoomId(data?.chatId);
       setInput("");
       scrollToBottom();
     }

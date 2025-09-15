@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { io } from "socket.io-client";
+import defaultImage from "../../assets/default.png";
+import { createChat } from "../../utilities/chat/getChat";
 import {
   acceptRequest,
   cancelRequest,
   getRequestSendedToMe,
 } from "../../utilities/friends/getFriends";
-import defaultImage from "../../assets/default.png";
-import { Link } from "react-router-dom";
-import { io } from "socket.io-client";
-import { createChat } from "../../utilities/chat/getChat";
 
 const socket = io("http://localhost:8002");
 const Invitation = () => {
@@ -48,7 +48,7 @@ const Invitation = () => {
         maxWidth: "880px",
         borderRadius: "7px",
       }}
-      className="mx-auto p-5"
+      className="mx-auto p-5 bg-white"
     >
       {!!data && data.length > 0 ? (
         <div className="header flex items-center mb-3">

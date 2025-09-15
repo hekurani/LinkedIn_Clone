@@ -1,82 +1,98 @@
-import React, { useEffect, useState } from "react";
-import { getFriends } from "../../utilities/friends/getFriends";
-import defaultImage from "../../assets/default.png";
+import React, { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import getMe from "../../utilities/user/getMe";
+import defaultImage from "../../assets/default.png";
 import axiosInstance from "../../axios/axios.tsx";
+import { getFriends } from "../../utilities/friends/getFriends";
+import getMe from "../../utilities/user/getMe";
+import ConnectionsHeader from "./ConnectionHeader.jsx"; // import header
 
 const socket = io("http://localhost:8003");
+
 const ConnectionComponent = () => {
   const [friends, setFriends] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState(searchTerm);
+  const [loading, setLoading] = useState(true);
 
-  const getAllFriends = async () => {
-    const data = await getFriends();
-    const user = await getMe();
-    setFriends(data);
-    await axiosInstance.patch(`users/users/${user.id}`, {
-      countUnseenConnections: 0,
-    });
+  const inputRef = useRef(null);
+
+  // Debounce search
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedSearch(searchTerm), 400);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
+  const getAllFriends = async (searchTerm) => {
+    try {
+      setLoading(true);
+      const data = await getFriends(searchTerm);
+      const user = await getMe();
+      setFriends(data);
+
+      await axiosInstance.patch(`users/users/${user.id}`, {
+        countUnseenConnections: 0,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    getAllFriends();
+    getAllFriends(debouncedSearch);
 
-    socket.on("newestFriend", (newRequest) => {
-      getAllFriends();
+    socket.on("newestFriend", () => {
+      getAllFriends(debouncedSearch);
     });
 
-    return () => {
-      socket.off("newestFriend");
-    };
-  }, []);
+    return () => socket.off("newestFriend");
+  }, [debouncedSearch]);
 
   return (
     <div
       style={{
-        border: "1px solid #d3d3d3 ",
+        border: "1px solid #d3d3d3",
         maxWidth: "880px",
         borderRadius: "7px",
       }}
-      className="mt-12 mx-auto h-auto"
+      className="mt-12 mx-auto h-auto bg-white"
     >
-      <div className="header nr-connections">
-        {friends.length > 0 ? (
-          <p className="text-2xl m-5">{friends.length} Connections</p>
-        ) : (
-          <div className="title">
-            <p className="m-5">No Active Connections</p>
-            <p className="text-sm m-5">Start by connecting with others!</p>
-          </div>
-        )}
-      </div>
-      {friends.length > 0 && (
-        <div className="searchAndFilter flex m-3">
-          <div className="search flex">
-            <p className="mr-2">Sort by:</p>
-            <p className="font-semibold text-stone-500">First Name</p>
-          </div>
-          <div className="searchbar ml-auto mr-5">
-            <input
-              type="text"
-              className="p-1 pl-2 w-64 h-8"
-              placeholder="Search by name"
-            />
-          </div>
-        </div>
-      )}
+      {/* Header */}
+      <ConnectionsHeader
+        loading={loading}
+        friends={friends}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        inputRef={inputRef}
+      />
 
-      {friends.map((friend) => {
-        return (
-          <div key={friend.id} className="connections flex mb-3">
-            <div className="ml-3">
-              <img
-                className="w-16 h-16 rounded-full"
-                src={friend.imageProfile || defaultImage}
-                alt=""
-              />
+      {/* Searchbar */}
+
+      {/* Friends List */}
+      {loading ? (
+        <div className="p-5 space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="flex items-center space-x-3 animate-pulse">
+              <div className="w-12 h-12 bg-gray-200 rounded-full" />
+              <div className="flex-1">
+                <div className="h-4 bg-gray-200 rounded w-1/3 mb-2" />
+                <div className="h-3 bg-gray-200 rounded w-1/4" />
+              </div>
             </div>
-            <div className="m-2">
-              <p className="font-semibold text-xl">
+          ))}
+        </div>
+      ) : (
+        friends.map((friend) => (
+          <div
+            key={friend.id}
+            className="connections flex mb-3 border-t border-gray-300 first:border-t-0"
+          >
+            <img
+              className="w-12 h-12 m-2 rounded-full"
+              src={friend.imageProfile || defaultImage}
+              alt=""
+            />
+            <div className="m-2 mt-2">
+              <p className="font-[400] text-xl">
                 {friend.name} {friend.lastname}
               </p>
               <p className="description font-lg">Student at UBT-University</p>
@@ -100,8 +116,8 @@ const ConnectionComponent = () => {
               </p>
             </div>
           </div>
-        );
-      })}
+        ))
+      )}
     </div>
   );
 };

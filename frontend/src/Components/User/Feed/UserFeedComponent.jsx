@@ -7,6 +7,7 @@ const UserFeedComponent = ({
   user,
   setUser = () => {},
   setAllPosts = () => {},
+  setShowCommingSoonConfirm = () => {},
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
@@ -16,7 +17,7 @@ const UserFeedComponent = ({
 
   return (
     <div
-      className={`w-56 rounded-md ml-16 mt-6 relative transition-all duration-500 `}
+      className={`w-56 rounded-md ml-32 mt-6 relative transition-all duration-500 `}
       style={{
         height: "310px",
         border: "1px solid #D3D3D3",
@@ -29,7 +30,7 @@ const UserFeedComponent = ({
       >
         <div
           className="Cover rounded-t-md h-14"
-          style={{ backgroundColor: "yellow", border: "1px solid #D3D3D3" }}
+          style={{ backgroundColor: "yellow" }}
         >
           {user && (
             <img
@@ -38,6 +39,10 @@ const UserFeedComponent = ({
                 borderRadius: "50%",
                 objectFit: "cover",
                 border: "2px solid white",
+              }}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = defaultProfile;
               }}
               src={user.imageProfile ? user.imageProfile : defaultProfile}
               alt={"Profile"}
@@ -60,7 +65,10 @@ const UserFeedComponent = ({
           </button>
         </div>
       </div>
-      <div className="ProfileViews  h-6 flex bg-white">
+      <div
+        className="ProfileViews  h-6 flex bg-white cursor-pointer"
+        onClick={() => setShowCommingSoonConfirm(true)}
+      >
         <p className="ml-3 mt-3 text-xs whitespace-nowrap text-gray-600 font-semibold">
           Profile Viewers
         </p>
@@ -72,8 +80,9 @@ const UserFeedComponent = ({
         </p>
       </div>
       <div
-        className="Connections h-10 flex"
+        className="Connections h-10 flex cursor-pointer"
         style={{ borderBottom: "0.5px solid #D3D3D3", background: "white" }}
+        onClick={() => navigate("/connections")}
       >
         <p className="ml-3 mt-3 text-xs text-gray-600 font-semibold">
           Connections
@@ -87,27 +96,34 @@ const UserFeedComponent = ({
         </p>
       </div>
       <div
-        className="Premium  h-16 pt-3"
+        className="Premium  h-16 pt-3 cursor-pointer"
         style={{ borderBottom: "0.5px solid #D3D3D3", background: "white" }}
+        onClick={() => setShowCommingSoonConfirm(true)}
       >
         <p className="text-xs text-center text-gray-600">
           Accelerate your career with Premium
         </p>
         <p className="text-left ml-4 text-xs font-semibold pt-2">Try for 0$</p>
       </div>
-      <div>
+      <div
+        onClick={() => setShowCommingSoonConfirm(true)}
+        className="cursor-pointer"
+      >
         <p className="text-xs font-semibold ml-4 mt-2"> My Items</p>
       </div>
 
       {isModalOpen && (
         <UploadImageModal
-          user={user}
-          isOpen={isModalOpen}
-          onRequestClose={closeModal}
-          capturedImage={capturedImage}
-          setCapturedImage={setCapturedImage}
-          setUser={setUser}
-          setAllPosts={setAllPosts}
+          {...{
+            user,
+            isOpen: isModalOpen,
+            onRequestClose: closeModal,
+            capturedImage,
+            setCapturedImage,
+            setUser,
+            setAllPosts,
+            setShowCommingSoonConfirm,
+          }}
         />
       )}
     </div>

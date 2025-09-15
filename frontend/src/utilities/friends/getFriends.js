@@ -1,6 +1,9 @@
 import axiosInstance from "../../axios/axios.tsx";
-const getFriends = async () => {
-  const { data } = await axiosInstance(`friends`);
+const getFriends = async (searchTerm = "") => {
+  console.log({ searchTerm });
+  const { data } = await axiosInstance(`friends`, {
+    params: { searchTerm },
+  });
   return data;
 };
 const sentRequestsByMe = async () => {

@@ -36,7 +36,7 @@ export class AuthService {
   async signIn(email: string, password: string) {
     const [user] = await this.usersService.findByPassword(email, false);
     if (!user || !user?.password) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('Email or password is wrong!');
     }
     const [salt, storedHash] = user?.password.split('.');
     const hash = (await scrypt(password, salt, 32)) as Buffer;
@@ -94,7 +94,7 @@ export class AuthService {
 
   async findById(id) {
     const user = await this.usersService.findOne(id);
-    if (!user) throw new NotFoundException('User not found');
+    if (!user) throw new NotFoundException('Email or password is wrong!');
     return user;
   }
 
@@ -151,7 +151,7 @@ export class AuthService {
     const payLoad = (await ticket).getPayload();
     const [user] = await this.usersService.findByPassword(payLoad?.email, true);
     if (!user) {
-      throw new NotFoundException('User not found!');
+      throw new NotFoundException('Email or password is wrong!');
     }
     const role  = await this.roleService.findOne(user?.roleId);
     const payload_access = {

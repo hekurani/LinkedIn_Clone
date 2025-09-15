@@ -1,16 +1,16 @@
 import {
-  Controller,
-  Post,
   Body,
-  Get,
+  Controller,
   Delete,
+  Get,
   Param,
-  Put,
   Patch,
+  Post,
+  Put,
 } from '@nestjs/common';
-import { MessageService } from './message.service';
-import { UpdateMessageDTO } from './dto/update.message.dto';
 import { Public } from 'src/auth/decorators/Public-Api.decorator';
+import { UpdateMessageDTO } from './dto/update.message.dto';
+import { MessageService } from './message.service';
 
 @Controller('message')
 export class MessageController {
@@ -26,10 +26,11 @@ export class MessageController {
   @Post('/sendMessage')
   async sendMessage(
     @Body('userId') userId: number,
+    @Body('user2Id') user2Id: number,
     @Body('chatId') chatId: number,
     @Body('message') message: string,
   ) {
-    return this.messageService.sendMessage(message, userId, chatId);
+    return this.messageService.sendMessage(message, userId, user2Id, chatId);
   }
 
   @Get('/:id')

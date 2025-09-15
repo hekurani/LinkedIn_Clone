@@ -5,11 +5,11 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Message } from './message.entity';
-import { User } from '../users/user.entity';
+import { Repository } from 'typeorm';
 import { ChatRoom } from '../chatroom/chat.entity';
+import { User } from '../users/user.entity';
+import { Message } from './message.entity';
 @Injectable()
 export class MessageService {
   constructor(
@@ -18,20 +18,56 @@ export class MessageService {
     @InjectRepository(ChatRoom) private chatRepository: Repository<ChatRoom>,
   ) {}
 
-  async sendMessage(messageText: string, userId: number, chatId: number) {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-    const chat = await this.chatRepository.findOne({ where: { id: chatId } });
+async sendMessage(
+  messageText: string,
+  userId: number,
+  user2Id: number,
+  chatId?: number,
+) {
+  const user1 = await this.userRepository.findOne({ where: { id: userId } });
+  const user2 = await this.userRepository.findOne({ where: { id: user2Id } });
 
-    if (!user || !chat) {
-      throw new NotFoundException('User or chat not found');
-    }
-    const message = this.repo.create({ description: messageText, user, chat });
-    const savedMessage = await this.repo.save(message);
-    chat.messages.push(savedMessage.id);
-    await this.chatRepository.save(chat);
-
-    return this.repo.save(message);
+  if (!user1 || !user2) {
+    throw new NotFoundException('User not found');
   }
+
+  let chat: ChatRoom;
+
+  if (chatId) {
+    chat = await this.chatRepository.findOne({ where: { id: chatId } });
+    if (!chat) throw new NotFoundException('Chat not found');
+  } else {
+    chat = await this.chatRepository.findOne({
+      where: [
+        { user1: { id: userId }, user2: { id: user2Id } },
+        { user1: { id: user2Id }, user2: { id: userId } },
+      ],
+    });
+
+    if (!chat) {
+      chat = this.chatRepository.create({
+        user1,
+        user2,
+        messages: [],
+      });
+      chat = await this.chatRepository.save(chat);
+    }
+  }
+
+  const message = this.repo.create({ description: messageText, user: user1, chat });
+  const savedMessage = await this.repo.save(message);
+
+  chat.messages = [...(chat.messages || []), savedMessage.id];
+  await this.chatRepository.save(chat);
+
+  return {
+    message: savedMessage,
+    chatId: chat.id,
+    user1Id: user1.id,
+    user2Id: user2.id,
+  };
+}
+
 
   async findAllMessages() {
     return await this.repo.find({ relations: ['user'] });

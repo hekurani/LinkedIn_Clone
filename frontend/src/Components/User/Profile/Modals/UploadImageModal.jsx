@@ -1,11 +1,11 @@
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 import React, { useState } from "react";
 import Modal from "react-modal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
-import CameraModal from "./CameraModal";
-import getMe from "../../../../utilities/user/getMe";
 import axiosInstance from "../../../../axios/axios.tsx";
+import getMe from "../../../../utilities/user/getMe";
+import CameraModal from "./CameraModal";
 
 Modal.setAppElement("#root");
 
@@ -15,6 +15,7 @@ const UploadImageModal = ({
   onRequestClose = () => {},
   setUser = () => {},
   setAllPosts = () => {},
+  setShowCommingSoonConfirm = () => {},
 }) => {
   const [isCameraModalOpen, setCameraModalOpen] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
@@ -131,7 +132,11 @@ const UploadImageModal = ({
           </div>
 
           <div className="flex mt-11">
-            <p className="m-5 font-semibold" style={{ color: "#0a66c2" }}>
+            <p
+              className="m-5 font-semibold cursor-pointer"
+              style={{ color: "#0a66c2" }}
+              onClick={() => setShowCommingSoonConfirm(true)}
+            >
               Frames
             </p>
 

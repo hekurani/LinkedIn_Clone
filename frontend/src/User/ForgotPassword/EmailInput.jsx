@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useEmail } from "./EmailContext";
-import logo from "../../assets/LinkedIn-logo.png";
 import axios from "axios";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "../../assets/LinkedIn-logo.png";
+import { useEmail } from "./EmailContext";
 const EmailInput = () => {
   const navigate = useNavigate();
   const { setEmail } = useEmail(); //pranojm emailin qe e ka shtyp dhe setOTP per mbivendosje te otp
@@ -37,11 +37,11 @@ const EmailInput = () => {
       });
   };
   return (
-    <div className="page" style={{ height: "800px" }}>
+    <div className="w-full mx-3">
       {" "}
       {/* div kryesor */}
       {/* Header Section */}
-      <div className="image ml-14 flex ">
+      <div className="image flex w-full  items-center justify-between">
         <img
           className="logo"
           width={120}
@@ -49,28 +49,30 @@ const EmailInput = () => {
           src={logo}
           alt={"clone"}
         />
-        <button
-          className="font-semibold"
-          style={{ marginLeft: "830px", marginBottom: "15px", color: "grey" }}
-        >
-          <Link to={"/Login"}>Sign in</Link>{" "}
-        </button>
-        <button
-          className="mb-7 pb-1 pl-4 pr-4 mt-3 ml-4 rounded-full  pt-1 pb-0 font-semibold"
-          style={{
-            color: "#0a66c2",
-            border: "1px solid #0a66c2",
-            borderTop: "1.8px solid #0a66c2",
-            borderLeft: "1.8px solid #0a66c2",
-            borderRight: "1.8px solid #0a66c2",
-          }}
-        >
-          {" "}
-          <span className="text-center">
+        <div className="mr-7">
+          <button
+            className="font-semibold"
+            style={{ marginBottom: "15px", color: "grey" }}
+          >
+            <Link to={"/Login"}>Sign in</Link>{" "}
+          </button>
+          <button
+            className="mb-7 pb-1 pl-4 pr-4 mt-3 ml-4 rounded-full  pt-1 pb-0 font-semibold"
+            style={{
+              color: "#0a66c2",
+              border: "1px solid #0a66c2",
+              borderTop: "1.8px solid #0a66c2",
+              borderLeft: "1.8px solid #0a66c2",
+              borderRight: "1.8px solid #0a66c2",
+            }}
+          >
             {" "}
-            <Link to={"/Register"}>Join now</Link>
-          </span>
-        </button>
+            <span className="text-center">
+              {" "}
+              <Link to={"/Register"}>Join now</Link>
+            </span>
+          </button>
+        </div>
       </div>
       <div className="form w-96 h-96 mt-6 mx-auto">
         {" "}

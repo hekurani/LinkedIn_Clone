@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Modal from "../../utilities/Modal/Modal";
-import updateCompany from "../../utilities/company/updateCompany";
-import { getCompanies } from "../../utilities/company/getCompanies";
-import profile from "../../assets/profile.png";
+import profile from "../../assets/default.png";
 import axiosInstance from "../../axios/axios.tsx";
+import Modal from "../../utilities/Modal/Modal";
+import { getCompanies } from "../../utilities/company/getCompanies";
+import updateCompany from "../../utilities/company/updateCompany";
 
 const Companies = () => {
   const [companies, setCompanies] = useState([]);
@@ -46,7 +46,7 @@ const Companies = () => {
   };
 
   const handleEditClick = (comp) => {
-    console.log({comp})
+    console.log({ comp });
     setSelectedCompany(comp);
     setImagePreview(comp.logo || null);
     setSelectedImage(null);
@@ -55,7 +55,6 @@ const Companies = () => {
 
   const handleSave = async () => {
     try {
-
       if (selectedImage) {
         const formData = new FormData();
         formData.append("logo", selectedImage);
@@ -67,11 +66,11 @@ const Companies = () => {
       }
 
       const result = await updateCompany(selectedCompany?.id, selectedCompany);
-      
+
       setCompanies((prevCompanies) =>
         prevCompanies.map((comp) => (comp?.id === result?.id ? result : comp))
       );
-      
+
       setShowModal({ open: false, variant: "edit" });
       setSelectedCompany(null);
       setSelectedImage(null);
@@ -91,7 +90,12 @@ const Companies = () => {
   return (
     <div className="bg-blue-900 flex-1 p-5">
       <div className="w-full flex items-center jsutify-end mb-5">
-        <button className="rounded-full bg-white text-blue-900 p-1 px-3 w-32 ml-auto" onClick={() => setShowModal({ open: true, variant: 'create' })}>New +</button>
+        <button
+          className="rounded-full bg-white text-blue-900 p-1 px-3 w-32 ml-auto"
+          onClick={() => setShowModal({ open: true, variant: "create" })}
+        >
+          New +
+        </button>
       </div>
 
       <p className="text-white text-2xl font-bold">Companies</p>
@@ -143,7 +147,17 @@ const Companies = () => {
                     {company?.email}
                   </td>
                   <td className="px-3 py-2 border-b border-gray-600 text-sm">
-                    <img src={company?.logo || profile} width={40} height={40} alt="" className="rounded-full" />
+                    <img
+                      src={company?.logo || profile}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = profile;
+                      }}
+                      width={40}
+                      height={40}
+                      alt=""
+                      className="rounded-full"
+                    />
                   </td>
                   <td className="px-3 py-2 border-b border-gray-600 text-sm">
                     <button
@@ -167,7 +181,6 @@ const Companies = () => {
             )}
           </tbody>
         </table>
-
       </div>
 
       {showModal?.open && (
@@ -182,9 +195,9 @@ const Companies = () => {
           <div className="p-4">
             <div className="mb-6 text-center">
               <div className="mb-4">
-                <img 
-                  src={imagePreview || selectedCompany?.imageProfile || profile} 
-                  alt="Company Logo" 
+                <img
+                  src={imagePreview || selectedCompany?.imageProfile || profile}
+                  alt="Company Logo"
                   className="w-24 h-24 rounded-full mx-auto border-2 border-gray-300"
                 />
               </div>
@@ -233,7 +246,7 @@ const Companies = () => {
                   className="w-full p-2 border text-black border-gray-300 rounded-md"
                 />
               </div>
-              {showModal?.variant === 'create' && (
+              {showModal?.variant === "create" && (
                 <div>
                   <p className="text-white mb-1">Password:</p>
                   <input

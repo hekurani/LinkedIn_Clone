@@ -1,8 +1,8 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useEmail } from "./EmailContext";
 import logo from "../../assets/LinkedIn-logo.png";
-import axios from "axios";
+import { useEmail } from "./EmailContext";
 
 const EnterCodeForgotPassword = () => {
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ const EnterCodeForgotPassword = () => {
       {" "}
       {/* div kryesor */}
       {/* Header Section */}
-      <div className="image ml-24 flex ">
+      <div className="image flex ">
         <img
           className="logo"
           width={120}
@@ -59,7 +59,7 @@ const EnterCodeForgotPassword = () => {
         />
         <button
           className="font-semibold"
-          style={{ marginLeft: "830px", marginBottom: "15px", color: "grey" }}
+          style={{ marginBottom: "15px", color: "grey" }}
         >
           <Link to={"/Login"}>Sign in</Link>{" "}
         </button>

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axiosInstance from "../axios/axios.tsx";
 import HeaderComponent from "../Components/HeaderComponent.jsx";
+import CommingSoon from "../Components/NotFound/CommingSoon.jsx";
 import ChatPage from "../Components/User/Chat/ChatComponent";
 import ChatListingComponent from "../Components/User/Chat/ChatListingComponent";
 import AddPostComponent from "../Components/User/Feed/AddPostComponent";
@@ -15,6 +16,7 @@ const Feed = () => {
   const [isUserFeedVisible, setIsUserFeedVisible] = useState(true);
   const [allPosts, setAllPosts] = useState([]);
   const [otherUser, setOtherUser] = useState({});
+  const [showCommingSoonConfirm, setShowCommingSoonConfirm] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,18 +70,21 @@ const Feed = () => {
             user={user}
             setUser={setUser}
             setAllPosts={setAllPosts}
+            setShowCommingSoonConfirm={setShowCommingSoonConfirm}
           />
         )}
-        <div className="mx-auto">
+        <div className="ml-32">
           <AddPostComponent
             user={user}
             setAllPosts={setAllPosts}
             isUserFeedVisible={isUserFeedVisible}
+            setShowCommingSoonConfirm={setShowCommingSoonConfirm}
           />
           <PostComponent
             user={user}
             allPosts={allPosts}
             setAllPosts={setAllPosts}
+            setShowCommingSoonConfirm={setShowCommingSoonConfirm}
           />
           <ChatListingComponent
             user={user}
@@ -92,8 +97,13 @@ const Feed = () => {
               // otherUser={otherUser}
               onCloseChat={handleCloseChatPage}
               chatRoomId={chatRoomId}
+              setShowCommingSoonConfirm={setShowCommingSoonConfirm}
             />
           )}
+          <CommingSoon
+            isOpen={showCommingSoonConfirm}
+            setIsOpen={setShowCommingSoonConfirm}
+          />
         </div>
       </div>
     </div>

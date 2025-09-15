@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/user.entity';
+import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { Friend } from './friends.entity';
-import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class FriendsService {
@@ -11,23 +11,33 @@ export class FriendsService {
     @InjectRepository(Friend) private friend: Repository<Friend>,
     private userService: UsersService,
   ) {}
-  async getFriends(userId: number) {
-    const user = await this.userService.findOne(userId);
-    const friends = await this.friend.find({
-      where: [{ sender: user }, { receiver: user }],
-      relations: ['sender', 'receiver'],
-    });
+async getFriends(userId: number, searchTerm: string) {
+  const friends = await this.friend.find({
+    where: [{ sender: { id: userId } }, { receiver: { id: userId } }],
+    relations: ['sender', 'receiver'],
+  });
 
-    const friendList = friends.map((friend) => {
-      if (friend.sender.id === userId) {
-        return friend.receiver;
-      } else {
-        return friend.sender;
-      }
-    });
+  // Get only the "other user"
+  let friendList = friends.map((friend) =>
+    friend.sender.id === userId ? friend.receiver : friend.sender,
+  );
 
-    return friendList;
+  // Apply search
+  if (searchTerm) {
+    const lower = searchTerm.toLowerCase();
+    friendList = friendList.filter(
+      (f) =>
+        f.name.toLowerCase().includes(lower) ||
+        f.lastname.toLowerCase().includes(lower) ||
+        f.email.toLowerCase().includes(lower),
+    );
   }
+  console.log({friendList})
+  return friendList;
+}
+
+
+
   async getFriend({ userId, friendId }) {
     return this.friend.findOne({
       where: [

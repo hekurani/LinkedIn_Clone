@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import cover from "../../../assets/cover.jpg";
 import profile from "../../../assets/default.png";
+import ChatPage from "../../../Components/User/Chat/ChatComponent";
 import ShowAlert from "../../../utilities/alert/showAlert";
 import { createChat } from "../../../utilities/chat/getChat";
 import {
@@ -11,15 +12,19 @@ import {
 } from "../../../utilities/friends/getFriends";
 import getMe from "../../../utilities/user/getMe";
 
-const ProfileInfo = ({ user }) => {
+const ProfileInfo = ({ foreignUser = {}, user = {} }) => {
   const [status, setStatus] = useState("Connect");
   const [alreadyFriends, setAllReadyFriends] = useState(false);
+  const [showChatPage, setShowPage] = useState(false);
+  const [chatRoomId, setChatRoomId] = useState(null);
   const handleHover = (e) => {
     e.target.style.color = "blue";
   };
   const getMyFriends = async () => {
     const data = await getFriends();
-    const existingFriend = data?.filter((friend) => friend?.id === user?.id);
+    const existingFriend = data?.filter(
+      (friend) => friend?.id === foreignUser?.id
+    );
     console.log({ existingFriend });
     setAllReadyFriends(
       Array.isArray(existingFriend) && existingFriend.length > 0 ? 1 : 0
@@ -34,7 +39,7 @@ const ProfileInfo = ({ user }) => {
   };
   const addFriend = async () => {
     try {
-      await requestAddFriend(user.id);
+      await requestAddFriend(foreignUser.id);
       setStatus("Pending");
       ShowAlert({ text: "Friend request sent", color: "blue" });
     } catch (err) {
@@ -43,8 +48,9 @@ const ProfileInfo = ({ user }) => {
   };
   const createChatRoom = async () => {
     try {
+      setShowPage(true);
       const me = await getMe();
-      await createChat(me.id, user.id);
+      await createChat(me.id, foreignUser.id);
     } catch (err) {
       console.log(err);
     }
@@ -52,8 +58,8 @@ const ProfileInfo = ({ user }) => {
 
   return (
     <div
-      className="main mx-auto mt-7  left-3 rounded-md"
-      style={{ width: "804px" }}
+      className="mx-auto mt-7 bg-white  left-3 rounded-md"
+      style={{ width: "804px", border: "1px solid #D3D3D3" }}
     >
       <div
         className="header  rounded-md"
@@ -66,7 +72,7 @@ const ProfileInfo = ({ user }) => {
           alt={"coveri"}
         />
         <img
-          src={user.imageProfile}
+          src={foreignUser.imageProfile}
           style={{
             width: "152px",
             height: "152px",
@@ -102,7 +108,7 @@ const ProfileInfo = ({ user }) => {
       <div className="profileInfo flex mt-16 mb-5 ">
         <div className="personalInfo text-left ml-7">
           <p className="font-semibold text-2xl">
-            {user.name} {user.lastname}
+            {foreignUser.name} {foreignUser.lastname}
           </p>
           <p>Software Developer</p>
           <p className="location mt-1 text-sm " style={{ color: "grey" }}>
@@ -156,11 +162,11 @@ const ProfileInfo = ({ user }) => {
                 border: " 1px solid #0a66c2",
                 borderTop: "1.5px solid #0a66c2",
               }}
+              onClick={() => createChatRoom()}
             >
               Message
             </button>
             <button
-              onClick={() => createChatRoom()}
               className="rounded-full ml-2
                          pb-1 pt-1 pl-3 pr-3 font-semibold"
               style={{
@@ -194,6 +200,17 @@ const ProfileInfo = ({ user }) => {
           </li>
         </ul>
       </div>
+
+      {showChatPage && (
+        <ChatPage
+          user={foreignUser}
+          otherUser={user}
+          // otherUser={otherUser}
+          chatRoomId={chatRoomId}
+          setChatRoomId={setChatRoomId}
+          onCloseChat={() => setShowPage(false)}
+        />
+      )}
     </div>
   );
 };

@@ -12,6 +12,7 @@ const AddPostComponent = ({
   user,
   isUserFeedVisible,
   setAllPosts = () => {},
+  setShowCommingSoonConfirm,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -39,6 +40,10 @@ const AddPostComponent = ({
           <img
             className="ml-3 mt-3 w-12 h-12 mb-2"
             style={{ borderRadius: "50%", objectFit: "cover" }}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = defaultProfile;
+            }}
             src={user.imageProfile ? user.imageProfile : defaultProfile}
             alt={"p"}
           />
@@ -60,6 +65,7 @@ const AddPostComponent = ({
         <div className="h-10 flex justify-around">
           <button
             className="w-20 ml-6 text-sm font-semibold text-black-50"
+            onClick={() => setShowCommingSoonConfirm(true)}
             style={{ color: "grey" }}
           >
             {" "}
@@ -73,6 +79,7 @@ const AddPostComponent = ({
           <button
             className="w-20 ml-6 text-sm font-semibold"
             style={{ color: "grey" }}
+            onClick={() => setShowCommingSoonConfirm(true)}
           >
             {" "}
             <FontAwesomeIcon
@@ -86,6 +93,7 @@ const AddPostComponent = ({
           <button
             className="w-20 ml-6  text-sm font-semibold"
             style={{ color: "grey" }}
+            onClick={() => setShowCommingSoonConfirm(true)}
           >
             {" "}
             <FontAwesomeIcon
@@ -100,6 +108,7 @@ const AddPostComponent = ({
             user={user}
             closeModal={closeModal}
             setAllPosts={setAllPosts}
+            setShowCommingSoonConfirm={setShowCommingSoonConfirm}
           />
         )}
       </div>

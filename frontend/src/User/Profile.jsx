@@ -46,7 +46,7 @@ const Profile = () => {
         {userId == loggedUser.id ? (
           <ProfileLoggedUserInfo user={loggedUser} />
         ) : (
-          <FriendsProfile user={foreignUser} />
+          <FriendsProfile foreignUser={foreignUser} user={loggedUser} />
         )}
         <SkillsSection user={loggedUser} />
 

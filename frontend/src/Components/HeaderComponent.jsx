@@ -25,9 +25,6 @@ const HeaderComponent = () => {
     const data = await getMe();
     setCountConnections(data?.countUnseenConnections);
   };
-  const location = useLocation();
-  const pathname = location.pathname;
-  const insideJobs = pathname.includes("/jobs");
   const token = getToken();
 
   const [countConnections, setCountConnections] = useState(0);
@@ -134,11 +131,14 @@ const HeaderComponent = () => {
 
   return (
     <div
-      className={`h-[53px] w-full bg-white mt-1 min-w-[600px] ${
+      className={`h-[53px] w-full bg-white sticky py-1 top-0 min-w-[600px] border border-solid border-[#D3D3D3] ${
         showSearch
           ? "grid grid-cols-2 gap-32"
           : "flex items-center justify-center"
       }`}
+      style={{
+        zIndex: 9998,
+      }}
     >
       {showSearch && (
         <div className="flex items-center gap-3 justify-end w-full">

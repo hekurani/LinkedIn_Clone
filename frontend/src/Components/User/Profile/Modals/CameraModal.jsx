@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import { faSave, faXmark } from "@fortawesome/free-solid-svg-icons"; // Import the save icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faSave } from "@fortawesome/free-solid-svg-icons"; // Import the save icon
 import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
 
 const CameraModal = ({ user, isOpen, onRequestClose }) => {
   const videoRef = useRef(null);
@@ -89,10 +89,7 @@ const CameraModal = ({ user, isOpen, onRequestClose }) => {
           className="fixed inset-0 flex items-center justify-center"
           style={{ zIndex: 50 }}
         >
-          <div
-            className="bg-white p-4 rounded shadow-lg"
-            style={{ width: "700px", height: "100vh" }}
-          >
+          <div className="bg-white p-4 rounded shadow-lg w-[800px]">
             <div className="flex ">
               <h2 className="text-xl font-semibold mb-4">Take photo</h2>
               <FontAwesomeIcon
@@ -125,7 +122,7 @@ const CameraModal = ({ user, isOpen, onRequestClose }) => {
               <div>
                 <video
                   id="video"
-                  width="640"
+                  width="790"
                   height="480"
                   ref={videoRef}
                   autoPlay
