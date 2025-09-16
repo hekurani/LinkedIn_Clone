@@ -20,13 +20,11 @@ import { FormProvider } from "./User/context/FormContext.jsx";
 // protected routes component
 import ProtectedRoutes from "./Components/ProtectedRoutes.js";
 // utilities
-import HeaderComponent from "./Components/HeaderComponent.jsx";
 import ErrorBoundary from "./ErrorBoundary.jsx";
 import { FeedProvider } from "./User/context/FeedContext.jsx";
 import AdminDashboard from "./admin/components/AdminDashboard.jsx";
 import CompanyDashboard from "./company/CompanyDashboard.jsx";
 import CompanyLogin from "./company/components/CompanyLogin.jsx";
-import LeftCompanyMenu from "./company/components/LeftCompanyMenu.jsx";
 
 const App = () => {
   return (

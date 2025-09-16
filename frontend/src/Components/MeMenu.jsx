@@ -2,7 +2,6 @@ import {
   faCaretDown,
   faGear,
   faRightFromBracket,
-  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
@@ -41,7 +40,7 @@ const MeMenu = ({
         />
         {showText && (
           <div className="flex justify-center items-center gap-1">
-            <span className="text-sm">
+            <span className="text-sm cursor-pointer">
               Me
               <FontAwesomeIcon
                 icon={faCaretDown}
@@ -84,7 +83,7 @@ const MeMenu = ({
                 className="text-[#0a66c2]"
                 onClick={() => {
                   setShowSettingsMenu(false);
-                  navigate(`${user.id}/profile`);
+                  navigate(`/${user.id}/profile`);
                 }}
               >
                 View Profile

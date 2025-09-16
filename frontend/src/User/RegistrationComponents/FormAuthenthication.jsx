@@ -10,7 +10,8 @@ export default function FormAuthenthication({ errors }) {
       <br></br>
       <input
         style={{ border: "1px solid black" }}
-        className="p-2 mt-1 w-80 h-8 rounded"
+        className="p-2 pl-3 mt-2 w-80 rounded h-12"
+        placeholder="Email or Phone"
         type="email"
         name="email"
         value={data.email}
@@ -23,11 +24,12 @@ export default function FormAuthenthication({ errors }) {
         <br></br>
         <input
           style={{ border: "1px solid black" }}
-          className=" p-2 mt-1 w-80 h-8 rounded"
+          className="p-2 pl-3 w-80 h-12 rounded"
+          placeholder="Password"
           type="password"
+          name="password"
           value={data.password}
           onChange={handleChange}
-          name="password"
         />
         <span className="text-red-500 text-xs italic">{errors.password}</span>
       </div>

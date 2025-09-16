@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { BiRepost } from "react-icons/bi";
+import { FiSend } from "react-icons/fi";
+import { SlLike } from "react-icons/sl";
+import { TfiCommentAlt } from "react-icons/tfi";
 import { useNavigate } from "react-router-dom";
 import defaultProfile from "../../../assets/default.png";
 import axiosInstance from "../../../axios/axios.tsx";
@@ -12,6 +16,7 @@ const PostComponent = ({
 }) => {
   const [comments, setComments] = useState({});
   const [postButtonForPost, setPostButtonForPost] = useState(null);
+  const [failedImagesCount, setFailedImagesCount] = useState({});
 
   const [imageToPreview, setImageToPreview] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -121,6 +126,7 @@ const PostComponent = ({
     <div className="mx-auto flex-1 w-[655px] px-2">
       {allPosts.map((postItem, index) => (
         <div
+          key={index}
           className="ml-16 mt-8 rounded-md"
           style={{
             border: "1px solid #D3D3D3",
@@ -128,22 +134,19 @@ const PostComponent = ({
             marginBottom: "20px",
           }}
         >
-          <div key={index} className="mb-4">
+          <div className="mb-4">
+            {/* User Info */}
             <div className="m-3 flex">
               <img
-                onClick={() => navigate(`${postItem?.user?.id}/profile`)}
-                src={
-                  postItem?.user?.imageProfile
-                    ? postItem.user.imageProfile
-                    : defaultProfile
-                }
+                onClick={() => navigate(`/${postItem?.user?.id}/profile`)}
+                src={postItem?.user?.imageProfile || defaultProfile}
                 onError={(e) => {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = defaultProfile;
                 }}
                 style={{ borderRadius: "50%", objectFit: "cover" }}
                 className="w-12 h-12 mt-1"
-                alt={"userprofile"}
+                alt="userprofile"
               />
               <div className="profileinfo text-left ml-2">
                 <p>
@@ -168,47 +171,58 @@ const PostComponent = ({
             <div className="description m-4 text-sm break-words whitespace-pre-wrap max-h-96">
               <p>{postItem.description}</p>
             </div>
-            {postItem?.postImages.length > 0 && (
+
+            {postItem?.postImages?.length > 0 && (
               <div
-                className="media flex flex-wrap"
+                className="media flex flex-wrap justify-center items-center"
                 style={{
                   border: "1px solid #D3D3D3",
-                  maxWidth: "555px",
                   height: "400px",
                   maxHeight: "300px",
                   overflow: "hidden",
                 }}
               >
-                {Array.isArray(postItem?.postImages) ? (
-                  postItem?.postImages.map((image, imageIndex) => (
+                {postItem.postImages.map((image, imageIndex) => {
+                  const failedCount = failedImagesCount[postItem.id] || 0;
+                  return (
                     <img
                       key={imageIndex}
                       src={`Images/postImages/${image}`}
                       alt={`media-${index}-${imageIndex}`}
                       onClick={() => openModal(image)}
+                      onError={() => {
+                        setFailedImagesCount((prev) => ({
+                          ...prev,
+                          [postItem.id]: (prev[postItem.id] || 0) + 1,
+                        }));
+                      }}
                       style={{
                         width:
-                          postItem?.postImages.length === 1
+                          postItem.postImages.length === 1
                             ? "100%"
-                            : postItem?.postImages.length === 3 &&
+                            : postItem.postImages.length === 3 &&
                               imageIndex === 2
                             ? "100%"
                             : "50%",
                         height:
-                          postItem?.postImages.length === 3 && imageIndex === 2
+                          postItem.postImages.length === 3 && imageIndex === 2
                             ? "100%"
                             : "auto",
                         marginBottom:
-                          postItem?.postImages.length === 2 ? "5px" : "0",
+                          postItem.postImages.length === 2 ? "5px" : "0",
+                        display:
+                          failedCount >= postItem.postImages.length
+                            ? "none"
+                            : "block",
                       }}
                     />
-                  ))
-                ) : (
+                  );
+                })}
+
+                {failedImagesCount[postItem.id] ===
+                  postItem.postImages.length && (
                   <div className="flex justify-center items-center w-full h-full">
-                    <p>
-                      Sorry, we couldn't fetch some images. Please try again
-                      later.
-                    </p>
+                    <p>Could not load post media</p>
                   </div>
                 )}
               </div>
@@ -219,12 +233,12 @@ const PostComponent = ({
               style={{ borderBottom: "1px solid #D3D3D3" }}
             >
               <img
-                className="reactions-icon social-detail-social-counts__count-icon socia...tions-icon-type-EMPATHY data-test-reactions-icon-theme-light m-1 absolute"
+                className="reactions-icon m-1 absolute"
                 src={LikeImageUrl}
                 alt="like"
               />
               <img
-                className="reactions-icon social-detail-social-counts__count-icon socia...tions-icon-type-EMPATHY data-test-reactions-icon-theme-light m-1 absolute"
+                className="reactions-icon m-1 absolute"
                 src={LoveImageUrl}
                 style={{ marginLeft: "15px" }}
                 alt="love"
@@ -241,22 +255,40 @@ const PostComponent = ({
             </div>
 
             <div className="Reaction flex justify-around m-3">
-              <button className="flex">
-                <svg
-                  id="thumbs-up-outline-medium"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  role="none"
-                  data-supported-dps="24x24"
-                  fill="currentColor"
-                >
-                  <path d="M19.46 11l-3.91-3.91a7 7 0 01-1.69-2.74l-.49-1.47A2.76 2.76 0 0010.76 1 2.75 2.75 0 008 3.74v1.12a9.19 9.19 0 00.46 2.85L8.89 9H4.12A2.12 2.12 0 002 11.12a2.16 2.16 0 00.92 1.76A2.11 2.11 0 002 14.62a2.14 2.14 0 001.28 2 2 2 0 00-.28 1 2.12 2.12 0 002 2.12v.14A2.12 2.12 0 007.12 22h7.49a8.08 8.08 0 003.58-.84l.31-.16H21V11zM19 19h-1l-.73.37a6.14 6.14 0 01-2.69.63H7.72a1 1 0 01-1-.72l-.25-.87-.85-.41A1 1 0 015 17l.17-1-.76-.74A1 1 0 014.27 14l.66-1.09-.73-1.1a.49.49 0 01.08-.7.48.48 0 01.34-.11h7.05l-1.31-3.92A7 7 0 0110 4.86V3.75a.77.77 0 01.75-.75.75.75 0 01.71.51L12 5a9 9 0 002.13 3.5l4.5 4.5H19z"></path>
-                </svg>
-                <p>Like</p>
-              </button>
-              <button>Comment</button>
-              <button>Repost</button>
-              <button>Send</button>
+              <div
+                className="flex items-center justify-between"
+                onClick={() => setShowCommingSoonConfirm(true)}
+              >
+                <SlLike color="black" className="m-1 mx-2" height={16} />
+                <button className="flex">Like</button>
+              </div>
+
+              <div
+                className="flex items-center justify-between"
+                onClick={() => setShowCommingSoonConfirm(true)}
+              >
+                <TfiCommentAlt color="black" className="m-1 mx-2" height={16} />
+
+                <button className="flex">Comment</button>
+              </div>
+
+              <div
+                className="flex items-center justify-between"
+                onClick={() => setShowCommingSoonConfirm(true)}
+              >
+                <BiRepost color="black" className="m-1" height={20} />
+
+                <button className="flex">Repost</button>
+              </div>
+
+              <div
+                className="flex items-center justify-between"
+                onClick={() => setShowCommingSoonConfirm(true)}
+              >
+                <FiSend color="black" className="m-1" height={20} />
+
+                <button className="flex">Send</button>
+              </div>
             </div>
 
             <div className="comments">
@@ -268,7 +300,7 @@ const PostComponent = ({
                   className="ml-3 mt-3 w-10 h-10 mb-2"
                   style={{ borderRadius: "50%", objectFit: "cover" }}
                   src={defaultProfile || user.imageProfile}
-                  alt={"p"}
+                  alt="p"
                 />
                 <div className="input-container">
                   <input
@@ -295,6 +327,7 @@ const PostComponent = ({
                   />
                 </div>
               </div>
+
               {postButtonForPost === postItem?.id && (
                 <div className="comment-input-container">
                   <button
@@ -311,6 +344,7 @@ const PostComponent = ({
                   </button>
                 </div>
               )}
+
               <div className="AllCommnets mt-2 mb-10">
                 {postItem?.comments &&
                   postItem?.comments
@@ -333,13 +367,11 @@ const PostComponent = ({
                           className="ml-3 mt-3 w-10 h-10 mb-2"
                           style={{ borderRadius: "50%", objectFit: "cover" }}
                           src={comment?.user?.imageProfile}
-                          alt={"p"}
+                          alt="p"
                         />
                         <div
                           className="ml-2 flex-column w-96 h-auto p-2 pl-3 pr-5"
-                          style={{
-                            wordWrap: "break-word",
-                          }}
+                          style={{ wordWrap: "break-word" }}
                         >
                           <div className="flex">
                             <p className="font-semibold">
@@ -349,7 +381,6 @@ const PostComponent = ({
                               {getTimePassed(comment?.publishDate)}
                             </p>
                           </div>
-
                           <p className="mt-3">{comment?.text}</p>
                         </div>
                       </div>

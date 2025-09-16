@@ -52,12 +52,11 @@ const AddPostComponent = ({
             style={{
               backgroundColor: "transparent",
               border: "1px solid #D3D3D3",
-              width: "467px",
               textAlign: "left",
               color: "grey",
             }}
             onClick={openModal}
-            className=" text-sm h-12 font-semibold text-white rounded-full ml-2 mt-3  pl-4"
+            className=" text-sm h-12 font-semibold text-white rounded-full ml-2 mt-3 w-full  pl-4"
           >
             Start a post
           </button>

@@ -7,9 +7,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AsyncSelect from "react-select/async";
 import { io } from "socket.io-client";
+import defaultImage from "../assets/default.png";
 import logo from "../assets/logoHeader.png";
 import { useFeedContext } from "../User/context/FeedContext";
 import { getToken } from "../utilities/getToken";
@@ -87,7 +88,7 @@ const HeaderComponent = () => {
       return res?.users.map((item) => ({
         label: `${item?.name} ${" "} ${item?.lastname}`,
         value: item?.id,
-        image: item?.imageProfile,
+        image: item?.imageProfile || defaultImage,
       }));
     } catch (error) {
       console.error("Error fetching search results:", error);
@@ -106,7 +107,7 @@ const HeaderComponent = () => {
           if (selectRef.current) {
             selectRef.current.blur();
           }
-          navigate(`${data?.value}/profile`);
+          navigate(`/${data?.value}/profile`);
         }}
       >
         <span className="cursor-pointer">{data?.label}</span>
@@ -127,11 +128,14 @@ const HeaderComponent = () => {
     );
   };
 
-  if (!token || token?.role !== "jobseeker") return null;
+  if (!token || token?.role !== "jobseeker") {
+    navigate("/login");
+    return;
+  }
 
   return (
     <div
-      className={`h-[53px] w-full bg-white sticky py-1 top-0 min-w-[600px] border border-solid border-[#D3D3D3] ${
+      className={`h-[53px] w-full bg-white sticky top-0 min-w-[600px] border border-solid border-[#D3D3D3] ${
         showSearch
           ? "grid grid-cols-2 gap-32"
           : "flex items-center justify-center"
@@ -182,7 +186,7 @@ const HeaderComponent = () => {
               className="
                         absolute -top-1 right-4
                         flex items-center justify-center
-                        h-4 min-w-4 px-2
+                        h-4 min-w-4 px-1
                         rounded-full bg-red-600 text-white
                         text-[10px] font-semibold leading-none
                         z-20

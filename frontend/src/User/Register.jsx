@@ -97,35 +97,28 @@ const Register = () => {
   };
 
   return (
-    <>
-      <div className="page h-screen bg-gray-100">
-        {" "}
-        {/* div kryesor */}
-        {/* Header Section */}
-        <div className="header">
-          {" "}
-          {/* pjesa e header perfshin pjesen e logos edhe pjesen e h1 */}
-          <div className="image ml-24 mt-0">
-            <img
-              className="logo pt-2"
-              width={130}
-              height={120}
-              src={logo}
-              alt={"clone"}
-            />
-          </div>
-          <h1 className=" h1title text-center text-3xl font-normal">
-            Make the most of your professional life
-          </h1>
-        </div>
-        <div className="form w-96 h-full my-auto mt-6 mx-auto">
-          {" "}
+    <div className="flex justify-center">
+      <div className="mr-auto m-5">
+        <img
+          className="logo"
+          width={120}
+          height={120}
+          src={logo}
+          alt="LinkedIn"
+        />
+      </div>
+      <div className="mr-auto mt-32 justify-center items-center flex flex-col">
+        <p className="text-[2.2rem] text-center font-semibold">
+          Make the most of your professional life
+        </p>
+        <div className="form">
           {/* div per krejt formen */}
           <div className="credentials m-5">
-            {" "}
             {/* div per email passsword div */}
-            <form className="bg-white w-96 h-120 rounded-lg p-7">
-              {" "}
+            <form
+              className="bg-white w-96  h-[464px] rounded-lg p-7"
+              style={{ boxShadow: "0 7px 30px -12px rgb(0 0 0 / 0.25)" }}
+            >
               {/* forma */}
               <FormInputs errors={error} />
               <p className="text-xs mx-auto mt-5 mb-5 text-center">
@@ -156,7 +149,6 @@ const Register = () => {
               <p className="mx-4 mb-0  mt-5 text-center font-semibold dark:text-white"></p>
               <div className="flex justify-center items-center">
                 <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
-                  {" "}
                   <GoogleLogin
                     onSuccess={responseGoogle}
                     shape="circle"
@@ -167,7 +159,6 @@ const Register = () => {
               <p className="mt-5 text-center">
                 Already on LinkedIn?{" "}
                 <span className="font-semibold" style={{ color: "#0a66c2" }}>
-                  {" "}
                   <Link to={"/Login"}>Sign in</Link>
                 </span>
               </p>
@@ -175,7 +166,7 @@ const Register = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default Register;
