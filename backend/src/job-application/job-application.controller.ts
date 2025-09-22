@@ -8,35 +8,24 @@ import {
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { application } from 'express';
 import { AuthUser } from 'src/auth/decorators/AuthUser-decorator';
+import { multerOptions } from 'src/utils/multer/multerOptions.multer';
 import { CreateJobApplicationDto } from './dto/CreateJobApplicationDto.dto';
 import { JobApplicationService } from './job-application.service';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { multerOptions } from 'src/utils/multer/multerOptions.multer';
-import { application } from 'express';
 
 @Controller('job-application')
 export class JobApplicationController {
   constructor(private readonly jobApplicationService: JobApplicationService) {}
   @Post()
-  @UseInterceptors(
-    FileFieldsInterceptor(
-      [{ name: 'applications', maxCount: 1 }],
-      multerOptions(
-        ['.pdf'], // Permissible file formats
-        [{ filename: 'applications', destination: '../Images/application' }], // Destination options
-      ),
-    ),
-  )
   sendJobApplication(
     @Body() createJobApplicationDto: { jobPostId: string },
     @AuthUser() user: { userId: number },
-    @UploadedFiles() files: { applications?: Express.Multer.File[] },
   ) {
     return this.jobApplicationService.sendJobApplication(
       parseInt(createJobApplicationDto?.jobPostId),
       user?.userId,
-      files?.applications[0]?.filename,
     );
   }
   @Get()

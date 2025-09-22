@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import { AiOutlineLike } from "react-icons/ai";
 import { BiRepost } from "react-icons/bi";
 import { FiSend } from "react-icons/fi";
-import { SlLike } from "react-icons/sl";
 import { TfiCommentAlt } from "react-icons/tfi";
 import { useNavigate } from "react-router-dom";
 import defaultProfile from "../../../assets/default.png";
@@ -259,7 +259,7 @@ const PostComponent = ({
                 className="flex items-center justify-between"
                 onClick={() => setShowCommingSoonConfirm(true)}
               >
-                <SlLike color="black" className="m-1 mx-2" height={16} />
+                <AiOutlineLike className="m-1 mx-2" />
                 <button className="flex">Like</button>
               </div>
 

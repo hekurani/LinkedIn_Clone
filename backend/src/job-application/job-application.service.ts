@@ -4,13 +4,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateJobApplicationDto } from './dto/CreateJobApplicationDto.dto';
-import { UsersService } from 'src/users/users.service';
-import { JobApplication } from './job-application.entity';
-import { jobPost } from 'src/job-post/job-post.entity';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { application } from 'express';
+import { jobPost } from 'src/job-post/job-post.entity';
+import { UsersService } from 'src/users/users.service';
+import { Repository } from 'typeorm';
+import { CreateJobApplicationDto } from './dto/CreateJobApplicationDto.dto';
+import { JobApplication } from './job-application.entity';
 
 @Injectable()
 export class JobApplicationService {
@@ -20,7 +20,7 @@ export class JobApplicationService {
     private jobapplicationrepo: Repository<JobApplication>,
     @InjectRepository(jobPost) private jobPostrepo: Repository<jobPost>,
   ) {}
-  async sendJobApplication(jobPostId: number, userId: number, aplication) {
+  async sendJobApplication(jobPostId: number, userId: number) {
     const user = await this.usersService.findOne(userId);
     if (!user) throw new NotFoundException("There's no user with this id!");
     const jobPost = await this.jobPostrepo.findOne({
@@ -45,8 +45,7 @@ export class JobApplicationService {
       );
     const jobapplication = this.jobapplicationrepo.create({
       jobPost,
-      applicant: user,
-      aplication,
+      applicant: user
     });
 
     await this.jobapplicationrepo.save(jobapplication);

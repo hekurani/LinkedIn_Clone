@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import success from "./icons/success.png";
+import React, { useEffect, useState } from "react";
 import danger from "./icons/danger.png";
+import success from "./icons/success.png";
 const ShowAlert = ({ text, variant }) => {
   const [isVisible, setIsVisible] = useState(true);
 
@@ -25,6 +25,9 @@ const ShowAlert = ({ text, variant }) => {
   return (
     <div
       className={`fixed top-5 right-5 p-4 rounded flex text-white text-lg w-96 shadow-lg z-50 ${getBackgroundColor()}`}
+      style={{
+        zIndex: 9999,
+      }}
     >
       {variant === "success" && (
         <img

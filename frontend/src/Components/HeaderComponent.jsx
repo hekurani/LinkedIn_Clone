@@ -7,6 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
+import { IoSearch } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import AsyncSelect from "react-select/async";
 import { io } from "socket.io-client";
@@ -96,6 +97,14 @@ const HeaderComponent = () => {
     }
   };
 
+  const customMenuList = (props) => {
+    return <div className="w-full">{props.children}</div>;
+  };
+
+  const CustomIndicatorsContainer = () => {
+    return null;
+  };
+
   const customOption = (props) => {
     const { data, innerRef, innerProps } = props;
     return (
@@ -136,16 +145,14 @@ const HeaderComponent = () => {
   return (
     <div
       className={`h-[53px] w-full bg-white sticky top-0 min-w-[600px] border border-solid border-[#D3D3D3] ${
-        showSearch
-          ? "grid grid-cols-2 gap-32"
-          : "flex items-center justify-center"
+        showSearch ? "grid grid-cols-2" : "flex items-center justify-center"
       }`}
       style={{
         zIndex: 9998,
       }}
     >
       {showSearch && (
-        <div className="flex items-center gap-3 justify-end w-full">
+        <div className="flex items-center gap-3 justify-center w-full">
           <img src={logo} width={34} height={34} alt="null" />
 
           <div className="search mr-5">
@@ -153,32 +160,72 @@ const HeaderComponent = () => {
               ref={selectRef}
               cacheOptions
               loadOptions={loadOptions}
-              placeholder="Search"
+              placeholder={
+                <div className="flex items-center gap-2">
+                  <IoSearch />
+                  Search
+                </div>
+              }
               styles={{
-                control: (base) => ({
+                control: (base, state) => ({
                   ...base,
-                  backgroundColor: "#f4f2ee",
-                  height: "2rem",
+                  backgroundColor: "white",
+                  width: "280px",
+                  borderRadius: "20px",
+                }),
+                placeholder: (base) => ({
+                  ...base,
+                  display: "flex",
+                  alignItems: "center",
+                  marginLeft: "8px",
+                  color: "#666",
+                  fontSize: "16px",
+                }),
+                menu: (base) => ({
+                  ...base,
+                  width: "280px",
+                  borderRadius: "8px",
+                  marginTop: "4px",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+                }),
+
+                dropdownIndicator: (base) => ({
+                  ...base,
+                  display: "none",
+                }),
+                indicatorSeparator: (base) => ({
+                  ...base,
+                  display: "none",
+                }),
+                input: (base) => ({
+                  ...base,
+                  margin: 0,
+                  padding: 0,
+                  color: "#333",
                 }),
               }}
               className="w-52"
-              components={{ Option: customOption }}
+              components={{
+                Option: customOption,
+                MenuList: customMenuList,
+                IndicatorsContainer: CustomIndicatorsContainer,
+              }}
             />
           </div>
         </div>
       )}
 
-      <div className="navigation flex  justify-start ml-5 items-center ">
+      <div className="navigation flex  ml-3 justify-start items-center ">
         <div
           onClick={() => navigate("/")}
-          className="flex-col flex text-center mr-5"
+          className="flex-col flex text-center mx-5 cursor-pointer"
         >
           <FontAwesomeIcon icon={faHouse} className="icon" />
           {showText && <span className="text-sm">Home</span>}
         </div>
         <div
           onClick={() => navigate("/connections")}
-          className="flex-col relative flex text-center mx-5"
+          className="flex-col relative flex text-center mx-5 cursor-pointer"
         >
           <FontAwesomeIcon icon={faUserPlus} className="icon" />
           {countConnections > 0 && (
@@ -196,21 +243,21 @@ const HeaderComponent = () => {
             </span>
           )}
           {showText && (
-            <span className="text-sm  w-full whitespace-nowrap ">
+            <span className="text-sm  w-full whitespace-nowrap cursor-pointer ">
               My Network
             </span>
           )}
         </div>
         <div
           onClick={() => navigate("/jobs")}
-          className="flex-col flex text-center mx-5"
+          className="flex-col flex text-center mx-5 cursor-pointer"
         >
           <FontAwesomeIcon icon={faBriefcase} className="icon" />
           {showText && <span className="text-sm">Jobs</span>}
         </div>
         <div
           onClick={() => navigate("/connections")}
-          className="flex-col flex text-center mx-5"
+          className="flex-col flex text-center mx-5 cursor-pointer"
         >
           <FontAwesomeIcon
             icon={faCommentDots}
@@ -219,7 +266,7 @@ const HeaderComponent = () => {
           />
           {showText && <span className="text-sm">Messaging</span>}
         </div>
-        <div to="/" className="flex-col flex text-center mx-5">
+        <div to="/" className="flex-col flex text-center mx-5 cursor-pointer">
           <FontAwesomeIcon icon={faBell} className="icon" />
           {showText && <span className="text-sm">Notifications</span>}
         </div>

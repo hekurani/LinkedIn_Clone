@@ -25,8 +25,10 @@ export class JobPostController {
   }
 
   @Get()
-  getJobPosts() {
-    return this.jobPostService.getJobPosts();
+  getJobPosts(
+        @AuthUser() user: { userId: number }
+  ) {
+    return this.jobPostService.getJobPosts(user?.userId);
   }
 
   @Get('/:id')

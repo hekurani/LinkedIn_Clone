@@ -67,9 +67,9 @@ const ProfileInfo = ({ user }) => {
       <div className="profileInfo flex mt-16 mb-5 ">
         <div className="personalInfo text-left ml-7">
           <p className="font-semibold text-2xl">
-            {user.name} {user.lastname}
+            {user?.name} {user?.lastname}
           </p>
-          <p>Software Developer</p>
+          <p>{user?.profession?.name}</p>
           <p className="location mt-1 text-sm " style={{ color: "grey" }}>
             {" "}
             Pristina, District of Pristina, Kosovo Contact info{" "}

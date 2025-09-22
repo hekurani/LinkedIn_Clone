@@ -1,3 +1,5 @@
+import { company } from 'src/company/company.entity';
+import { jobPost } from 'src/job-post/job-post.entity';
 import {
   Column,
   CreateDateColumn,
@@ -8,8 +10,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../users/user.entity';
-import { company } from 'src/company/company.entity';
-import { jobPost } from 'src/job-post/job-post.entity';
 
 @Entity({ name: 'jobapplication' })
 export class JobApplication {
@@ -23,9 +23,6 @@ export class JobApplication {
   @ManyToOne(() => jobPost, { eager: true, createForeignKeyConstraints: false })
   @JoinColumn()
   jobPost: jobPost;
-
-  @Column({ nullable: false })
-  aplication: string;
 
   @CreateDateColumn({ type: 'date', default: () => 'CURRENT_DATE' })
   createdAt: Date;

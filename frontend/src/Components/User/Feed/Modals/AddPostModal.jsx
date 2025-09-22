@@ -88,7 +88,7 @@ const AddPostModal = ({
           </button>
         </div>
 
-        <div className="border border-solid border-primary-500 p-4">
+        <div className="p-4">
           {" "}
           {/* message */}
           <textarea

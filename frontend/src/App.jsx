@@ -70,9 +70,7 @@ const App = () => {
                 <Route path="/connections" element={<Connections />} />
               </Route>
 
-              <Route
-                element={<ProtectedRoutes roles={["admmin", "company"]} />}
-              >
+              <Route element={<ProtectedRoutes roles={["admin", "company"]} />}>
                 <Route
                   path="/company-dashboard"
                   element={<CompanyDashboard />}

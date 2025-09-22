@@ -4,15 +4,16 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { jobPost } from './job-post.entity';
-import { Repository } from 'typeorm';
-import { CreateJobPostDto } from './dto/CreateJobPost.dto';
-import { UsersService } from 'src/users/users.service';
 import { company } from 'src/company/company.entity';
-import { WorkExperience } from 'src/work-experience/work-experience.entity';
-import { UpdateJobPostDto } from './dto/updateJobPost.dto';
-import { Skill } from 'src/skills/skills.entity';
+import { JobApplication } from 'src/job-application/job-application.entity';
 import { city } from 'src/location/entity/city.entity';
+import { Skill } from 'src/skills/skills.entity';
+import { UsersService } from 'src/users/users.service';
+import { WorkExperience } from 'src/work-experience/work-experience.entity';
+import { In, Not, Repository } from 'typeorm';
+import { CreateJobPostDto } from './dto/CreateJobPost.dto';
+import { UpdateJobPostDto } from './dto/updateJobPost.dto';
+import { jobPost } from './job-post.entity';
 
 @Injectable()
 export class JobPostService {
@@ -23,7 +24,7 @@ export class JobPostService {
     @InjectRepository(WorkExperience)
     private workExperienceRepo: Repository<WorkExperience>,
     @InjectRepository(Skill) private skillsRepo: Repository<Skill>,
-    @InjectRepository(city) private CityRepository: Repository<city>,
+    @InjectRepository(JobApplication) private jobApplicationRepository: Repository<JobApplication>,
   ) {}
   async createJobPost(createJobPostDto: CreateJobPostDto, userId: number) {
     const deadLine = new Date(createJobPostDto.deadLine);
@@ -90,15 +91,27 @@ export class JobPostService {
       jobPost,
     };
   }
-  async getJobPosts() {
-    const jobPosts = await this.jobPost.find({
-      relations: ['company']
-    });
-    return {
-      status: 'success',
-      jobPosts,
-    };
-  }
+
+async getJobPosts(userId: number) {
+  const appliedJobPosts = await this.jobApplicationRepository.find({
+    where: { applicant: { id: userId } },
+    select: ['jobPost'],
+  });
+
+  const appliedJobPostIds = appliedJobPosts.map(application => application.jobPost.id);
+
+  const jobPosts = await this.jobPost.find({
+    where: {
+      id: Not(In(appliedJobPostIds)),
+    },
+    relations: ['company'],
+  });
+
+  return {
+    status: 'success',
+    jobPosts,
+  };
+}
   async updateJobPost(
     updateJobPostDto: UpdateJobPostDto,
     id: number,

@@ -6,13 +6,18 @@ import JobHeader from "./components/JobHeader";
 import JobListing from "./components/JobListing";
 const Job = () => {
   const [selectedJob, setSelectedJob] = useState(null);
+  const [newApply, setNewApply] = useState(false);
   return (
-    <div style={{ backgroundColor: "#f4f2ee" }}>
+    <div style={{ backgroundColor: "#f4f2ee" }} className="h-full">
       <HeaderComponent />
       <JobBar />
       <div className="grid gap-0 grid-cols-2">
-        <JobListing setSelectedJob={setSelectedJob} />
-        <JobDescription selectedJob={selectedJob} />
+        <JobListing
+          setSelectedJob={setSelectedJob}
+          newApply={newApply}
+          setNewApply={setNewApply}
+        />
+        <JobDescription selectedJob={selectedJob} setNewApply={setNewApply} />
       </div>
     </div>
   );
