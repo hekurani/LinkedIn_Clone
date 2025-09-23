@@ -21,6 +21,7 @@ import { FormProvider } from "./User/context/FormContext.jsx";
 import ProtectedRoutes from "./Components/ProtectedRoutes.js";
 // utilities
 import ErrorBoundary from "./ErrorBoundary.jsx";
+import JobseekerApplications from "./User/components/JobseekerAppplications.jsx";
 import { FeedProvider } from "./User/context/FeedContext.jsx";
 import AdminDashboard from "./admin/components/AdminDashboard.jsx";
 import CompanyDashboard from "./company/CompanyDashboard.jsx";
@@ -68,6 +69,10 @@ const App = () => {
                 <Route path="/jobs" element={<Job />} />
                 <Route path="/job-listing" element={<JobListing />} />
                 <Route path="/connections" element={<Connections />} />
+                <Route
+                  path="/job-applications"
+                  element={<JobseekerApplications />}
+                />
               </Route>
 
               <Route element={<ProtectedRoutes roles={["admin", "company"]} />}>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CgDetailsMore } from "react-icons/cg";
 import myriadLogo from "../../../assets/myriad.png";
 import { useAlert } from "../../../utilities/alert/AlertContext";
 import Confirm from "../../../utilities/Confrm/Confirm";
@@ -25,7 +26,8 @@ const JobDescription = ({ selectedJob, setNewApply = () => {} }) => {
   if (!selectedJob) {
     return (
       <div className="main bg-white  max-h-screen overflow-y-auto rounded-r-md">
-        <div className="my-auto h-full flex justify-center items-center">
+        <div className="my-auto h-full flex flex-col gap-3 justify-center items-center">
+          <CgDetailsMore className="text-4xl mr-2" />
           <p className="text-md font-semibold">
             You have to select a job in order to see job details
           </p>

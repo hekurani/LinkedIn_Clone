@@ -4,7 +4,8 @@ import {
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { BsFillClipboard2DataFill } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import defaultProfile from "../assets/default.png";
 import { clearTokens } from "../utilities/auth/clearTokens";
@@ -90,13 +91,25 @@ const MeMenu = ({
               </span>
             </button>
           </div>
-          <Link
-            to="/settings"
-            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-          >
-            <FontAwesomeIcon icon={faGear} className="mr-3 w-4" />
-            Settings
-          </Link>
+          <div>
+            <Link
+              to="/job-applications"
+              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >
+              <BsFillClipboard2DataFill className="mr-3 w-4" />
+              <p className="text-md font-500">Job Applications</p>
+            </Link>
+          </div>
+          <div>
+            <Link
+              to="/settings"
+              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >
+              <FontAwesomeIcon icon={faGear} className="mr-3 w-4" />
+              <p className="text-md font-500">Settings</p>
+            </Link>
+          </div>
+
           <div className="border-t border-gray-200 my-1"></div>
           <button
             onClick={() => {
@@ -106,7 +119,7 @@ const MeMenu = ({
             className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
           >
             <FontAwesomeIcon icon={faRightFromBracket} className="mr-3 w-4" />
-            Sign Out
+            <p className="text-md font-500">Sign Out</p>
           </button>
         </div>
       )}

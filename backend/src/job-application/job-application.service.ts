@@ -57,6 +57,22 @@ export class JobApplicationService {
   async getJobApplications() {
     return await this.jobapplicationrepo.find();
   }
+
+  async getjobApplicationsByUserId(userId: number) {
+    const user = await this.usersService.findOne(userId);
+    if (!user) throw new NotFoundException("There's no user with this id!");
+
+    const jobapplications = await this.jobapplicationrepo.find({
+      where: { applicant: { id: userId } },
+      relations: { jobPost: { company: true } },
+    });
+
+    return {
+      status: 'success',
+      jobapplications,
+    };
+  }
+  
   async getJobApplication(id: number) {
     const jobapplication = await this.jobapplicationrepo.findOne({
       where: { id },

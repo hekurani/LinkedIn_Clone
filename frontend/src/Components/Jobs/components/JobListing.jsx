@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { BsFillClipboard2DataFill } from "react-icons/bs";
 import defaultProfile from "../../../assets/default.png";
 import { getAllJobs } from "../../../utilities/jobs/getAllJobs";
 import "../style/JobListing.css";
@@ -23,7 +24,8 @@ const JobListing = ({
   if (!Array.isArray(allJobs) || allJobs.length === 0) {
     return (
       <div className="main ml-auto bg-white rounded-l-md">
-        <div className="my-auto h-full flex justify-center items-center">
+        <div className="my-auto h-full flex flex-col gap-3 justify-center items-center">
+          <BsFillClipboard2DataFill className="text-4xl mr-2" />
           <p className="text-md font-semibold">
             No jobs available at the moment
           </p>
