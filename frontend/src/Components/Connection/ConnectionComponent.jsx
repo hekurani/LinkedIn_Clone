@@ -4,7 +4,6 @@ import defaultImage from "../../assets/default.png";
 import axiosInstance from "../../axios/axios.tsx";
 import { getFriends } from "../../utilities/friends/getFriends";
 import getMe from "../../utilities/user/getMe";
-import ConnectionsHeader from "./ConnectionHeader.jsx"; // import header
 
 const socket = io("http://localhost:8003");
 
@@ -16,16 +15,15 @@ const ConnectionComponent = () => {
 
   const inputRef = useRef(null);
 
-  // Debounce search
   useEffect(() => {
     const handler = setTimeout(() => setDebouncedSearch(searchTerm), 400);
     return () => clearTimeout(handler);
   }, [searchTerm]);
 
-  const getAllFriends = async (searchTerm) => {
+  const getAllFriends = async (search) => {
     try {
       setLoading(true);
-      const data = await getFriends(searchTerm);
+      const data = await getFriends(search);
       const user = await getMe();
       setFriends(data);
 
@@ -56,18 +54,34 @@ const ConnectionComponent = () => {
       }}
       className="mt-12 mx-auto h-auto bg-white"
     >
-      {/* Header */}
-      <ConnectionsHeader
-        loading={loading}
-        friends={friends}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        inputRef={inputRef}
-      />
-
-      {/* Searchbar */}
-
-      {/* Friends List */}
+      <p className="text-xl m-5">
+        {friends.length > 0
+          ? `${friends.length} Connections`
+          : "No Connections"}
+      </p>
+      <div className="searchbar ml-5 mr-3 mb-5">
+        <input
+          ref={inputRef}
+          autoFocus
+          type="text"
+          className="border border-solid rounded-md p-1 pl-2 hover:outline max-w-md"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search by name"
+        />
+      </div>
+      <p className="text-sm m-5 whitespace-nowrap">
+        {friends.length === 0 && searchTerm ? (
+          <>
+            <p className="text-[16px] w-full whitespace-nowrap">
+              No connections found for the search term:{" "}
+              <span className="font-bold">{searchTerm}</span>
+            </p>
+          </>
+        ) : (
+          <p className="text-[16px]">Start by connecting with others!</p>
+        )}
+      </p>
       {loading ? (
         <div className="p-5 space-y-3">
           {[1, 2, 3].map((i) => (
@@ -84,7 +98,7 @@ const ConnectionComponent = () => {
         friends.map((friend) => (
           <div
             key={friend.id}
-            className="connections flex mb-3 border-t border-gray-300 first:border-t-0"
+            className="connections flex mb-3 border-t border-gray-300 first:border-t-0 mt-3"
           >
             <img
               className="w-12 h-12 m-2 rounded-full"

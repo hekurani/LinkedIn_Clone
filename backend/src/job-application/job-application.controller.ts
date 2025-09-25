@@ -34,6 +34,13 @@ export class JobApplicationController {
     return this.jobApplicationService.getjobApplicationsByUserId(user?.userId);
   }
 
+      @Get('/company')
+  getJobApplicationsByCompanyId(
+      
+  ) {
+    return this.jobApplicationService.getjobApplicationsByCompanyId(7);
+  }
+
 
   @Get('/:id')
   getJobApplication(@Param('id') id: number) {

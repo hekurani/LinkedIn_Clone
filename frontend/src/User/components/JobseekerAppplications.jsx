@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import defaultCompany from "../../assets/myriad.png";
 import HeaderComponent from "../../Components/HeaderComponent";
-import getApplications from "../../utilities/applications/getApplications";
+import getApplications from "../../utilities/applications/getApplicationsJobseeker";
 
 const JobseekerApplications = () => {
   const [applications, setApplications] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       const applications = await getApplications();
-      console.log({ applications });
       setApplications(applications?.jobapplications);
     };
     fetchData();

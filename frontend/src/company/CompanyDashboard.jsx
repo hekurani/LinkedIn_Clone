@@ -23,7 +23,7 @@ const CompanyDashboard = ({}) => {
 
   return (
     <div className="flex items-start bg-[#f4f2ee] justify-start h-screen">
-      <LeftCompanyMenu />
+      {/* <LeftCompanyMenu /> */}
       <JobApplications companyId={1} />
       <CreateJobPost
         showModal={showModal}

@@ -18,15 +18,14 @@ const LeftCompanyMenu = ({
     <div
       className={`w-56 rounded-md ml-16 mt-6 relative transition-all duration-500 `}
       style={{
-        height: "150px",
-        border: "1px solid #D3D3D3",
+        height: "146px",
+        borderBottom: "1px solid #D3D3D3",
+        borderLeft: "1px solid #D3D3D3",
+        borderRight: "1px solid #D3D3D3",
         background: "white",
       }}
     >
-      <div
-        className="h-36"
-        style={{ borderBottom: "1px solid #D3D3D3", background: "white" }}
-      >
+      <div className="h-36">
         <div
           className="Cover rounded-t-md h-14"
           style={{ backgroundColor: "yellow", border: "1px solid #D3D3D3" }}
@@ -37,7 +36,6 @@ const LeftCompanyMenu = ({
               style={{
                 borderRadius: "50%",
                 objectFit: "cover",
-                border: "2px solid white",
               }}
               src={user.imageProfile ? user.imageProfile : defaultProfile}
               alt={"Profile"}

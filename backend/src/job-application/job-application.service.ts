@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { application } from 'express';
+import { company } from 'src/company/company.entity';
 import { jobPost } from 'src/job-post/job-post.entity';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
@@ -16,6 +17,8 @@ import { JobApplication } from './job-application.entity';
 export class JobApplicationService {
   constructor(
     private readonly usersService: UsersService,
+    @InjectRepository(company)
+    private companyRepo: Repository<company>,
     @InjectRepository(JobApplication)
     private jobapplicationrepo: Repository<JobApplication>,
     @InjectRepository(jobPost) private jobPostrepo: Repository<jobPost>,
@@ -72,7 +75,24 @@ export class JobApplicationService {
       jobapplications,
     };
   }
-  
+
+  async getjobApplicationsByCompanyId(userId: number) {
+    const user = await this.companyRepo.findOne({
+      where: { id: userId },
+    });
+    if (!user) throw new NotFoundException("There's no company with this id!");
+
+    const jobapplications = await this.jobapplicationrepo.find({
+      where: { jobPost: { company: { id: user.id } } },
+      relations: { jobPost: { company: true } },
+    });
+
+    return {
+      status: 'success',
+      jobapplications,
+    };
+  }
+
   async getJobApplication(id: number) {
     const jobapplication = await this.jobapplicationrepo.findOne({
       where: { id },

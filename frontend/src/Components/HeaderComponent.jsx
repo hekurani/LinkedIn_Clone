@@ -137,7 +137,7 @@ const HeaderComponent = () => {
     );
   };
 
-  if (!token || token?.role !== "jobseeker") {
+  if (!token || !["admin", "jobseeker"].includes(token?.role)) {
     navigate("/login");
     return;
   }
@@ -231,7 +231,7 @@ const HeaderComponent = () => {
           {countConnections > 0 && (
             <span
               className="
-                        absolute -top-1 right-4
+                        absolute -top-1 right-6
                         flex items-center justify-center
                         h-4 min-w-4 px-1
                         rounded-full bg-red-600 text-white

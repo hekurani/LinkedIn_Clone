@@ -20,6 +20,7 @@ import { FormProvider } from "./User/context/FormContext.jsx";
 // protected routes component
 import ProtectedRoutes from "./Components/ProtectedRoutes.js";
 // utilities
+import NotFound from "./Components/NotFound/NotFound.jsx";
 import ErrorBoundary from "./ErrorBoundary.jsx";
 import JobseekerApplications from "./User/components/JobseekerAppplications.jsx";
 import { FeedProvider } from "./User/context/FeedContext.jsx";
@@ -81,6 +82,7 @@ const App = () => {
                   element={<CompanyDashboard />}
                 />
               </Route>
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </EmailProvider>
         </FeedProvider>
