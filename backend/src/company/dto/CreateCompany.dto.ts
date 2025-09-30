@@ -1,4 +1,4 @@
-import {   IsArray, IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsEmail, IsEnum, IsOptional, IsString } from "class-validator";
 import { IndustryType } from "../enum/industry_type.enum";
 import { WorkPlace } from "../enum/workplace.enum";
 
@@ -13,8 +13,13 @@ export class CreateCommpanyDto{
 
    @IsEnum(IndustryType)
    industry_type: IndustryType;
-
    
+    @IsEmail()
+    email:string;
+ 
+    @IsString()
+    password:string;
+
     @IsString()
     yearFounded:string;
 
@@ -25,12 +30,13 @@ export class CreateCommpanyDto{
 
 
     @IsString()
+    @IsOptional()
     Specialities:String[];
 
     @IsString()
     phone_number:string;
-   
-    @IsString()
+
+   @IsString()
     cityId:string;
    
     @IsOptional()
@@ -39,11 +45,11 @@ export class CreateCommpanyDto{
     @IsString()
     slug:string;
 
-    @IsArray()
-    hashTags:String[]
+
     @IsString()
     @IsOptional()
     logo:string;
+
     @IsString()
     @IsOptional()
     imageCover:string;

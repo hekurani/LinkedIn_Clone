@@ -1,13 +1,13 @@
 import { jobPost } from 'src/job-post/job-post.entity';
 import { User } from 'src/users/user.entity';
 import {
-  Entity,
   Column,
-  PrimaryGeneratedColumn,
-  OneToMany,
+  Entity,
   JoinColumn,
   ManyToMany,
   ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
@@ -17,9 +17,4 @@ export class Skill {
 
   @Column({ unique: true })
   name: string;
-
-  @ManyToOne(() => jobPost, (jobPosts) => jobPosts.skills, {
-    createForeignKeyConstraints: false,
-  })
-  jobPosts: jobPost;
 }

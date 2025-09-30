@@ -299,7 +299,7 @@ const PostComponent = ({
                 <img
                   className="ml-3 mt-3 w-10 h-10 mb-2"
                   style={{ borderRadius: "50%", objectFit: "cover" }}
-                  src={defaultProfile || user.imageProfile}
+                  src={user.imageProfile || defaultProfile}
                   alt="p"
                 />
                 <div className="input-container">

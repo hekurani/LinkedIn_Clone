@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import coverImage from "../../../assets/cover.jpg";
 import defaultProfile from "../../../assets/default.png";
 import UploadImageModal from "../Profile/Modals/UploadImageModal";
 
@@ -25,12 +26,16 @@ const UserFeedComponent = ({
       }}
     >
       <div
-        className="h-36"
+        className="h-36 rounded-t-md"
         style={{ borderBottom: "1px solid #D3D3D3", background: "white" }}
       >
         <div
           className="Cover rounded-t-md h-14"
-          style={{ backgroundColor: "yellow" }}
+          style={{
+            backgroundImage: `url(${coverImage})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
         >
           {user && (
             <img

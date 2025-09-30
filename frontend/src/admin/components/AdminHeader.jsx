@@ -21,21 +21,24 @@ const AdminHeader = () => {
   }, []);
 
   return (
-    <div className="flex justify-between items-center p-3 bg-gray-800">
-      <img
-        className="logo"
-        width={120}
-        height={120}
-        src={logo}
-        alt="LinkedIn"
-      />
+    <div className=" p-3 bg-gray-800">
+      <div className="flex justify-between items-center">
+        <img
+          className="logo"
+          width={120}
+          height={120}
+          src={logo}
+          alt="LinkedIn"
+        />
 
-      <MeMenu
-        showSettingsMenu={showSettingsMenu}
-        setShowSettingsMenu={setShowSettingsMenu}
-        menuRef={menuRef}
-        showText={true}
-      />
+        <MeMenu
+          showSettingsMenu={showSettingsMenu}
+          setShowSettingsMenu={setShowSettingsMenu}
+          menuRef={menuRef}
+          showText={true}
+          fromAdmin={true}
+        />
+      </div>
     </div>
   );
 };

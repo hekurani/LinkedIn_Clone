@@ -94,7 +94,6 @@ const Feed = () => {
             <ChatPage
               user={user}
               otherUser={otherUser}
-              // otherUser={otherUser}
               onCloseChat={handleCloseChatPage}
               chatRoomId={chatRoomId}
               setShowCommingSoonConfirm={setShowCommingSoonConfirm}

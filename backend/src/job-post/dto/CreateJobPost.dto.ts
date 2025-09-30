@@ -2,8 +2,6 @@ import { IsArray, IsDate, IsEmail, IsEnum, IsNumber, IsOptional, IsString } from
 import { WorkType } from "../enum/WorkPlace.enum";
 
 export class CreateJobPostDto {
-@IsNumber()
-companyId:number;
 @IsString()
 @IsOptional()
 redirectURL:string;
@@ -24,5 +22,5 @@ skillsId:number[]
 role:string
 @IsEnum(WorkType)
 @IsOptional()
-workplace:WorkType
+workPlace:WorkType
 }

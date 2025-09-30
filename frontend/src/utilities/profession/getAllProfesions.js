@@ -1,7 +1,6 @@
-import axios from "axios";
+import axiosInstance from "../../axios/axios.tsx";
 
-const getAllProfessions = async () => {
-  const { data } = await axios.get(`professions`);
+export const getAllProfessions = async () => {
+  const { data } = await axiosInstance.get(`professions`);
   return data;
 };
-export default getAllProfessions;

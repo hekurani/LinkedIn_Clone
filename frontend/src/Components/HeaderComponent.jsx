@@ -13,14 +13,17 @@ import AsyncSelect from "react-select/async";
 import { io } from "socket.io-client";
 import defaultImage from "../assets/default.png";
 import logo from "../assets/logoHeader.png";
+import CommingSoon from "../Components/NotFound/CommingSoon";
 import { useFeedContext } from "../User/context/FeedContext";
 import { getToken } from "../utilities/getToken";
 import getAllUsers from "../utilities/user/getAllUsers";
 import getMe from "../utilities/user/getMe";
 import "./Header.css";
 import MeMenu from "./MeMenu";
-const socket = io("http://localhost:8003");
+import ChatPage from "./User/Chat/ChatComponent";
+import ChatListingComponent from "./User/Chat/ChatListingComponent";
 
+const socket = io("http://localhost:8003");
 const HeaderComponent = () => {
   const [showSearch, setShowSearch] = useState(window.innerWidth >= 1310);
   const connectionBadge = async () => {
@@ -34,8 +37,24 @@ const HeaderComponent = () => {
   const selectRef = useRef(null);
   const [showText, setShowText] = useState(window.innerWidth >= 1050);
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
+  const [showCommingSoonConfirm, setShowCommingSoonConfirm] = useState(false);
+  const [collapsedChatListing, setCollapsedChatListing] = useState(true);
+  const [chatRoomId, setChatRoomId] = useState(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [user, setUser] = useState({});
+  const [otherUser, setOtherUser] = useState({});
+  const [openChatListing, setOpenChatListing] = useState(null);
+
   const { setShowMessageList } = useFeedContext();
   const menuRef = useRef(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const user = await getMe();
+      setUser(user);
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     connectionBadge();
@@ -82,6 +101,12 @@ const HeaderComponent = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleOpenChatPage = (chatRoomId, chatListingOtherUser) => {
+    setOtherUser(chatListingOtherUser);
+    setIsChatOpen(true);
+    setChatRoomId(chatRoomId);
+  };
 
   const loadOptions = async (inputValue) => {
     try {
@@ -256,7 +281,7 @@ const HeaderComponent = () => {
           {showText && <span className="text-sm">Jobs</span>}
         </div>
         <div
-          onClick={() => navigate("/connections")}
+          onClick={() => setCollapsedChatListing(false)}
           className="flex-col flex text-center mx-5 cursor-pointer"
         >
           <FontAwesomeIcon
@@ -266,7 +291,10 @@ const HeaderComponent = () => {
           />
           {showText && <span className="text-sm">Messaging</span>}
         </div>
-        <div to="/" className="flex-col flex text-center mx-5 cursor-pointer">
+        <div
+          className="flex-col flex text-center mx-5 cursor-pointer"
+          onClick={() => setShowCommingSoonConfirm(true)}
+        >
           <FontAwesomeIcon icon={faBell} className="icon" />
           {showText && <span className="text-sm">Notifications</span>}
         </div>
@@ -275,6 +303,27 @@ const HeaderComponent = () => {
           showText={showText}
           showSettingsMenu={showSettingsMenu}
           setShowSettingsMenu={setShowSettingsMenu}
+        />
+
+        {isChatOpen && (
+          <ChatPage
+            user={user}
+            otherUser={otherUser}
+            onCloseChat={() => setIsChatOpen(false)}
+            chatRoomId={chatRoomId}
+            setShowCommingSoonConfirm={setShowCommingSoonConfirm}
+          />
+        )}
+
+        <ChatListingComponent
+          user={user}
+          onChatRowClick={handleOpenChatPage}
+          collapsed={collapsedChatListing}
+          setCollapsedChatListing={setCollapsedChatListing}
+        />
+        <CommingSoon
+          isOpen={showCommingSoonConfirm}
+          setIsOpen={setShowCommingSoonConfirm}
         />
       </div>
     </div>

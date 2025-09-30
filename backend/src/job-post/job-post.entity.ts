@@ -1,3 +1,5 @@
+import { company } from 'src/company/company.entity';
+import { Skill } from 'src/skills/skills.entity';
 import {
   Column,
   CreateDateColumn,
@@ -9,8 +11,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../users/user.entity';
-import { company } from 'src/company/company.entity';
-import { Skill } from 'src/skills/skills.entity';
 import { WorkType } from './enum/WorkPlace.enum';
 
 @Entity({ name: 'job-post' })
@@ -36,12 +36,6 @@ export class jobPost {
 
   @Column({ nullable: true })
   redirectURL: string;
-
-  @OneToMany(() => Skill, (skill) => skill.jobPosts, {
-    eager: true,
-    createForeignKeyConstraints: false,
-  })
-  skills: Skill[];
 
   @CreateDateColumn({ type: 'date', default: () => 'CURRENT_DATE' })
   createdAt: Date;

@@ -1,3 +1,5 @@
+import { IsEmail, IsNotEmpty } from 'class-validator';
+import { city } from 'src/location/entity/city.entity';
 import { User } from 'src/users/user.entity';
 import {
   Column,
@@ -10,9 +12,7 @@ import {
   Unique,
 } from 'typeorm';
 import { IndustryType } from './enum/industry_type.enum';
-import { IsNotEmpty, IsEmail } from 'class-validator';
 import { WorkPlace } from './enum/workplace.enum';
-import { city } from 'src/location/entity/city.entity';
 @Entity()
 export class company {
   @PrimaryGeneratedColumn()
@@ -53,12 +53,6 @@ export class company {
 
   @Column({ default: 'imageCover.png' })
   imageCover: string;
-
-  @ManyToOne(() => User, (user) => user.companies, {
-    eager: true,
-    cascade: true,
-  })
-  owner: User;
 
   @Column({ nullable: true })
   url: string;

@@ -2,7 +2,12 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import defaultProfile from "../../../assets/default.png";
 
-const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
+const ChatListingComponent = ({
+  user = null,
+  onChatRowClick = () => {},
+  collapsed = true,
+  setCollapsedChatListing = () => {},
+}) => {
   const [chatRooms, setChatRooms] = useState([]);
   const [messages, setAllMessages] = useState([]);
   const [loggedInUser, setLoggedInUser] = useState({});
@@ -49,10 +54,15 @@ const ChatListingComponent = ({ user = null, onChatRowClick = () => {} }) => {
     return message;
   };
 
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(collapsed);
+
+  useEffect(() => {
+    setIsCollapsed(collapsed);
+  }, [collapsed]);
 
   const toggleChatListing = () => {
     setIsCollapsed(!isCollapsed);
+    setCollapsedChatListing(!isCollapsed);
   };
 
   const handleChatRowClick = (chatRoomId, otherUser) => {

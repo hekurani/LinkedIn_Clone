@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/LinkedIn-logo.png";
 import axiosInstance from "../../axios/axios.tsx";
 import { useAlert } from "../../utilities/alert/AlertContext.js";
@@ -40,18 +40,21 @@ const CompanyLogin = () => {
       password: password,
     };
     try {
-      const response = await axiosInstance.post("auth/company/login", loginInfo);
+      const response = await axiosInstance.post(
+        "auth/company/login",
+        loginInfo
+      );
 
       const token = response?.data?.access_token;
-      
+
       if (token) {
         localStorage.setItem("access_token", token);
-      } 
+      }
       const innerToken = getToken();
-     
-       innerToken?.role === 'company' ? 
-        navigate("/company-dashboard") : navigate("/");
-  
+
+      if (innerToken?.role === "company") {
+        navigate("/company-dashboard");
+      }
     } catch (err) {
       console.log(err);
       showAlert({
@@ -60,7 +63,7 @@ const CompanyLogin = () => {
       });
     }
   };
-  
+
   return (
     <>
       <div
@@ -134,7 +137,6 @@ const CompanyLogin = () => {
                 <span style={{ color: "#0a66c2" }}>Cookie Policy</span>.{" "}
               </p>
             </form>
-          
           </div>
         </div>
       </div>

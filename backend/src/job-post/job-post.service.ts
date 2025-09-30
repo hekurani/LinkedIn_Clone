@@ -26,7 +26,7 @@ export class JobPostService {
     @InjectRepository(Skill) private skillsRepo: Repository<Skill>,
     @InjectRepository(JobApplication) private jobApplicationRepository: Repository<JobApplication>,
   ) {}
-  async createJobPost(createJobPostDto: CreateJobPostDto, userId: number) {
+  async createJobPost(createJobPostDto: CreateJobPostDto, companyId: number) {
     const deadLine = new Date(createJobPostDto.deadLine);
     if (deadLine <= new Date())
       throw new ForbiddenException('You are entering an invalid Deadline!');
@@ -58,11 +58,10 @@ export class JobPostService {
       }),
     );
 
-    const user = await this.userService.findOne(userId);
-    if (!user) throw new NotFoundException("There's no user with that ID!");
+
 
     const company = await this.companyrepo.findOne({
-      where: { id: createJobPostDto.companyId, owner: { id: userId } },
+      where: { id: companyId },
     });
     if (!company)
       throw new NotFoundException(
@@ -73,11 +72,10 @@ export class JobPostService {
       ...createJobPostDto,
       company,
       deadLine,
-      skills,
     });
 
     const savedJobPost = await this.jobPost.save(jobPost);
-
+    console.log({savedJobPost})
     return {
       status: 'success',
       savedJobPost,
@@ -105,6 +103,7 @@ async getJobPosts(userId: number) {
       id: Not(In(appliedJobPostIds)),
     },
     relations: ['company'],
+    order: { id: 'DESC' },
   });
 
   return {
@@ -112,6 +111,18 @@ async getJobPosts(userId: number) {
     jobPosts,
   };
 }
+
+async getJobPostsCompany (companyId: number)  {
+    const jobPosts = await this.jobPost.find({
+      where: { company: { id: companyId } },
+       order: { id: 'DESC' },
+    });
+    return {
+      status: 'success',
+      jobPosts,
+    };
+  }
+
   async updateJobPost(
     updateJobPostDto: UpdateJobPostDto,
     id: number,
@@ -126,10 +137,7 @@ async getJobPosts(userId: number) {
     const user = await this.userService.findOne(userId);
     if (!user)
       throw new NotFoundException('User doesnt exist please login again!');
-    if (jobPostObject.company.owner.id !== user.id)
-      throw new ForbiddenException(
-        'You are not allowed to update jobPost without logging in as an owner!',
-      );
+
     let deadLine: Date | undefined;
     if (updateJobPostDto.deadLine) {
       deadLine = new Date(updateJobPostDto.deadLine);
@@ -174,9 +182,7 @@ async getJobPosts(userId: number) {
     if (updateJobPostDto.redirectURL !== undefined) {
       jobPostObject.redirectURL = updateJobPostDto.redirectURL;
     }
-    if (skills.length) {
-      jobPostObject.skills = skills;
-    }
+
     if (updateJobPostDto.workplace) {
       jobPostObject.workPlace = updateJobPostDto.workplace;
     }
@@ -186,17 +192,14 @@ async getJobPosts(userId: number) {
       jobPostObject,
     };
   }
-  async deleteJobPost(id: number, userId: number) {
+  async deleteJobPost(id: number, companyId: number) {
     const jobPost = await this.jobPost.findOne({ where: { id } });
     if (!jobPost) throw new NotFoundException("there's no jobPost found!");
-    const user = await this.userService.findOne(userId);
-    if (!user) throw new NotFoundException("There's no user found!");
-    if (
-      jobPost.company.owner.id !== user.id
-    )
-      throw new ForbiddenException(
-        'You are not allowed to delete jobPost without being owner!',
-      );
+    const company = await this.companyrepo.findOne({
+      where: { id: companyId },
+    });
+    if (!company) throw new NotFoundException("There's no company found!");
+
     await this.jobPost.remove(jobPost);
     return {
       status: 'success',

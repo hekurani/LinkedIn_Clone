@@ -7,6 +7,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { AuthUser } from 'src/auth/decorators/AuthUser-decorator';
+import { company } from 'src/company/company.entity';
 import { JobApplicationService } from './job-application.service';
 
 @Controller('job-application')
@@ -36,9 +37,11 @@ export class JobApplicationController {
 
       @Get('/company')
   getJobApplicationsByCompanyId(
+     @AuthUser() company: { companyId: number }
       
   ) {
-    return this.jobApplicationService.getjobApplicationsByCompanyId(7);
+    console.log({company})
+    return this.jobApplicationService.getjobApplicationsByCompanyId(company?.companyId);
   }
 
 

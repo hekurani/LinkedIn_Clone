@@ -19,9 +19,9 @@ export class JobPostController {
   @Post()
   createJobPost(
     @Body() createJobPostDto: CreateJobPostDto,
-    @AuthUser() user: { userId: number },
+    @AuthUser() company: { companyId: number },
   ) {
-    return this.jobPostService.createJobPost(createJobPostDto, user?.userId);
+    return this.jobPostService.createJobPost(createJobPostDto, company?.companyId);
   }
 
   @Get()
@@ -30,6 +30,14 @@ export class JobPostController {
   ) {
     return this.jobPostService.getJobPosts(user?.userId);
   }
+
+    @Get('/company')
+  getJobPostsCompany(
+        @AuthUser() company: { companyId: number }
+  ) {
+    return this.jobPostService.getJobPostsCompany(company?.companyId);
+  }
+
 
   @Get('/:id')
   getJobPost(@Param('id') id: number) {

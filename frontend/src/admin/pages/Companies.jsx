@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import profile from "../../assets/default.png";
-import axiosInstance from "../../axios/axios.tsx";
 import Modal from "../../utilities/Modal/Modal";
+import { useAlert } from "../../utilities/alert/AlertContext";
+import { getCitites } from "../../utilities/cities/getCities";
+import createCompany from "../../utilities/company/createCompany";
 import { getCompanies } from "../../utilities/company/getCompanies";
 import updateCompany from "../../utilities/company/updateCompany";
 
 const Companies = () => {
   const [companies, setCompanies] = useState([]);
+  const [cities, setCities] = useState([]);
   const [showModal, setShowModal] = useState({ open: false, variant: "edit" });
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const showAlert = useAlert();
 
   useEffect(() => {
     const fetchAllCompanies = async () => {
@@ -22,7 +26,17 @@ const Companies = () => {
       }
     };
 
+    const fetchAllCities = async () => {
+      try {
+        const res = await getCitites();
+        setCities(res || []);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     fetchAllCompanies();
+    fetchAllCities();
   }, []);
 
   const handleChange = (e) => {
@@ -65,11 +79,30 @@ const Companies = () => {
         // );
       }
 
-      const result = await updateCompany(selectedCompany?.id, selectedCompany);
+      const result =
+        showModal?.variant === "edit"
+          ? await updateCompany(selectedCompany.id, selectedCompany)
+          : await createCompany(selectedCompany);
 
-      setCompanies((prevCompanies) =>
-        prevCompanies.map((comp) => (comp?.id === result?.id ? result : comp))
+      showModal?.variant === "create"
+        ? showAlert({
+            text: "Company created successfully",
+            variant: "success",
+          })
+        : showAlert({
+            text: "Company updated successfully",
+            variant: "success",
+          });
+
+      setCompanies((prev) =>
+        prev.map((comp) =>
+          comp.id === result.id ? { ...comp, ...result } : comp
+        )
       );
+
+      if (showModal?.variant === "create") {
+        setCompanies((prev) => [...prev, result]);
+      }
 
       setShowModal({ open: false, variant: "edit" });
       setSelectedCompany(null);
@@ -246,6 +279,68 @@ const Companies = () => {
                   className="w-full p-2 border text-black border-gray-300 rounded-md"
                 />
               </div>
+              {showModal?.variant === "create" && (
+                <div>
+                  <p className="text-white mb-1">Year founded:</p>
+                  <input
+                    type="text"
+                    name="yearFounded"
+                    value={selectedCompany?.yearFounded || ""}
+                    onChange={handleChange}
+                    className="w-full p-2 text-black border border-gray-300 rounded-md"
+                  />
+                </div>
+              )}
+
+              {showModal?.variant === "create" && (
+                <div>
+                  <p className="text-white mb-1">Industry:</p>
+                  <select
+                    name="industry_type"
+                    value={selectedCompany?.industry_type || ""}
+                    onChange={handleChange}
+                    className="w-full p-2 text-black border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select Industry</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Healthcare">Healthcare</option>
+                  </select>
+                </div>
+              )}
+
+              {showModal?.variant === "create" && (
+                <div>
+                  <p className="text-white mb-1">City:</p>
+                  <select
+                    name="cityId"
+                    value={selectedCompany?.cityId || ""}
+                    onChange={handleChange}
+                    className="w-full p-2 text-black border border-gray-300 rounded-md"
+                  >
+                    <option value="">Select City</option>
+                    {cities.map((city) => (
+                      <option key={city.id} value={city.id}>
+                        {city.city}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {showModal?.variant === "create" && (
+                <div>
+                  <p className="text-white mb-1">Phone number:</p>
+                  <input
+                    type="text"
+                    name="phone_number"
+                    value={selectedCompany?.phone_number || ""}
+                    onChange={handleChange}
+                    className="w-full p-2 text-black border border-gray-300 rounded-md"
+                  />
+                </div>
+              )}
+
               {showModal?.variant === "create" && (
                 <div>
                   <p className="text-white mb-1">Password:</p>

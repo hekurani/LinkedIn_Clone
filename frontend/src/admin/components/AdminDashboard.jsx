@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Companies from "../pages/Companies";
-import Dashboard from "../pages/Dashboard";
 import Users from "../pages/Users";
 import AdminHeader from "./AdminHeader";
 import AdminSideBar from "./AdminSideBar";

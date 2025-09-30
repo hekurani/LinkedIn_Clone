@@ -3,10 +3,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { country } from './entity/country.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { city } from './entity/city.entity';
+import { country } from './entity/country.entity';
 
 @Injectable()
 export class LocationService {
@@ -32,6 +32,11 @@ export class LocationService {
   async getCountries() {
     return this.CountryRepository.find();
   }
+
+  async getCities() {
+    return this.CityRepository.find();
+  }
+  
   async getCitiesByCountry(id: number) {
     const country = this.CountryRepository.findOne({ where: { id } });
     if (!country)

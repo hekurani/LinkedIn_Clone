@@ -78,8 +78,6 @@ export class User {
   @Column({ nullable: true })
   gender: string;
 
-  @OneToMany(() => company, (company) => company.owner)
-  companies: company[];
 
   @OneToMany(() => Reposts, (reposts) => reposts.user)
   reposts: Reposts[];

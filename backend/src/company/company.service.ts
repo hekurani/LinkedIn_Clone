@@ -3,22 +3,22 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { company } from './company.entity';
-import { DeepPartial, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/user.entity';
+import { scrypt as _scrypt, randomBytes } from 'crypto';
 import { NotFoundError } from 'rxjs';
-import { randomBytes, scrypt as _scrypt } from 'crypto';
+import { User } from 'src/users/user.entity';
+import { DeepPartial, Repository } from 'typeorm';
+import { company } from './company.entity';
 
-import { IndustryType } from './enum/industry_type.enum';
-import { WorkPlace } from './enum/workplace.enum';
-import { city } from 'src/location/entity/city.entity';
 import { AuthService } from 'src/auth/auth.service';
+import { UpdateCommentDto } from 'src/comments/dto/update.dto.entity';
+import { city } from 'src/location/entity/city.entity';
 import { UsersService } from 'src/users/users.service';
 import { promisify } from 'util';
-import { UpdateCommentDto } from 'src/comments/dto/update.dto.entity';
-import { UpdateCommpanyDto } from './dto/UpdateCompany.dto';
 import { CreateCommpanyDto } from './dto/CreateCompany.dto';
+import { UpdateCommpanyDto } from './dto/UpdateCompany.dto';
+import { IndustryType } from './enum/industry_type.enum';
+import { WorkPlace } from './enum/workplace.enum';
 const scrypt = promisify(_scrypt);
 
 @Injectable()
@@ -57,10 +57,15 @@ export class CompanyService {
     });
     if (!user) throw new NotFoundException('No user exist!');
     if (!city) throw new NotFoundException('No city with given id exist!');
+        const salt = randomBytes(8).toString('hex');
+
+
+
+    const hash = (await scrypt(createCompanyDto.password, salt, 32)) as Buffer;
+    const newcomp = { ...createCompanyDto, password: salt + '.' + hash.toString('hex') };
     const company = this.companyRepository.create({
-      ...createCompanyDto,
+      ...newcomp,
       cityId: city,
-      owner: user,
     });
 
     const savedCompany = await this.companyRepository.save(company);
@@ -96,7 +101,7 @@ export class CompanyService {
       );
 
     const company = await this.companyRepository.findOne({
-      where: { id, owner: await user },
+      where: { id },
     });
 
     if (!company) {

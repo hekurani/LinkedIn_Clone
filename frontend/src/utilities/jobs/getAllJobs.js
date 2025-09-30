@@ -15,4 +15,11 @@ const applyToJob = async (jobPostId) => {
   const { data } = await axiosInstance.post("job-application", { jobPostId });
   return data;
 };
-export { applyToJob, getAllJobs };
+
+const getAllJobsCompany = async () => {
+  const token = getToken();
+  if (!token) return;
+  const { data } = await axiosInstance.get(`job-post/company`);
+  return data;
+};
+export { applyToJob, getAllJobs, getAllJobsCompany };

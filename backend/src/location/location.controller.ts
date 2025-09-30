@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CreateCountryDto } from './dto/CreateCountry.dto';
 import { AuthUser } from 'src/auth/decorators/AuthUser-decorator';
-import { LocationService } from './location.service';
 import { CreateCityDto } from './dto/CreateCity.dto';
+import { CreateCountryDto } from './dto/CreateCountry.dto';
+import { LocationService } from './location.service';
 @Controller('location')
 export class LocationController {
   constructor(private readonly locationService: LocationService) {}
@@ -20,6 +20,11 @@ export class LocationController {
   @Get('/country')
   getCountries() {
     return this.locationService.getCountries();
+  }
+
+    @Get('/city')
+  getCities() {
+    return this.locationService.getCities();
   }
 
   @Get('/country/:id/city')
