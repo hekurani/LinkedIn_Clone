@@ -84,10 +84,13 @@ export class CompanyService {
     }
     return user;
   }
-  async getCompany(slug: string) {
-    const company = await this.companyRepository.findOne({ where: { slug } });
+  async getCompany(id: number) {
+    const company = await this.companyRepository.findOne({ where: { id } });
     return company;
   }
+
+
+
   async deleteCompany(
     id: number,
     email: string,

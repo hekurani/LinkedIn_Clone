@@ -11,12 +11,14 @@ import {
   requestAddFriend,
 } from "../../../utilities/friends/getFriends";
 import getMe from "../../../utilities/user/getMe";
+import CommingSoon from "../../NotFound/CommingSoon";
 
 const ProfileInfo = ({ foreignUser = {}, user = {} }) => {
   const [status, setStatus] = useState("Connect");
   const [alreadyFriends, setAllReadyFriends] = useState(false);
   const [showChatPage, setShowPage] = useState(false);
   const [chatRoomId, setChatRoomId] = useState(null);
+  const [comingSoon, setComingSoon] = useState(false);
   const handleHover = (e) => {
     e.target.style.color = "blue";
   };
@@ -169,6 +171,7 @@ const ProfileInfo = ({ foreignUser = {}, user = {} }) => {
             <button
               className="rounded-full ml-2
                          pb-1 pt-1 pl-3 pr-3 font-semibold"
+              onClick={() => setComingSoon(true)}
               style={{
                 color: "grey",
                 border: " 1px solid black",
@@ -200,6 +203,7 @@ const ProfileInfo = ({ foreignUser = {}, user = {} }) => {
           </li>
         </ul>
       </div>
+      <CommingSoon isOpen={comingSoon} setIsOpen={setComingSoon} />
 
       {showChatPage && (
         <ChatPage

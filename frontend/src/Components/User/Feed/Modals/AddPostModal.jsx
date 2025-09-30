@@ -77,7 +77,9 @@ const AddPostModal = ({
             alt={"p"}
           />
           <div className="ml-5">
-            <p className="font-semibold text-lg">Ferat Gashi</p>
+            <p className="font-semibold text-lg">
+              {user.name} {user.lastname}
+            </p>
             <p className="text-sm">Post to anyone</p>
           </div>
           <button className="ml-auto text-2xl mb-5">

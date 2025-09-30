@@ -1,15 +1,17 @@
-import React, { useState } from "react";
-
+import CompanyHeader from "./components/CompanyHeader";
 import JobApplications from "./components/JobApplications";
 import JobPosts from "./components/JobPosts";
-import LeftCompanyMenu from "./components/LeftCompanyMenu";
-
-const CompanyDashboard = ({}) => {
+const CompanyDashboard = () => {
   return (
-    <div className="flex items-start bg-[#f4f2ee] justify-start h-screen">
+    <div className="bg-[#f4f2ee] pt-3 p-5 h-screen">
       {/* <LeftCompanyMenu /> */}
-      <JobApplications />
-      <JobPosts />
+      <div>
+        <CompanyHeader />
+      </div>
+      <div className="flex items-start justify-start">
+        <JobApplications />
+        <JobPosts />
+      </div>
     </div>
   );
 };

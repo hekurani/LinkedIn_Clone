@@ -6,18 +6,43 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
-import { CompanyService } from './company.service';
-import { CreateCommpanyDto } from './dto/CreateCompany.dto';
-import { AuthUser } from 'src/auth/decorators/AuthUser-decorator';
 import {
   FileFieldsInterceptor,
+  FileInterceptor,
 } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { AuthUser } from 'src/auth/decorators/AuthUser-decorator';
 import { multerOptions } from 'src/utils/multer/multerOptions.multer';
+import { CompanyService } from './company.service';
+import { CreateCommpanyDto } from './dto/CreateCompany.dto';
 import { DeleteCommpanyDto } from './dto/DeleteCompany.dto';
 import { UpdateCommpanyDto } from './dto/UpdateCompany.dto';
+
+
+const imageFileFilter = (req, file, callback) => {
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+    return callback(new Error('Only image files are allowed!'), false);
+  }
+  callback(null, true);
+};
+const storage = diskStorage({
+  destination: '../', // <-- no slash at start, relative to root
+  filename: (req, file, cb) => {
+    const name = file.originalname.split('.')[0];
+    const extension = extname(file.originalname);
+    const randomName = Array(32)
+      .fill(null)
+      .map(() => Math.round(Math.random() * 16).toString(16))
+      .join('');
+    cb(null, `/Images/logo/${name}-${randomName}${extension}`); // <-- filename only
+  },
+});
+
 
 @Controller('company')
 export class CompanyController {
@@ -25,90 +50,44 @@ export class CompanyController {
 
   @Post()
   @UseInterceptors(
-    FileFieldsInterceptor(
-      [
-        { name: 'logo', maxCount: 1 },
-        { name: 'imageCover', maxCount: 1 },
-      ],
-      multerOptions(
-        ['.jpg', '.jpeg', '.png', '.gif'], // Permissible file formats
-        [
-          { filename: 'logo', destination: '../Images/logo' }, // Destination for 'logo'
-          { filename: 'imageCover', destination: '../Images/imageCover' }, // Destination for 'imageCover'
-        ],
-      ),
-    ),
+    FileInterceptor('logo', { storage, fileFilter: imageFileFilter }),
   )
-
   createCompany(
     @Body() createCompanyDto: CreateCommpanyDto,
     @AuthUser() user: { userId: number },
-    @UploadedFiles()
-    files: { logo?: Express.Multer.File[]; imageCover?: Express.Multer.File[] },
+  @UploadedFile() file: Express.Multer.File,
   ) {
-    let logo, imageCover;
-    if (files) {
-      if (files.logo) {
-        logo = files.logo.find((file) => file.fieldname === 'logo');
-      }
-      if (files.imageCover) {
-        imageCover = files.imageCover.find(
-          (file) => file.fieldname === 'imageCover',
-        );
-      }
-    }
+    if (file) createCompanyDto.logo = `${file.filename}`;
 
-    if (logo) createCompanyDto.logo = logo.filename;
-    if (imageCover) createCompanyDto.imageCover = imageCover.filename;
+    // if (imageCover) createCompanyDto.imageCover = imageCover.filename;
     return this.companyService.createCompany(createCompanyDto, user.userId);
   }
 
-  @Get('/:slug')
-  getCompany(@Param('slug') slug: string) {
-    return this.companyService.getCompany(slug);
-  }
 
   @Get()
   getCompanies() {
     return this.companyService.getCompanies();
   }
 
+
+  @Get('/getById')
+  getCompany(@AuthUser() company: { companyId: number }) {
+    return this.companyService.getCompany(company?.companyId);
+  }
+
+
+
   @Patch('/:id')
   @UseInterceptors(
-    FileFieldsInterceptor(
-      [
-        { name: 'logo', maxCount: 1 },
-        { name: 'imageCover', maxCount: 1 },
-      ],
-      multerOptions(
-        ['.jpg', '.jpeg', '.png', '.gif'],
-        [
-          { filename: 'logo', destination: '../Images/logo' },
-          { filename: 'imageCover', destination: '../Images/imageCover' },
-        ],
-      ),
-    ),
+    FileInterceptor('logo', { storage, fileFilter: imageFileFilter }),
   )
   updateCompany(
     @Param('id') id: number,
     @Body() updateCompany: UpdateCommpanyDto,
-    @UploadedFiles()
-    files: { logo?: Express.Multer.File[]; imageCover?: Express.Multer.File[] },
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    let logo, imageCover;
-    if (files) {
-      if (files.logo) {
-        logo = files.logo.find((file) => file.fieldname === 'logo');
-      }
-      if (files.imageCover) {
-        imageCover = files.imageCover.find(
-          (file) => file.fieldname === 'imageCover',
-        );
-      }
-    }
+    if (file) updateCompany.logo =  `${file.filename}`;
 
-    if (logo) updateCompany.logo = logo.filename;
-    if (imageCover) updateCompany.imageCover = imageCover.filename;
     return this.companyService.updateCompany(id, updateCompany);
   }
 

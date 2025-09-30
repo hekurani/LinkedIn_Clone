@@ -40,7 +40,13 @@ const JobDescription = ({ selectedJob, setNewApply = () => {} }) => {
     <div className="main bg-white  max-h-screen overflow-y-auto rounded-r-md">
       <div className="header m-5 h-[100px]">
         <div className="flex gap-3 mb-3">
-          <img src={myriadLogo} alt="" width={22} height={20} />
+          <img
+            src={selectedJob?.company?.logo}
+            alt=""
+            className="rounded-full"
+            width={22}
+            height={20}
+          />
           <p>{selectedJob?.company?.name}</p>
         </div>
         <div className="tittle flex">

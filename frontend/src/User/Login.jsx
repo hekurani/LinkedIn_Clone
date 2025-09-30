@@ -66,14 +66,6 @@ const Login = () => {
       const token = response?.data?.access_token;
       if (token) {
         localStorage.setItem("access_token", token);
-      }
-      const innerToken = getToken();
-
-      if (innerToken?.role === "admin") {
-        navigate("/admin/dashboard");
-      } else if (innerToken?.role === "company") {
-        navigate("/company-dashboard");
-      } else {
         navigate("/");
       }
     } catch (err) {

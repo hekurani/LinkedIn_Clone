@@ -35,10 +35,7 @@ export class JobApplicationService {
       throw new ForbiddenException(
         'You are nto allowed to send applications after deadline!',
       );
-    if (jobPost.redirectURL)
-      throw new ForbiddenException(
-        'You cant apply for an job in this jobPost!',
-      );
+
     const existingUserApplication = await this.jobapplicationrepo.findOne({
       where: { id: jobPostId, applicant: { id: userId } },
     });
